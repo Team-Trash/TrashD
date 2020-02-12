@@ -1,11 +1,1 @@
-# Trash'D #
-Virtual reality game to educate users on how to correctly categorize and dispose of waste.
-
-**Contributors**
-Ye Fang Kuang
-Niki Roy
-Dedka Said
-Hoang Nguyen (Thao)
-
-**Development Blog**
-https://trashd.yfkuang.com/
+pick-up-object-component.js is contained the code that allow the object to follow the mouse cursor. But right now the object is above the camera right now. I am thinking the way how to make the selected object at the middle of the cursor.
