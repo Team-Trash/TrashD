@@ -7,7 +7,6 @@
         <script src = "https://aframe.io/releases/1.0.3/aframe.min.js"></script>
         <script src = "https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
 		<script src = "js/pick-up-object-component.js"></script>
-
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -17,7 +16,7 @@
 						camera
 						look-controls
 						wasd-controls
-						position="0 1 0"
+						position="0 1.5 0"
 						walk>
 				<a-entity 	id = "main-cursor"
 							cursor ="rayOrigin:mouse;"
@@ -29,18 +28,55 @@
             <a-assets>
             </a-assets>
             
-             <!--ADD ENVIRONMENT-->
-            <a-entity environment = "preset: forest;"></a-entity>
-
+             <!--ADDING THE PLANE-->
+            <a-entity   geometry = "primitive:plane; height: 100; width: 100"
+                        rotation = "-90 0 0"></a-entity>
             <!--ADDING A PRIMITIVE-->
 			<a-entity   id = "cube"
 						class = "clickable"
-                        geometry = "primitive:box; depth: 1; height: 2, width: 1"
+                        geometry = "primitive:box; depth: 1; height: 1; width: 1"
                         position = "7 0 0"
                         rotation = "0 0 0"
                         pick-up-object ="">
             </a-entity >
+            <!--ADD CONVEYOR-->
+            <a-entity   id = "conveyor"
+                        geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
+                        position = "0 0 -3"></a-entity>
             
+            <!--ADD BIN (THIS SIDE)-->
+            <a-entity   id = "plastic-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "0 0 -1.5"></a-entity>
+            <a-entity   id = "paper-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "2 0 -1.5"></a-entity>
+            <a-entity   id = "metal-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-2 0 -1.5"></a-entity>
+            <a-entity   id = "trash-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-4 0 -1.5"></a-entity>
+            <a-entity   id = "compost-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "4 0 -1.5"></a-entity>
+            
+            <!--ADD BIN (THAT SIDE)-->
+            <a-entity   id = "plastic-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "0 0 -4.5"></a-entity>
+            <a-entity   id = "paper-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "2 0 -4.5"></a-entity>
+            <a-entity   id = "metal-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-2 0 -4.5"></a-entity>
+            <a-entity   id = "trash-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-4 0 -4.5"></a-entity>
+            <a-entity   id = "compost-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "4 0 -4.5"></a-entity>
         </a-scene>
     </body>
 </html>
