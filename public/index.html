@@ -1,94 +1,82 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>kuangYeFang_IMD3901_A2</title>
-		<script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
-		<script src="js/car-control-component.js"></script>
-		<script src="js/walk-component.js"></script>
-		<script src="js/button-component.js"></script>
-		<script src="js/box-component.js"></script>
-	</head>
-	<body>
-		<a-scene id="fog" fog="type: linear; color: #d57a7a; near: 10; far: 650">
-			<!--Assets-->
-			<a-assets>
-				<a-asset-item id="McLaren" response-type="arraybuffer" src="assets/McLaren.glb"></a-asset-item>
-				<img id="saltflats fsfsdfsd" src="assets/desert.jpg">
-				<img id="sand" src="assets/sand.jpg">
-				<audio id="walk" src="assets/walk.wav" preload="auto"></audio>
-				<audio id="car-sound" src="assets/car.wav" preload="auto"></audio>
-			</a-assets>
-
-			<!-- VR Controls -->
-			<a-entity oculus-touch-controls="hand: left">
-				<a-entity	raycaster="objects: .raycastable;">
-				</a-entity>
-			</a-entity>
-			<a-entity oculus-touch-controls="hand: right">
-				<a-entity	raycaster="objects: .raycastable;">
-				</a-entity>
-			</a-entity>
-
-			<!--Camera-->
-			<a-entity 	id="primary-camera"
-						active
+    <head>
+        <title>nguyenHoang_IMD3901</title>
+        <meta name = "description" content = "nguyenHoang_IMD3901">
+        <meta charset = "UTF-8">
+        <script src = "https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+        <script src = "https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+		<script src = "js/pick-up-object-component.js"></script>
+    </head>
+    <body>
+        <!--BEGIN A SCENE-->
+        <a-scene>      
+            <!--CAMERA-->
+            <a-entity 	id="primary-camera"
 						camera
 						look-controls
 						wasd-controls
-						position="0 1 0"
-						sound="src: #walk;"
+						position="0 1.5 0"
 						walk>
-				<a-entity 	cursor="rayOrigin:mouse;"
-							raycaster="objects: .raycastable;">
+				<a-entity 	id = "main-cursor"
+							cursor ="rayOrigin:mouse;"
+							raycaster="objects: .clickable;">
 				</a-entity>
 			</a-entity>
 
-			<!--Environment-->
-			<a-sky id="salt" src="#saltflats"></a-sky>
-
-			<!--Models-->
-			<a-entity	id="plane"
-						geometry="primitive: plane;"
-						material="src: #sand; shader: flat; repeat: 100 100"
-						position="0 0 0"
-						rotation="-90 0 0"
-						scale="256 256 1"></a-entity>
-
-
-			<a-entity	id="car"
-						class="raycastable"
-						position="1.5 0.5 -3"
-						rotation="0 295 0"
-						scale="8 8 8"
-						gltf-model="#McLaren"
-						sound="src: #car-sound;"
-						light="type: ambient; color: #fff; intensity: 1"
-						car-control="inCarCamera: #secondary-camera; outCamera: #primary-camera; fog: #fog; mode: false">
-				<a-entity	geometry="primitive: cylinder;"
-							position="-0.031 0 0.293"
-							rotation="0 0 -90"
-							scale="0.005 0.005 0.005"
-							material="color: red"
-							light="type: ambient; color: #fff; intensity: 1"
-							button-control="car: #car"
-							class="raycastableInCar"></a-entity	>
-				<a-entity	id="secondary-camera-rig"
-							position="0.04 0.04 0.27"
-							rotation="0 130 0">
-					<a-entity	id="secondary-camera"
-								camera
-								look-controls
-								wasd-controls="enabled: false">
-						<a-entity 	cursor="rayOrigin:mouse;"
-									raycaster="objects: .raycastableInCar;">
-						</a-entity>
-						<a-text	value="Press Q to leave"
-								height="0.1"
-								width="0.1"
-								position="-0.012 -0.014 -0.029"></a-text>
-					</a-entity>
-				</a-entity>
-			</a-entity>
-		</a-scene>
-	</body>
+            <!--LOADING ASSETS-->
+            <a-assets>
+            </a-assets>
+            
+             <!--ADDING THE PLANE-->
+            <a-entity   geometry = "primitive:plane; height: 100; width: 100"
+                        rotation = "-90 0 0"></a-entity>
+            <!--ADDING A PRIMITIVE-->
+			<a-entity   id = "cube"
+						class = "clickable"
+                        geometry = "primitive:box; depth: 1; height: 1; width: 1"
+                        position = "7 0 0"
+                        rotation = "0 0 0"
+                        pick-up-object ="">
+            </a-entity >
+            <!--ADD CONVEYOR-->
+            <a-entity   id = "conveyor"
+                        geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
+                        position = "0 0 -3"></a-entity>
+            
+            <!--ADD BIN (THIS SIDE)-->
+            <a-entity   id = "plastic-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "0 0 -1.5"></a-entity>
+            <a-entity   id = "paper-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "2 0 -1.5"></a-entity>
+            <a-entity   id = "metal-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-2 0 -1.5"></a-entity>
+            <a-entity   id = "trash-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-4 0 -1.5"></a-entity>
+            <a-entity   id = "compost-bin"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "4 0 -1.5"></a-entity>
+            
+            <!--ADD BIN (THAT SIDE)-->
+            <a-entity   id = "plastic-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "0 0 -4.5"></a-entity>
+            <a-entity   id = "paper-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "2 0 -4.5"></a-entity>
+            <a-entity   id = "metal-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-2 0 -4.5"></a-entity>
+            <a-entity   id = "trash-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "-4 0 -4.5"></a-entity>
+            <a-entity   id = "compost-bin2"
+                        geometry = "primitive: box; depth: 1; height: 1; width: 1"
+                        position = "4 0 -4.5"></a-entity>
+        </a-scene>
+    </body>
 </html>
