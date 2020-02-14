@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>nguyenHoang_IMD3901</title>
+        <title>Trash'D</title>
         <meta name = "description" content = "nguyenHoang_IMD3901">
         <meta charset = "UTF-8">
         <script src = "https://aframe.io/releases/1.0.3/aframe.min.js"></script>
         <script src = "https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+        <script src = "https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+        <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
 		<script src = "js/pick-up-object-component.js"></script>
     </head>
     <body>
         <!--BEGIN A SCENE-->
-        <a-scene>      
+        <a-scene id="scene" physics>      
             <!--CAMERA-->
             <a-entity 	id="primary-camera"
 						camera
-						look-controls
-						wasd-controls
-						position="0 1.5 0"
-						walk>
-				<a-entity 	id = "main-cursor"
-							cursor ="rayOrigin:mouse;"
+						fps-look-controls="userHeight: 1"
+						position="0 1 0">
+                <a-entity 	id = "main-cursor"
+                            geometry="primitive: circle; radius: 0.01"
+                            material="color: red"
+                            position="0 0 -1"
+							cursor ="rayOrigin:entity;"
 							raycaster="objects: .clickable;">
 				</a-entity>
 			</a-entity>
@@ -30,53 +33,79 @@
             
              <!--ADDING THE PLANE-->
             <a-entity   geometry = "primitive:plane; height: 100; width: 100"
-                        rotation = "-90 0 0"></a-entity>
+                        material = "color: #f4eed7"
+                        rotation = "-90 0 0"
+                        static-body></a-entity>
             <!--ADDING A PRIMITIVE-->
 			<a-entity   id = "cube"
 						class = "clickable"
                         geometry = "primitive:box; depth: 1; height: 1; width: 1"
-                        position = "7 0 0"
+                        position = "0 2 -3"
+                        scale = "0.5 0.5 0.5"
                         rotation = "0 0 0"
-                        pick-up-object ="">
+                        dynamic-body
+                        pick-up-object>
             </a-entity >
             <!--ADD CONVEYOR-->
             <a-entity   id = "conveyor"
                         geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
-                        position = "0 0 -3"></a-entity>
+                        material = "color: #454545"
+                        position = "0 0 -3"
+                        static-body></a-entity>
             
             <!--ADD BIN (THIS SIDE)-->
             <a-entity   id = "plastic-bin"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "0 0 -1.5"></a-entity>
+                        material = "color: #229FFF"
+                        position = "0 0 -1.5"
+                        static-body></a-entity>
             <a-entity   id = "paper-bin"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "2 0 -1.5"></a-entity>
+                        material = "color: #AE3030"
+                        position = "2 0 -1.5"
+                        static-body></a-entity>
             <a-entity   id = "metal-bin"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "-2 0 -1.5"></a-entity>
+                        material = "color: #E5E4E4"
+                        position = "-2 0 -1.5"
+                        static-body></a-entity>
             <a-entity   id = "trash-bin"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "-4 0 -1.5"></a-entity>
+                        material = "color: #000000"
+                        position = "-4 0 -1.5"
+                        static-body></a-entity>
             <a-entity   id = "compost-bin"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "4 0 -1.5"></a-entity>
+                        material = "color: #39B54A"
+                        position = "4 0 -1.5"
+                        static-body></a-entity>
             
             <!--ADD BIN (THAT SIDE)-->
             <a-entity   id = "plastic-bin2"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "0 0 -4.5"></a-entity>
+                        material = "color: #229FFF"
+                        position = "0 0 -4.5"
+                        static-body></a-entity>
             <a-entity   id = "paper-bin2"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "2 0 -4.5"></a-entity>
+                        material = "color: #AE3030"
+                        position = "2 0 -4.5"
+                        static-body></a-entity>
             <a-entity   id = "metal-bin2"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "-2 0 -4.5"></a-entity>
+                        material = "color: #E5E4E4"
+                        position = "-2 0 -4.5"
+                        static-body></a-entity>
             <a-entity   id = "trash-bin2"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "-4 0 -4.5"></a-entity>
+                        material = "color: #000000"
+                        position = "-4 0 -4.5"
+                        static-body></a-entity>
             <a-entity   id = "compost-bin2"
                         geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                        position = "4 0 -4.5"></a-entity>
+                        material = "color: #39B54A"
+                        position = "4 0 -4.5"
+                        static-body></a-entity>
         </a-scene>
     </body>
 </html>
