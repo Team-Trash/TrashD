@@ -28,10 +28,6 @@ AFRAME.registerComponent('pick-up-object', {
             context.dropObject();
         });
 
-        context.el.addEventListener('mouseup', function(e){
-            context.dropObject();
-        });
-
         context.el.addEventListener('collide', function(e){
             console.log(e.detail.body.id);
             if(e.detail.body.id == 3){

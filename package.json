@@ -1,7 +1,7 @@
 {
-  "name": "Lesson1",
+  "name": "lesson1",
   "version": "1.0.0",
-  "description": "",
+  "description": "Virtual reality game to educate users on how to correctly categorize and dispose of waste.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +14,9 @@
   },
   "devDependencies": {
     "https-localhost": "^4.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "node ./app.js"
   }
 }
