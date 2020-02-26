@@ -1,3 +1,0 @@
-function setupConveyor(){
-    var trashArry = [];
-}
