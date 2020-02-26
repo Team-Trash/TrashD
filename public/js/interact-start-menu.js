@@ -32,5 +32,4 @@ AFRAME.registerComponent('interact-start-menu', {
         start.setAttribute('visible', 'false');
         ingame.setAttribute('visible', 'true');
     },
-
 });
