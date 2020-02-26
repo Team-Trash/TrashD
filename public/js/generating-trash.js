@@ -6,9 +6,10 @@ function setup(){
 function update(){
     //For 1s create trash
     setInterval('generatingTrash', 1000);
+
+    function generatingTrash(){
+        console.log("Test")
+        scene.append();
+    }
 }
 
-function generatingTrash(){
-    
-    scene.append();
-}
