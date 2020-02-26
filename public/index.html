@@ -32,16 +32,15 @@
                 <a-entity 	id="start-camera"
                             camera="active: true"
                             position="0 0 0">
-                    <a-entity 	id = "main-cursor"
-                                cursor ="rayOrigin:entity;"
+                    <a-entity 	id = "menu-cursor"
+                                cursor ="rayOrigin:mouse;"
                                 raycaster="objects: .menu;">
                     </a-entity>
                 </a-entity>
 
                 <!--MENU-->
                 <a-entity   id = "startMenu" interact-start-menu>
-                    <!--GENERATING THE START MENU-->
-                    <script>setupStartMenu()</script>
+
                 </a-entity>
             </a-entity>
 
