@@ -43,21 +43,18 @@
                             height = "1"
                             scale="0.8 0.8 0.8"></a-image>
                 
-                    <a-image    src = "#start-button"
+                    <a-image    
+                                id="singleButton"
+                                src = "#start-button"
                                 class = "menu"
                                 position = "-0.8 0 -2"
                                 width = "1.2"
                                 height = "0.5"></a-image>
                     
-                    <a-image    src = "#start-button"
+                    <a-image    id="multiButton"
+                                src = "#start-button"
                                 class = "menu"
                                 position = "0.8 0 -2"
-                                width = "1.2"
-                                height = "0.5"></a-image>
-
-                    <a-image    src = "#settings-button"
-                                class = "menu"
-                                position = "0 -0.8 -2"
                                 width = "1.2"
                                 height = "0.5"></a-image>
                 </a-entity>
@@ -69,11 +66,11 @@
             <a-entity id="ingame" visible="false">
 
                 <!--CAMERA-->
-                <a-entity 	id="primary-camera"
-                            camera="active-false"
+                <a-entity 	id="game-camera"
+                            camera="active: false"
                             fps-look-controls="userHeight: 1"
                             position="0 1 0">
-                    <a-entity 	id = "main-cursor"
+                    <a-entity 	id = "game-cursor"
                                 geometry="primitive: circle; radius: 0.01"
                                 material="color: red"
                                 position="0 0 -1"
