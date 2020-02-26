@@ -45,16 +45,27 @@
             </a-entity>
 
             <!--PAUSE MENU SCENE-->
+            
+            <!--ADDING A PRIMITIVE-->
+            <a-entity   id = "cube"
+                        class = "clickable"
+                        geometry = "primitive:box; depth: 1; height: 1; width: 1"
+                        position = "0 2 -3"
+                        scale = "0.5 0.5 0.5"
+                        rotation = "0 0 0"
+                        dynamic-body
+                        pick-up-object>
+            </a-entity>
 
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
 
                 <!--CAMERA-->
-                <a-entity 	id="primary-camera"
-                            camera="active-false"
+                <a-entity 	id="game-camera"
+                            camera="active: false"
                             fps-look-controls="userHeight: 1"
                             position="0 1 0">
-                    <a-entity 	id = "main-cursor"
+                    <a-entity 	id = "game-cursor"
                                 geometry="primitive: circle; radius: 0.01"
                                 material="color: red"
                                 position="0 0 -1"
@@ -69,16 +80,7 @@
                             rotation = "-90 0 0"
                             static-body></a-entity>
                 
-                <!--ADDING A PRIMITIVE-->
-                <a-entity   id = "cube"
-                            class = "clickable"
-                            geometry = "primitive:box; depth: 1; height: 1; width: 1"
-                            position = "0 2 -3"
-                            scale = "0.5 0.5 0.5"
-                            rotation = "0 0 0"
-                            dynamic-body
-                            pick-up-object>
-                </a-entity >
+                
 
                 <!--ADD CONVEYOR-->
                 <a-entity   id = "conveyor"
