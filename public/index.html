@@ -10,6 +10,10 @@
         <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
+
+        <!--SETUP SCRIPT-->
+        <script src="js/start-menu.js"></script>
+
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -36,27 +40,7 @@
 
                 <!--MENU-->
                 <a-entity   id = "startMenu" interact-start-menu>
-                    <a-image    id = "logo"
-                            src = "#logo"
-                            position = "0 1 -2"
-                            width = "3.7"
-                            height = "1"
-                            scale="0.8 0.8 0.8"></a-image>
-                
-                    <a-image    
-                                id="singleButton"
-                                src = "#start-button"
-                                class = "menu"
-                                position = "-0.8 0 -2"
-                                width = "1.2"
-                                height = "0.5"></a-image>
-                    
-                    <a-image    id="multiButton"
-                                src = "#start-button"
-                                class = "menu"
-                                position = "0.8 0 -2"
-                                width = "1.2"
-                                height = "0.5"></a-image>
+
                 </a-entity>
             </a-entity>
 

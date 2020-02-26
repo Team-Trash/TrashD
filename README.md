@@ -4,7 +4,7 @@ Virtual reality game to educate users on how to correctly categorize and dispose
 **Contributors**
 Ye Fang Kuang,
 Niki Roy,
-Dedka Said,
+Deka Said,
 Hoang Nguyen (Thao)
 
 **Development Blog**
