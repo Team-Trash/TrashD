@@ -1,8 +1,15 @@
 function setup(){
-    var trash = [];
+    var scene = document.getElementById('scene');
+
 }
 
 function update(){
     //For 1s create trash
-    setInterval('creatingTrash', 1000);
+    setInterval('generatingTrash', 1000);
+
+    function generatingTrash(){
+        console.log("Test")
+        scene.append();
+    }
 }
+
