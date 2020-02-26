@@ -6,7 +6,6 @@ function setupStartMenu(){
     var singePlayer = document.createElement('a-image');
     var multiplePlayer = document.createElement('a-image');
 
-    trashLogo.setAttribute('class', 'menu');
     trashLogo.setAttribute('src', '#logo');
     trashLogo.setAttribute('position', '0 1 -2');
     trashLogo.setAttribute('width', '3.7');
@@ -15,17 +14,17 @@ function setupStartMenu(){
 
     singePlayer.setAttribute('class', 'menu');
     singePlayer.setAttribute('id', 'singleButton');
-    singePlayer.setAttribute('src', '#start-button');
+    singePlayer.setAttribute('src', '#single-button');
     singePlayer.setAttribute('position', '-0.8 0 -2');
-    singePlayer.setAttribute('width', '1.2');
-    singePlayer.setAttribute('height', '0.5');
+    singePlayer.setAttribute('width', '1.29');
+    singePlayer.setAttribute('height', '.363');
 
     multiplePlayer.setAttribute('class', 'menu');
     multiplePlayer.setAttribute('id', 'multiButton');
-    multiplePlayer.setAttribute('src', '#start-button');
+    multiplePlayer.setAttribute('src', '#multi-button');
     multiplePlayer.setAttribute('position', '0.8 0 -2');
-    multiplePlayer.setAttribute('width', '1.2');
-    multiplePlayer.setAttribute('height', '0.5');
+    multiplePlayer.setAttribute('width', '1.29');
+    multiplePlayer.setAttribute('height', '.363');
 
     startMenu.append(trashLogo);
     startMenu.append(singePlayer);
