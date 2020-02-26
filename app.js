@@ -1,15 +1,36 @@
-const express   =   require("express");     //"include"
-const app       =   express();              //initialize
-const http      =   require("http");        //need http
-const server    =   http.createServer(app); //initialize
+const express   = require('express');
+const app       = express();
+const http      = require('http');
+const server    = http.createServer(app);
+const socketIO  = require('socket.io')(server); //hello I am new
+let map = [];
 
-const PORT      =   1111;   //Default is 80
+const LISTEN_PORT = 3333; //make sure greater than 3000. Some ports are reserved/blocked by firewall ...
 
-server.listen(PORT);                        //Hey  listen!
-app.use(express.static(__dirname + "/public/")); //setting the html directory
-console.log("Listening on port: " + PORT);
+app.use((express.static(__dirname + '/public'))); //set root dir to the public folder
 
-//route
+//routes
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/public/");
 });
+
+//websocket stuff
+socketIO.on('connection', function(socket) {
+    console.log(socket.id + ' has connected!');
+
+    socket.on('disconnect', function(data) {
+        console.log(socket.id + ' has disconnected');
+        
+    });
+
+    //custom events
+    socket.on('add-player', function(data) {//Add player to lobby across clients
+        console.log('creating entities for ' + data);
+        socket.broadcast.emit('construct-player', data);
+    });
+
+});
+
+//finally, start server
+server.listen(LISTEN_PORT);
+console.log('listening to port: ' + LISTEN_PORT);
