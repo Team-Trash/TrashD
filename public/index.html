@@ -8,12 +8,9 @@
         <script src = "https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
         <script src = "https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
         <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
+        <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
-
-        <!--SETUP SCRIPT-->
-        <script src="js/start-menu.js"></script>
-
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -22,8 +19,9 @@
             <!--LOADING ASSETS-->
             <a-assets>
                 <img id="logo" src="assets/logo.png">
-                <img id="start-button" src="assets/start-button.jpg">
-                <img id="settings-button" src="assets/settings-button.jpg">
+                <img id="single-button" src="assets/SinglePlayer.png">
+                <img id="multi-button" src="assets/Multiplayer.png">
+                <img id="multi-list" src="assets/multiplayer_list.png">
             </a-assets>
 
             <!--START MENU SCENE-->
@@ -40,13 +38,12 @@
 
                 <!--MENU-->
                 <a-entity   id = "startMenu" interact-start-menu>
-                    <script>setupStartMenu()</script>
                 </a-entity>
             </a-entity>
 
             <!--PAUSE MENU SCENE-->
             
-            <!--ADDING A PRIMITIVE-->
+            <!--TESTING-->
             <a-entity   id = "cube"
                         class = "clickable"
                         geometry = "primitive:box; depth: 1; height: 1; width: 1"
@@ -63,7 +60,6 @@
                 <!--CAMERA-->
                 <a-entity 	id="game-camera"
                             camera="active: false"
-                            fps-look-controls="userHeight: 1"
                             position="0 1 0">
                     <a-entity 	id = "game-cursor"
                                 geometry="primitive: circle; radius: 0.01"

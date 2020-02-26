@@ -5,7 +5,7 @@ const server    = http.createServer(app);
 const socketIO  = require('socket.io')(server); //hello I am new
 let map = [];
 
-const LISTEN_PORT = 3333; //make sure greater than 3000. Some ports are reserved/blocked by firewall ...
+const LISTEN_PORT = 1111;
 
 app.use((express.static(__dirname + '/public'))); //set root dir to the public folder
 
@@ -14,7 +14,7 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + "/public/");
 });
 
-//websocket stuff
+//Websocket
 socketIO.on('connection', function(socket) {
     console.log(socket.id + ' has connected!');
 
