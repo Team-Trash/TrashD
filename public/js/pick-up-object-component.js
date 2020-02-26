@@ -48,10 +48,12 @@ AFRAME.registerComponent('pick-up-object', {
     },
 
     dropObject: function(){
-        var scene = document.getElementById("ingame");
+        var scene = document.getElementById("scene");
+        
         this.el.object3D.getWorldPosition(this.el.object3D.position);
+        
         this.el.object3D.getWorldQuaternion(this.el.object3D.rotation);
         this.el.setAttribute("dynamic-body", '');
-        scene.object3D.attach(this.el.object3D);
+        scene.object3D.add(this.el.object3D);
     }
 });

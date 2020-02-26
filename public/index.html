@@ -61,6 +61,17 @@
             </a-entity>
 
             <!--PAUSE MENU SCENE-->
+            
+            <!--ADDING A PRIMITIVE-->
+            <a-entity   id = "cube"
+                        class = "clickable"
+                        geometry = "primitive:box; depth: 1; height: 1; width: 1"
+                        position = "0 2 -3"
+                        scale = "0.5 0.5 0.5"
+                        rotation = "0 0 0"
+                        dynamic-body
+                        pick-up-object>
+            </a-entity>
 
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
@@ -85,16 +96,7 @@
                             rotation = "-90 0 0"
                             static-body></a-entity>
                 
-                <!--ADDING A PRIMITIVE-->
-                <a-entity   id = "cube"
-                            class = "clickable"
-                            geometry = "primitive:box; depth: 1; height: 1; width: 1"
-                            position = "0 2 -3"
-                            scale = "0.5 0.5 0.5"
-                            rotation = "0 0 0"
-                            dynamic-body
-                            pick-up-object>
-                </a-entity >
+                
 
                 <!--ADD CONVEYOR-->
                 <a-entity   id = "conveyor"
