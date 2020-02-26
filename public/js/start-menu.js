@@ -14,12 +14,14 @@ function setupStartMenu(){
     trashLogo.setAttribute('scale', '0.8 0.8 0.8');
 
     singePlayer.setAttribute('class', 'menu');
+    singePlayer.setAttribute('id', 'singleButton');
     singePlayer.setAttribute('src', '#start-button');
     singePlayer.setAttribute('position', '-0.8 0 -2');
     singePlayer.setAttribute('width', '1.2');
     singePlayer.setAttribute('height', '0.5');
 
     multiplePlayer.setAttribute('class', 'menu');
+    multiplePlayer.setAttribute('id', 'multiButton');
     multiplePlayer.setAttribute('src', '#start-button');
     multiplePlayer.setAttribute('position', '0.8 0 -2');
     multiplePlayer.setAttribute('width', '1.2');
