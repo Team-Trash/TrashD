@@ -8,12 +8,9 @@
         <script src = "https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
         <script src = "https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
         <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
+        <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
-
-        <!--SETUP SCRIPT-->
-        <script src="js/start-menu.js"></script>
-
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -62,7 +59,6 @@
                 <!--CAMERA-->
                 <a-entity 	id="game-camera"
                             camera="active: false"
-                            fps-look-controls="userHeight: 1"
                             position="0 1 0">
                     <a-entity 	id = "game-cursor"
                                 geometry="primitive: circle; radius: 0.01"

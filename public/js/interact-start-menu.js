@@ -1,3 +1,5 @@
+let socket;
+
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
         
@@ -27,7 +29,7 @@ AFRAME.registerComponent('interact-start-menu', {
                 }
 
                 if(menuID == 'multiButton'){
-                    
+                    context.enterMulti();
                 }
             });
         });
@@ -35,7 +37,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
     //Generate start menu
     setupStartMenu : function(){
-        console.log("START MENU CREATED")
+        console.log("Star menu created")
         var startMenu = document.getElementById('startMenu');
         var trashLogo = document.createElement('a-image');
         var singePlayer = document.createElement('a-image');
@@ -73,8 +75,17 @@ AFRAME.registerComponent('interact-start-menu', {
         var ingame = document.getElementById('ingame');
 
         start.setAttribute('visible', 'false');
-        start.querySelector('#start-camera').setAttribute('camera', 'active: false');;
+        start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
-        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');;
+        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
+        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
     },
+
+    enterMulti: function(){
+        socket = io();
+
+        socket.on('connect', function() {
+            console.log(socket.id + " connected!");
+        });
+    }
 });
