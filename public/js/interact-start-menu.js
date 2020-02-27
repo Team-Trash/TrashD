@@ -1,4 +1,5 @@
 let socket;
+let context;
 
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
@@ -8,10 +9,12 @@ AFRAME.registerComponent('interact-start-menu', {
     init : function() {
         console.log('Initalize Start Menu');
         //Init context
-        const context = this;
+        context = this;
+        
         context.startMenu();
-        let menuButtons = context.el.querySelectorAll('.menu');
+    },
 
+    menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
@@ -24,13 +27,20 @@ AFRAME.registerComponent('interact-start-menu', {
             menuButton.addEventListener('click', function(e){
                 let menuID = menuButton.getAttribute('id');
                 
-                if(menuID == 'singleButton'){
-                    context.enterSingle();
+                switch(menuID){
+                    case 'singleButton':
+                        context.enterSingle();
+                        break;
+
+                    case 'multiButton':
+                        context.enterMulti();
+                        break;
+
+                    case 'back':
+                        context.startMenu();
+                        break;
                 }
 
-                if(menuID == 'multiButton'){
-                    context.enterMulti();
-                }
             });
         });
     },
@@ -38,10 +48,16 @@ AFRAME.registerComponent('interact-start-menu', {
     //Generate start menu
     startMenu : function(){
         console.log("Star menu created")
+
         var startMenu = document.getElementById('startMenu');
         var trashLogo = document.createElement('a-image');
         var singlePlayer = document.createElement('a-image');
         var multiplePlayer = document.createElement('a-image');
+
+        //Empty start menu of child nodes
+        while (startMenu.firstChild) {
+            startMenu.removeChild(startMenu.lastChild);
+        }
 
         trashLogo.setAttribute('src', '#logo');
         trashLogo.setAttribute('position', '0 1 -2');
@@ -66,6 +82,8 @@ AFRAME.registerComponent('interact-start-menu', {
         startMenu.append(trashLogo);
         startMenu.append(singlePlayer);
         startMenu.append(multiplePlayer);
+
+        context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
     multiMenu: function(){
@@ -73,29 +91,42 @@ AFRAME.registerComponent('interact-start-menu', {
         var multiList = document.createElement('a-entity');
         var multiBG =  document.createElement('a-image');
         var textTest =  document.createElement('a-entity');
+        var back =  document.createElement('a-entity');
 
         //Empty start menu of child nodes
         while (startMenu.firstChild) {
             startMenu.removeChild(startMenu.lastChild);
         }
 
-        multiList.setAttribute('class', 'menu');
         multiList.setAttribute('id', 'multiList');
-        multiList.setAttribute('position', '0 0 -2');
+        multiList.setAttribute('position', '0 0 -1');
 
         multiBG.setAttribute('src', '#multi-list');
-        multiBG.setAttribute('scale', '2.5 2.5 2.5');
+        multiBG.setAttribute('scale', '1.5 1.5 1.5');
         multiBG.setAttribute('width', '1.29');
         multiBG.setAttribute('height', '.847');
 
-        textTest.setAttribute('text', 'value: testfsdfsdfsdfsdf; color: #3b3836;');
-        textTest.setAttribute('position', '-0.5 0.8 0');
-        textTest.setAttribute('scale', '2 2 2');
+        socket.emit('get-rooms');
+
+        textTest.setAttribute('text', 'value: New Room; color: f4eed7; align: center; height: 2; width: 1;');
+        textTest.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
+        textTest.setAttribute('material', 'color: #3b3836');
+        textTest.setAttribute('position', '-0.65 0.45 0.1');
+        textTest.setAttribute('class', 'menu');
+
+        back.setAttribute('text', 'value: Back to start menu; color: f4eed7; align: center; height: 2; width: 1;');
+        back.setAttribute('id', 'back');
+        back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
+        back.setAttribute('material', 'color: #697c37');
+        back.setAttribute('position', '-0.6 -0.45 0.1');
+        back.setAttribute('class', 'menu');
 
         startMenu.append(multiList);
         multiList.append(multiBG);
         multiList.append(textTest);
+        multiList.append(back);
 
+        context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
     enterSingle: function(){
