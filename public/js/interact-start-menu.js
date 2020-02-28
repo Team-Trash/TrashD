@@ -61,9 +61,9 @@ AFRAME.registerComponent('interact-start-menu', {
         });
     },
 
-    //Generate start menu
+    //Generate Start Menu
     startMenu : function(){
-        console.log("Start menu created.")
+        console.log("Start menu created!");
 
         var startMenu = document.getElementById('startMenu');
         var trashLogo = document.createElement('a-image');
