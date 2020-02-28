@@ -26,6 +26,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
             menuButton.addEventListener('click', function(e){
                 let menuID = menuButton.getAttribute('id');
+                let roomID = menuButton.getAttribute('data-room');
                 
                 switch(menuID){
                     case 'singleButton':
@@ -33,12 +34,27 @@ AFRAME.registerComponent('interact-start-menu', {
                         break;
 
                     case 'multiButton':
-                        context.enterMulti();
+                        context.multiList();
                         break;
 
+                    case 'newRoom':
+                        socket.emit('new-room');
+                        socket.on('return-room-id', function(data){
+                            context.enterMulti(data);
+                        });
+                        break;
+                    
                     case 'back':
+                        socket.close();
                         context.startMenu();
                         break;
+                }
+
+                if(roomID){
+                    socket.emit('join-room', roomID);
+                    socket.on('return-room-id', function(data){
+                        context.enterMulti(data);
+                    });
                 }
 
             });
@@ -47,7 +63,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
     //Generate start menu
     startMenu : function(){
-        console.log("Star menu created")
+        console.log("Start menu created.")
 
         var startMenu = document.getElementById('startMenu');
         var trashLogo = document.createElement('a-image');
@@ -90,8 +106,10 @@ AFRAME.registerComponent('interact-start-menu', {
         var startMenu = document.getElementById('startMenu');
         var multiList = document.createElement('a-entity');
         var multiBG =  document.createElement('a-image');
-        var textTest =  document.createElement('a-entity');
+        var newRoom =  document.createElement('a-entity');
         var back =  document.createElement('a-entity');
+        let rooms = [];
+        let position = 0.45;
 
         //Empty start menu of child nodes
         while (startMenu.firstChild) {
@@ -105,32 +123,64 @@ AFRAME.registerComponent('interact-start-menu', {
         multiBG.setAttribute('scale', '1.5 1.5 1.5');
         multiBG.setAttribute('width', '1.29');
         multiBG.setAttribute('height', '.847');
+        startMenu.append(multiList);
 
         socket.emit('get-rooms');
+        socket.on('return-rooms', function(data){
+            let roomCount = 1;
+            console.log(data);
+            for (room in data){
+                if(room.includes("room") && data[room].length < 2){
+                    position -= 0.15;
+                    rooms[roomCount] = document.createElement('a-entity');
+                    rooms[roomCount].setAttribute('text', 'value: Room ' + roomCount + '; color: #f4eed7; align: center; height: 2; width: 1;');
+                    rooms[roomCount].setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
+                    rooms[roomCount].setAttribute('material', 'color: #3b3836');
+                    rooms[roomCount].setAttribute('position',  '-0.65 ' + position + ' 0.1');
+                    rooms[roomCount].setAttribute('class', 'menu');
+                    rooms[roomCount].setAttribute('data-room', room);
 
-        textTest.setAttribute('text', 'value: New Room; color: f4eed7; align: center; height: 2; width: 1;');
-        textTest.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
-        textTest.setAttribute('material', 'color: #3b3836');
-        textTest.setAttribute('position', '-0.65 0.45 0.1');
-        textTest.setAttribute('class', 'menu');
+                    multiList.append(rooms[roomCount]);
+                    roomCount++;
 
-        back.setAttribute('text', 'value: Back to start menu; color: f4eed7; align: center; height: 2; width: 1;');
+                    context.menuEventListener(context.el.querySelectorAll('.menu'));
+                }
+            }
+        });
+
+        newRoom.setAttribute('text', 'value: New Room; color: #fff; align: center; height: 2; width: 1;');
+        newRoom.setAttribute('id', 'newRoom');
+        newRoom.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
+        newRoom.setAttribute('material', 'color: #fe9801');
+        newRoom.setAttribute('position',  '-0.65 ' + position + ' 0.1');
+        newRoom.setAttribute('class', 'menu');
+
+        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 1;');
         back.setAttribute('id', 'back');
         back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
         back.setAttribute('material', 'color: #697c37');
         back.setAttribute('position', '-0.6 -0.45 0.1');
         back.setAttribute('class', 'menu');
 
-        startMenu.append(multiList);
         multiList.append(multiBG);
-        multiList.append(textTest);
+        multiList.append(newRoom);
         multiList.append(back);
 
         context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
+    multiList: function(){
+        socket = io();
+
+        socket.on('connect', function() {
+            console.log(socket.id + " connected!");
+        });
+
+        this.multiMenu();
+    },
+
     enterSingle: function(){
-        console.log('Entering Single Player');
+        console.log('Entering SinglePlayer');
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
@@ -142,13 +192,16 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
     },
 
-    enterMulti: function(){
-        socket = io();
+    enterMulti: function(data){
+        console.log('Entering ' + data);
 
-        socket.on('connect', function() {
-            console.log(socket.id + " connected!");
-        });
+        var start = document.getElementById('start');
+        var ingame = document.getElementById('ingame');
 
-        this.multiMenu();
+        start.setAttribute('visible', 'false');
+        start.querySelector('#start-camera').setAttribute('camera', 'active: false');
+        ingame.setAttribute('visible', 'true');
+        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
+        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
     }
 });
