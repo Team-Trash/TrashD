@@ -11,6 +11,8 @@
         <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
+        <script src = "js/generating-trash.js"></script>
+
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -37,26 +39,27 @@
                 </a-entity>
 
                 <!--MENU-->
-                <a-entity   id = "startMenu" interact-start-menu>
-                </a-entity>
+                <a-entity   id = "startMenu" interact-start-menu></a-entity>
             </a-entity>
 
             <!--PAUSE MENU SCENE-->
             
-            <!--TESTING-->
-            <!--<a-entity   id = "cube"
-                        class = "clickable"
-                        geometry = "primitive:box; depth: 1; height: 1; width: 1"
-                        position = "0 2 -3"
-                        scale = "0.5 0.5 0.5"
-                        rotation = "0 0 0"
-                        dynamic-body
-                        pick-up-object>
-            </a-entity>-->
+            <!--TESTING TRASH OBJECT-->
+            <a-entity   id = "cube"
+                            class = "clickable"
+                            geometry = "primitive:box; depth: 1; height: 1; width: 1"
+                            position = "-5 1 -3"
+                            scale = "0.5 0.5 0.5"
+                            rotation = "0 0 0"
+                            dynamic-body
+                            animation = "property: position; from: -5 1 -3; to: 5 1 -3; dur: 10000"
+                            pick-up-object>
+            </a-entity>
 
+            <script>gtFunction()</script>
+            
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
-
                 <!--CAMERA-->
                 <a-entity 	id="game-camera"
                             camera="active: false"
@@ -69,7 +72,7 @@
                                 raycaster="objects: .clickable;">
                     </a-entity>
                 </a-entity>
-
+                
                 <!--ADDING THE PLANE-->
                 <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                             material = "color: #f4eed7"
