@@ -3,7 +3,7 @@ const app       = express();
 const http      = require('http');
 const server    = http.createServer(app);
 const socketIO  = require('socket.io')(server); //hello I am new
-let map = [];
+let rooms = 0;
 
 const LISTEN_PORT = 1111;
 
@@ -24,9 +24,24 @@ socketIO.on('connection', function(socket) {
     });
 
     //custom events
-    socket.on('add-player', function(data) {//Add player to lobby across clients
-        console.log('creating entities for ' + data);
-        socket.broadcast.emit('construct-player', data);
+    socket.on('get-rooms', function(data) {//Add player to lobby across clients
+        console.log('Getting rooms for ' + socket.id);
+
+        let rooms = socketIO.sockets.adapter.rooms;
+
+        socket.emit('return-rooms', rooms);
+    });
+
+    socket.on('new-room', function(data){
+        let roomID = 'room' + rooms;
+        socket.join(roomID);
+        rooms++;
+        socket.emit('return-room-id', roomID);
+    });
+
+    socket.on('join-room', function(data){
+        socket.join(data);
+        socket.emit('return-room-id', data);
     });
 
 });
