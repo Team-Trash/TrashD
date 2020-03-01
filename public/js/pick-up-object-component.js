@@ -40,11 +40,18 @@ AFRAME.registerComponent('pick-up-object', {
     pickUpObject: function(){
         var camera = document.querySelector("#game-camera");
         this.el.removeAttribute("dynamic-body");
-        this.el.object3D.position.set(0,0,-2)
+        this.el.object3D.position.set(0, 0, -2)
         this.el.object3D.rotation.x = 0;
         this.el.object3D.rotation.y = 0;
         this.el.object3D.rotation.z = 0;
         camera.object3D.add(this.el.object3D);
+
+        console.log("This is a position x: " + this.el.object3D.position.x);
+        console.log("This is a position y: " + this.el.object3D.position.y);
+        console.log("This is a position z: " + this.el.object3D.position.z);
+
+        //STOP THE ANIMATION FROMT THE TRASH
+        this.el.removeAttribute('animation');
     },
 
     dropObject: function(){

@@ -3,6 +3,7 @@ function gtFunction(){
     var scene = document.getElementById('scene');
     generatingTrash = setInterval(generatingTrashFunction, 3000);
 
+
     function generatingTrashFunction(){
         console.log("Trash generating");
         var trash = document.createElement('a-entity');
@@ -11,12 +12,11 @@ function gtFunction(){
         trash.setAttribute('position', '-5 2 -3');
         trash.setAttribute('scale', '0.5 0.5 0.5');
         trash.setAttribute('rotation', '0 0 0');
-        trash.setAttribute('dynamic-body', '');
+        trash.setAttribute('animation', 'property: position; from: -5.5 1 -3; to: 5.5 1 -3; dur: 7000; easing: linear');
         trash.setAttribute('pick-up-object', '');
 
-        console.log(trash.position);
         scene.append(trash);
         //REMOVE THIS SO IT CAN CONTINUELY ADDING NEW TRASH
-        clearInterval(generatingTrash);
+        //clearInterval(generatingTrash);
     }
 }
