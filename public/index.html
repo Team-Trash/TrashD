@@ -24,6 +24,10 @@
                 <img id="single-button" src="assets/SinglePlayer.png">
                 <img id="multi-button" src="assets/Multiplayer.png">
                 <img id="multi-list" src="assets/multiplayer_list.png">
+
+                <!--3D MODELS-->
+                <a-asset-item id="belt-obj" src="assets/models/belt.obj"></a-asset-item>
+                <a-asset-item id="belt-mtl" ew src="assets/models/belt.mtl"></a-asset-item>
             </a-assets>
 
             <!--START MENU SCENE-->
@@ -88,11 +92,12 @@
                 
                 
 
-                <!--ADD CONVEYOR-->
-                <a-entity   id = "conveyor"
-                            geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
-                            material = "color: #454545"
-                            position = "0 0 -3  "
+                <!--ADD CONVEYOR geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
+                                material = "color: #454545"-->
+                <a-entity   id          = "conveyor"
+                            obj-model   = "obj:#belt-obj; mtl:#belt-mtl"
+                            position    = "0 0.738 -3"
+                            scale       = "0.64 0.25 0.25" 
                             static-body></a-entity>
 
                 <!--<a-entity   geometry = "primitive: box; depth: 1.25; height: 3; width: 1.5"
