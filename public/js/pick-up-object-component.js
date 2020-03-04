@@ -29,9 +29,12 @@ AFRAME.registerComponent('pick-up-object', {
         });
 
         context.el.addEventListener('collide', function(e){
-            console.log(e.detail.body.id);
-            if(e.detail.body.id == 3){
-                e.detail.target.el.setAttribute('visible', false);
+            let collider = e.detail.body.el.getAttribute('id');
+
+            if(collider == 'plastic-bin'){
+                //e.detail.target.el.setAttribute('visible', false);
+                //e.detail.target.el.removeAttribute('dynamic-body');
+                e.detail.target.el.remove();
             }
         });
     },
@@ -46,11 +49,11 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.object3D.rotation.z = 0;
         camera.object3D.add(this.el.object3D);
 
-        console.log("This is a position x: " + this.el.object3D.position.x);
-        console.log("This is a position y: " + this.el.object3D.position.y);
-        console.log("This is a position z: " + this.el.object3D.position.z);
+        //console.log("This is a position x: " + this.el.object3D.position.x);
+        //console.log("This is a position y: " + this.el.object3D.position.y);
+        //console.log("This is a position z: " + this.el.object3D.position.z);
 
-        //STOP THE ANIMATION FROMT THE TRASH
+        //STOP THE ANIMATION FROM THE TRASH
         this.el.removeAttribute('animation');
     },
 
