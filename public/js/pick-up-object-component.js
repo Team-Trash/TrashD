@@ -1,6 +1,8 @@
 AFRAME.registerComponent('pick-up-object', {
     schema : {
         cursor: {type: 'selector', default: "#game-cursor"},
+        pickUpStatus: {type: 'boolean', default: false},
+        mouseButton: {type: 'int'}
     },
 
     init : function() {
@@ -22,10 +24,23 @@ AFRAME.registerComponent('pick-up-object', {
 
         context.el.addEventListener('mousedown', function(e){
             context.pickUpObject();
+            context.data.pickUpStatus = true;
+            console.log(context.data.pickUpStatus);
         });
 
-        context.el.addEventListener('mouseup', function(e){
-            context.dropObject();
+        document.addEventListener('mouseup', function(e){
+            if(context.data.pickUpStatus == true){
+                if(e.button == 0){
+                    context.dropObject();
+                    console.log("drop");
+                    context.data.pickUpStatus = false;
+                }
+                if(e.button == 2){
+                    context.throwObject();
+                    console.log("throw");
+                    context.data.pickUpStatus = false;
+                }
+            }
         });
 
         context.el.addEventListener('collide', function(e){
@@ -34,6 +49,8 @@ AFRAME.registerComponent('pick-up-object', {
             if(collider == 'plastic-bin'){
                 //e.detail.target.el.setAttribute('visible', false);
                 //e.detail.target.el.removeAttribute('dynamic-body');
+                e.preventDefault;
+                e.stopPropagation;
                 e.detail.target.el.remove();
             }
         });
@@ -65,5 +82,16 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.object3D.getWorldQuaternion(this.el.object3D.rotation);
         this.el.setAttribute("dynamic-body", '');
         scene.object3D.add(this.el.object3D);
+    },
+
+    throwObject: function(){
+        var scene = document.getElementById("scene");
+        
+        this.el.object3D.getWorldPosition(this.el.object3D.position);
+        
+        this.el.object3D.getWorldQuaternion(this.el.object3D.rotation);
+        this.el.setAttribute("dynamic-body", '');
+        scene.object3D.add(this.el.object3D);
+        this.el.body.applyLocalImpulse(new CANNON.Vec3(0, 1, -40), new CANNON.Vec3(0, 0, 0));
     }
 });
