@@ -2,7 +2,8 @@ AFRAME.registerComponent('pick-up-object', {
     schema : {
         cursor: {type: 'selector', default: "#game-cursor"},
         pickUpStatus: {type: 'boolean', default: false},
-        mouseButton: {type: 'int'}
+        mouseButton: {type: 'int'},
+        score : {type: 'int', default: 0},
     },
 
     init : function() {
@@ -45,13 +46,18 @@ AFRAME.registerComponent('pick-up-object', {
 
         context.el.addEventListener('collide', function(e){
             let collider = e.detail.body.el.getAttribute('id');
+            let ingameEl = document.querySelector("#ingame");
 
             if(collider == 'plastic-bin'){
-                //e.detail.target.el.setAttribute('visible', false);
-                //e.detail.target.el.removeAttribute('dynamic-body');
-                e.preventDefault;
-                e.stopPropagation;
-                e.detail.target.el.remove();
+                e.detail.target.el.setAttribute('visible', false);
+                context.data.score += 10;
+                ingameEl.setAttribute("ingame", "score: " + context.data.score);
+
+                setTimeout(function() {
+                    if(e.detail.target.el){
+                        e.detail.target.el.remove();
+                    }
+                }, 0);
             }
         });
     },

@@ -5,7 +5,7 @@ function gtFunction(){
 
 
     function generatingTrashFunction(){
-        console.log("Trash generating");
+        //console.log("Trash generating");
         var trash = document.createElement('a-entity');
         trash.setAttribute('class', 'clickable');
         trash.setAttribute('geometry', 'primitive: box; depth: 1; height: 1; width: 1');
