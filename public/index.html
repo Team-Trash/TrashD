@@ -85,6 +85,18 @@
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .clickable;">
                     </a-entity>
+                    <a-text font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                            color = "black"
+                            value = "You"
+                            position = "-0.25 0.75 -1"
+                            width = "2"></a-text>
+                    
+                    <a-text font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                            color = "black"
+                            position = "0.2 0.75 -1"
+                            value = "Opponent"
+                            width = "2"></a-text>   
+
                     <a-text id="timer"
                             value="Timer"
                             font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
@@ -93,6 +105,7 @@
                             position="-1.2 0.5 -1"
                             width="2">
                     </a-text>
+
                     <a-text id="score"   
                             value="0 PTS"
                             font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
@@ -100,7 +113,8 @@
                             align="right"
                             position="1.2 0.5 -1"
                             width="2">
-                    </a-text    id="timer"   >
+                    </a-text    id="timer">
+
                 </a-entity>
                 
                 <!--ADDING THE PLANE-->
@@ -109,7 +123,7 @@
                             rotation = "-90 0 0"
                             static-body></a-entity>
                 
-                <!--GARBAGE BIN-->
+                <!--GARBAGE BIN OURSIDE-->
                 <a-entity   id          = "garbageBinPlastic"
                             obj-model   = "obj:#garbageBin-obj;"
                             material    = "src:#garbageBin-green;" 
@@ -158,67 +172,56 @@
                             position    = "1 0 0"
                             scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
-                <!--ADD CONVEYOR geometry = "primitive: box; depth: 1; height: 1.5; width: 12"
-                                material = "color: #454545"-->
+
+                <!--ADD CONVEYOR-->
                 <a-entity   id          = "conveyor"
                             obj-model   = "obj:#belt-obj; mtl:#belt-mtl"
                             position    = "0 0.738 -3"
                             scale       = "0.25 0.25 0.25" 
                             static-body></a-entity>
                 
-                <!--ADD BIN (OUR SIDE)-->
-                <a-entity   id = "plastic-bin"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #229FFF"
-                            position = "0 0 -1.5"
-                            static-body></a-entity>
-                <a-entity   id = "paper-bin"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #AE3030"
-                            position = "2 0 -1.5"
-                            static-body></a-entity>
-                <a-entity   id = "metal-bin"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #E5E4E4"
-                            position = "-2 0 -1.5"
-                            static-body></a-entity>
-                <a-entity   id = "trash-bin"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #000000"
-                            position = "-4 0 -1.5"
-                            static-body></a-entity>
-                <a-entity   id = "compost-bin"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #39B54A"
-                            position = "4 0 -1.5"
+                <!--ADD BIN (OTHER SIDE)-->
+                <a-entity   id          = "garbageBinPlastic2"
+                            obj-model   = "obj:#garbageBin-obj;"
+                            material    = "src:#garbageBin-green;" 
+                            position    = "0 0 -4.5"
+                            scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
                 
-                <!--ADD BIN (OPPONENT SIDE)-->
-                <a-entity   id = "plastic-bin2"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #229FFF"
-                            position = "0 0 -4.5"
+                <a-entity   id          = "garbageBinMetal2"
+                            obj-model   = "obj:#garbageBin-obj"
+                            material    = "src:#garbageBin-blue"
+                            position    = "-1 0 -5"
+                            scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
-                <a-entity   id = "paper-bin2"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #AE3030"
-                            position = "2 0 -4.5"
+                            
+                <a-entity   id          = "garbageBinGlass2"
+                            obj-model   = "obj:#garbageBin-obj"
+                            material    = "src:#garbageBin-green"
+                            position    = "1.5 0 -6"
+                            scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
-                <a-entity   id = "metal-bin2"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #E5E4E4"
-                            position = "-2 0 -4.5"
+
+                <a-entity   id          = "garbageBinCompost2"
+                            obj-model   = "obj:#garbageBin-obj"
+                            material    = "src:#garbageBin-green"
+                            position    = "-1.5 0 -6"
+                            scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
-                <a-entity   id = "trash-bin2"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #000000"
-                            position = "-4 0 -4.5"
-                            static-body></a-entity>
-                <a-entity   id = "compost-bin2"
-                            geometry = "primitive: box; depth: 1; height: 1; width: 1"
-                            material = "color: #39B54A"
-                            position = "4 0 -4.5"
-                            static-body></a-entity>
+                
+                <a-entity   id          = "garbageBinTrash2"
+                            obj-model   = "obj:#garbageBin-obj"
+                            material    = "src:#garbageBin-green"
+                            position    = "1 0 -5"
+                            scale       = "0.10 0.10 0.10" 
+                            static-body></a-entity>    
+                
+                <a-entity   id          = "garbageBinGlass"
+                            obj-model   = "obj:#garbageBin-obj"
+                            material    = "src:#garbageBin-green"
+                            position    = "1 0 -7"
+                            scale       = "0.10 0.10 0.10" 
+                            static-body></a-entity>   
             </a-entity>
 
         </a-scene>

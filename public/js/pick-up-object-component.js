@@ -72,10 +72,6 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.object3D.rotation.z = 0;
         camera.object3D.add(this.el.object3D);
 
-        //console.log("This is a position x: " + this.el.object3D.position.x);
-        //console.log("This is a position y: " + this.el.object3D.position.y);
-        //console.log("This is a position z: " + this.el.object3D.position.z);
-
         //STOP THE ANIMATION FROM THE TRASH
         this.el.removeAttribute('animation');
     },
