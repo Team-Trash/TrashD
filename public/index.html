@@ -14,12 +14,10 @@
         <script src = "js/interact-start-menu.js"></script>
         <script src = "js/ingame-component.js"></script>
         <script src = "js/generating-trash.js"></script>
-
     </head>
     <body>
         <!--BEGIN A SCENE-->
         <a-scene id="scene" physics>
-
             <!--LOADING ASSETS-->
             <a-assets>
                 <img id="logo" src="assets/logo.png">
@@ -27,28 +25,53 @@
                 <img id="multi-button" src="assets/Multiplayer.png">
                 <img id="multi-list" src="assets/multiplayer_list.png">
 
-                <!--Texture-->
+                <!--TEXTURE-->
                 <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
                 <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
+                <img crossorigin="anonymous" id="fireExtinguisher-texture" src="assets/textures/fireTexture.png">
+                
+                <!--TEXTURE PAPER-->
                 <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
+                <img crossorigin="anonymous" id="pizza2-texture" src="assets/textures/pizzatexture2.png">
+                <img crossorigin="anonymous" id="coffee-texture" src="assets/textures/coffeeCupTexture.png">
+                
+                <!--TEXTURE METAL-->
+                <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaText.png">
+
+                <!--TEXTURE PLASTIC-->
+                <img crossorigin="anonymous" id="cola-texture" src="assets/textures/bottleTexture.png">
+
+                <!--TEXTURE COMPOST-->
+                <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
+
 
                 <!--3D MODELS-->
                 <!--BELT-->
                 <a-asset-item id="belt-obj" src="assets/models/belt.obj"></a-asset-item>
                 <a-asset-item id="belt-mtl" src="assets/models/belt.mtl"></a-asset-item>
+                <a-asset-item id="fireExtinguisher-obj" src="assets/models/fireExtinguisher.obj"></a-asset-item>
+                <a-asset-item id="shelf-obj" src="assets/models/shelf.obj"></a-asset-item>
 
-                <!--GARBAGE BIN-->
+                <!--BIN MODELS-->
                 <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
 
-                <!--GARBAGE PAPER-->
+                <!--PAPER MODELS-->
                 <a-asset-item id="pizzaBox-obj" src="assets/models/paper/pizzaBox.obj"></a-asset-item>
+                <a-asset-item id="cardBoard-obj" src="assets/models/paper/cardBoardBox.obj"></a-asset-item>
+
                 
-                <!--GARBAGE TRASH-->
+                <!--TRASH MODELS-->
                 <a-asset-item id="chipBag-obj" src="assets/models/trashes/chipBag.obj"></a-asset-item>
 
-                <!--GARBAGE COMPOST-->
+                <!--COMPOST MODELS-->
                 <a-asset-item id="bananaPeel-obj" src="assets/models/compost/bananaPeel.obj"></a-asset-item>
 
+                <!--METAL MODELS-->
+                <a-asset-item id="colaCan-obj" src="assets/models/metals/colaCan.obj"></a-asset-item>
+
+                <!--PLASTIC MODELS-->
+                <a-asset-item id="bottle-obj" src="assets/models/plastic/bottle.obj"></a-asset-item>
+                <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>
             </a-assets>
 
             <!--START MENU SCENE-->
