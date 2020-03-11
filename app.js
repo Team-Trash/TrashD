@@ -2,15 +2,10 @@ const express   = require('express');
 const app       = express();
 const http      = require('http');
 const server    = http.createServer(app);
-const httpProxy = require('http-proxy');
 const socketIO  = require('socket.io')(server);
 let rooms = 0;
 
 const LISTEN_PORT = 3000;
-const PROXY_PORT = 80;
-
-//Proxy port
-httpProxy.createProxyServer({target:'http://127.0.0.1:' + LISTEN_PORT}).listen(PROXY_PORT);
 
 app.use((express.static(__dirname + '/public'))); //set root dir to the public folder
 
