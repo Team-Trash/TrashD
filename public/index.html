@@ -96,15 +96,17 @@
                             position="0 0 0">
                     <a-entity 	id = "vr-raycast-left"
                                 cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu;"></a-entity>
+                                raycaster="objects: .menu; showLine: true"
+                                line="color: blue; opacity: 0.7"></a-entity>
                 </a-entity >
                 <a-entity   hand-controls="right"
                             interact-start-menu-vr="cursor: #vr-raycast-right"
                             position="0 0 0">
                     <a-entity   id = "vr-raycast-right"
                                 cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu;"></a-entity>
-                </a-entity >
+                                raycaster="objects: .menu; showLine: true"
+                                line="color: blue; opacity: 0.7"></a-entity>
+                </a-entity>
 
                 <!--MENU-->
                 <a-entity   id = "startMenu" interact-start-menu></a-entity>
@@ -224,6 +226,21 @@
                     </a-text>
                 </a-entity>
                 
+                <!--VR Hands-->
+                <a-entity   hand-controls="left"
+                            position="0 0 0">
+                    <a-entity 	id = "vr-raycast-left"
+                                cursor ="rayOrigin:entity;"
+                                raycaster="objects: .menu; showLine: true"
+                                line="color: blue; opacity: 0.7"></a-entity>
+                </a-entity >
+                <a-entity   hand-controls="right"
+                            position="0 0 0">
+                    <a-entity   id = "vr-raycast-right"
+                                cursor ="rayOrigin:entity;"
+                                raycaster="objects: .menu; showLine: true"
+                                line="color: blue; opacity: 0.7"></a-entity>
+                </a-entity >
                 
                 
                 <!--GARBAGE BIN-->
