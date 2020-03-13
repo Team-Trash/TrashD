@@ -17,9 +17,9 @@ AFRAME.registerComponent('interact-start-menu', {
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
             let scene = document.getElementById('scene');
-            var trashLogo = document.getElementById('singleButton');
+            var trashLogo = document.getElementById('startLogo');
             var singlePlayer = document.getElementById('singleButton');
-            var multiplePlayer = document.getElementById('singleButton');
+            var multiplePlayer = document.getElementById('multiButton');
 
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
@@ -38,6 +38,14 @@ AFRAME.registerComponent('interact-start-menu', {
             //Enter/Exit VR
             scene.addEventListener('enter-vr', function(e){
                 trashLogo.setAttribute('position', '0 2 -2');
+                singlePlayer.setAttribute('position', '-0.8 1 -2');
+                multiplePlayer.setAttribute('position', '0.8 1 -2');
+            });
+
+            scene.addEventListener('exit-vr', function(e){
+                trashLogo.setAttribute('position', '0 1 -2');
+                singlePlayer.setAttribute('position', '-0.8 0 -2');
+                multiplePlayer.setAttribute('position', '0.8 0 -2');
             });
         });
     },
@@ -57,7 +65,7 @@ AFRAME.registerComponent('interact-start-menu', {
             startMenu.removeChild(startMenu.lastChild);
         }
 
-        trashLogo.setAttribute('id', '#startLogo');
+        trashLogo.setAttribute('id', 'startLogo');
         trashLogo.setAttribute('src', '#logo');
         if(scene.is('vr-mode')){
             trashLogo.setAttribute('position', '0 2 -2');
