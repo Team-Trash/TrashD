@@ -28,7 +28,7 @@ class Trash{
         trash.setAttribute('geometry', 'primitive: box; depth: 1; height: 1; width: 1');
         trash.setAttribute('position', this.positionX , this.positionY, this.positionZ);
         trash.setAttribute('scale', '0.5 0.5 0.5');
-        trash.setAttribute('animation', 'property: position; from: -5.5 1 -3; to: 7 1 -3; dur: 7000; easing: linear');
+        trash.setAttribute('animation', 'property: position; from: -5.5 1 0; to: 7 1 0; dur: 7000; easing: linear');
         trash.setAttribute('pick-up-object', '');
         return trash;
     }
