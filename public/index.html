@@ -12,6 +12,7 @@
         <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
+        <script src = "js/interact-start-menu-vr.js"></script>
         <script src = "js/ingame-component.js"></script>
         <script src = "js/generating-trash.js"></script>
     </head>
@@ -89,14 +90,16 @@
                                 raycaster="objects: .menu;"></a-entity>
                 </a-entity>
                 <a-entity   hand-controls="left"
+                            interact-start-menu-vr="cursor: #vr-raycast-left"
                             position="0 0 0">
-                    <a-entity 	
+                    <a-entity 	id = "vr-raycast-left"
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .menu;"></a-entity>
                 </a-entity >
                 <a-entity   hand-controls="right"
+                            interact-start-menu-vr="cursor: #vr-raycast-right"
                             position="0 0 0">
-                    <a-entity 
+                    <a-entity   id = "vr-raycast-right"
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .menu;"></a-entity>
                 </a-entity >

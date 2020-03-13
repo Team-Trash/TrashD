@@ -27,20 +27,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
             //Desktop Listeners
             menuButton.addEventListener('click', function(e){
-                context.clickMenu();
-            });
-
-            //VR Listeners
-            menuButton.addEventListener('xbuttondown', function(e){
-                context.clickMenu();
-            });
-
-            menuButton.addEventListener('abuttondown', function(e){
-                context.clickMenu();
-            });
-
-            menuButton.addEventListener('triggerdown', function(e){
-                context.clickMenu();
+                context.clickMenu(menuButton);
             });
         });
     },
@@ -163,7 +150,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.multiMenu();
     },
 
-    clickMenu: function(){
+    clickMenu: function(menuButton){
         let menuID = menuButton.getAttribute('id');
         let roomID = menuButton.getAttribute('data-room');
         
@@ -199,9 +186,11 @@ AFRAME.registerComponent('interact-start-menu', {
 
     enterSingle: function(){
         console.log('Entering SinglePlayer');
+        
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
+        let scene = document.getElementById('scene');
 
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
@@ -209,6 +198,10 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('ingame', '');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
         ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        
+        if(scene.is('vr-mode') == true){
+            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+        }
     },
 
     enterMulti: function(data){
