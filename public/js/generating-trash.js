@@ -1,7 +1,6 @@
 function gtFunction(){
     let trashID = 0;
     let trashDeletingID = 0;
-    var trashType = ["plastic", "metal", "compost", "paper", "trash"];
     let trashes = [];
     var scene = document.getElementById('scene');
     generatingTrash = setInterval(generatingTrashFunction, 3000);
