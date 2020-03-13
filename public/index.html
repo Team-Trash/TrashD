@@ -46,7 +46,7 @@
                 <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaText.png">
 
                 <!--TEXTURE PLASTIC-->
-                <img crossorigin="anonymous" id="cola-texture" src="assets/textures/bottleTexture.png">
+                <img crossorigin="anonymous" id="bottle-texture" src="assets/textures/bottleTexture.png">
 
                 <!--TEXTURE COMPOST-->
                 <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
@@ -57,7 +57,9 @@
                 <!--ROOM-->
                 <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
                 <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
-                <img crossorigin="anonymous" id="room-texture" src="assets/textures/room.png">
+                <img crossorigin="anonymous" id="room-texture" src="assets/textures/room_texture.png">
+                <a-asset-item id="walls-obj" src="assets/models/walls.obj"></a-asset-item>
+                <img crossorigin="anonymous" id="walls-texture" src="assets/textures/walls_texture.png">
 
                 <!--BIN MODELS-->
                 <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
@@ -126,12 +128,18 @@
                             position    = "0 1 0"
                             scale       = "0.04 0.04 0.04"></a-entity>
 
+                <a-entity   id          = "walls"
+                            obj-model   = "obj:#walls-obj;"
+                            material    = "src:#walls-texture"
+                            position    = "0 1 0"
+                            scale       = "0.04 0.04 0.04"></a-entity>
+
                 <!--ADDING THE PLANE -->
                 <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                             material = "color: gray"
                             position = "0 1.342 -7.194"
                             scale = "0.170 0.125 0.170"
-                            visible = "true"
+                            visible = "false"
                             rotation = "0 0 0"
                             static-body></a-entity>
 
@@ -139,7 +147,7 @@
                             material = "color: gray"
                             position = "-8.491 1.342 -0.709"
                             scale = "0.170 0.125 0.170"
-                            visible = "true"
+                            visible = "false"
                             rotation = "0 90 0"
                             static-body></a-entity>
                 
@@ -147,7 +155,7 @@
                             material = "color: gray"
                             position = "7.207 1.342 -0.709"
                             scale = "0.170 0.125 0.170"
-                            visible = "true"
+                            visible = "false"
                             rotation = "0 -90 0"
                             static-body></a-entity>
                 
@@ -155,14 +163,21 @@
                             material = "color: gray"
                             position = "-0.425 1.342 7.254"
                             scale = "0.170 0.125 0.170"
-                            visible = "true"
+                            visible = "false"
                             rotation = "0 180 0"
-                            static-body></a-entity>  
+                            static-body></a-entity>
 
                 <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                             material = "color: gray"
-                            position = "7.379 0.029 -0.709"
+                            visible = "false"
+                            position = "7.379 -1.601 -0.709"
                             rotation = "-90 0 0"
+                            static-body></a-entity>
+
+                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                            material = "color: #343434"
+                            position = "7.379 7 -0.709"
+                            rotation = "90 0 0"
                             static-body></a-entity>
                 
                 <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
@@ -249,7 +264,7 @@
                             data-trash-type         = "plastic"
                             obj-model               = "obj:#garbageBin-obj;"
                             material                = "src:#garbageBin-blue;" 
-                            position                = "0 0 1.5"
+                            position                = "0 -1 1.5"
                             scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                 
@@ -258,7 +273,7 @@
                             data-trash-type         = "metal"
                             obj-model               = "obj:#garbageBin-obj"
                             material                = "src:#garbageBin-red"
-                            position                = "-2 0 2.5"
+                            position                = "-2 -1 2.5"
                             scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                             
@@ -267,7 +282,7 @@
                             data-trash-type         = "paper"
                             obj-model               = "obj:#garbageBin-obj"
                             material                = "src:#garbageBin-yellow"
-                            position                = "2 0 3.5"
+                            position                = "2 -1 3.5"
                             scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
 
@@ -276,7 +291,7 @@
                             data-trash-type         = "compost"
                             obj-model               = "obj:#garbageBin-obj"
                             material                = "src:#garbageBin-green"
-                            position                = "-2 0 3.5"
+                            position                = "-2 -1 3.5"
                             scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                 
@@ -285,18 +300,9 @@
                             data-trash-type         = "trash"
                             obj-model               = "obj:#garbageBin-obj"
                             material                = "src:#garbageBin-black"
-                            position                = "2 0 2.5"
+                            position                = "2 -1 2.5"
                             scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>    
-                                                  
-                <!--CHIP BAG-->
-                <a-entity   id          = "chipBag"
-                            obj-model   = "obj:#chipBag-obj"
-                            material    = "src:#chip-texture"
-                            position    = "1 0 0"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>
-                 
             </a-entity>
 
         </a-scene>
