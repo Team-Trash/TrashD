@@ -23,12 +23,18 @@
                 <img id="logo" src="assets/logo.png">
                 <img id="single-button" src="assets/SinglePlayer.png">
                 <img id="multi-button" src="assets/Multiplayer.png">
-                <img id="multi-list" src="assets/multiplayer_list.png">
+                <img id="pause-logo" src="assets/pauseLogo.png">
+                <img id="resume-button" src="assets/resumeButton.png">
+                <img id="exit-button" src="assets/exitButton.png">
+                <img id="control-button" src="assets/controlButton.png">
 
                 <!--TEXTURE-->
                 <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
                 <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
-                <img crossorigin="anonymous" id="fireExtinguisher-texture" src="assets/textures/fireTexture.png">
+                <img crossorigin="anonymous" id="garbageBin-yellow" src="assets/textures/garbageBin_Yellow.png">
+                <img crossorigin="anonymous" id="garbageBin-red" src="assets/textures/garbageBin_Red.png">
+                <img crossorigin="anonymous" id="garbageBin-black" src="assets/textures/garbageBin_Black.png">
+                
                 
                 <!--TEXTURE PAPER-->
                 <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
@@ -50,6 +56,7 @@
                 <!--ROOM-->
                 <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
                 <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
+                <img crossorigin="anonymous" id="room-texture" src="assets/textures/walls_texture.png">
 
                 <!--BIN MODELS-->
                 <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
@@ -91,16 +98,13 @@
 
             <!--PAUSE MENU SCENE-->
 
-
-            <script>gtFunction()</script>
-
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
-
+                <script>gtFunction()</script>
                 <!--ADDING ROOM-->
                 <a-entity   id          = "room"
                             obj-model   = "obj:#room-obj;"
-                            
+                            material    = "src:#room-texture"
                             position    = "0 1 0"
                             scale       = "0.04 0.04 0.04"></a-entity>
 
@@ -207,47 +211,45 @@
                 
                 
                 <!--GARBAGE BIN OURSIDE-->
-                <a-entity   id          = "garbageBinPlastic"
-                            obj-model   = "obj:#garbageBin-obj;"
-                            material    = "src:#garbageBin-green;" 
-                            position    = "0 0 1.5"
-                            scale       = "0.10 0.10 0.10" 
+                <a-entity   id                      = "plasticBin"
+                            data-trash-type         = "plastic"
+                            obj-model               = "obj:#garbageBin-obj;"
+                            material                = "src:#garbageBin-blue;" 
+                            position                = "0 0 1"
+                            scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                 
-                <a-entity   id          = "garbageBinMetal"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-blue"
-                            position    = "-1 0 2"
-                            scale       = "0.10 0.10 0.10" 
+                <a-entity   id                      = "metalBin"
+                            data-trash-type         = "metal"
+                            obj-model               = "obj:#garbageBin-obj"
+                            material                = "src:#garbageBin-red"
+                            position                = "-2 0 2"
+                            scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                             
-                <a-entity   id          = "garbageBinPaper"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1 0 3"
-                            scale       = "0.10 0.10 0.10" 
+                <a-entity   id                      = "paperBin"
+                            data-trash-type         = "paper"
+                            obj-model               = "obj:#garbageBin-obj"
+                            material                = "src:#garbageBin-yellow"
+                            position                = "2 0 3"
+                            scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
 
-                <a-entity   id          = "garbageBinCompost"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "-1 0 3"
-                            scale       = "0.10 0.10 0.10" 
+                <a-entity   id                      = "compostBin"
+                            data-trash-type         = "compost"
+                            obj-model               = "obj:#garbageBin-obj"
+                            material                = "src:#garbageBin-green"
+                            position                = "-2 0 3"
+                            scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>
                 
-                <a-entity   id          = "garbageBinTrash"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1 0 2"
-                            scale       = "0.10 0.10 0.10" 
+                <a-entity   id                      = "trashBin"
+                            data-trash-type         = "trash"
+                            obj-model               = "obj:#garbageBin-obj"
+                            material                = "src:#garbageBin-black"
+                            position                = "2 0 2"
+                            scale                   = "0.10 0.10 0.10" 
                             static-body></a-entity>    
-                
-                <!--<a-entity   id          = "garbageBinGlass"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1 0 2"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>-->
                                                   
                 <!--CHIP BAG-->
                 <a-entity   id          = "chipBag"
