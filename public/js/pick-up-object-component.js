@@ -49,28 +49,30 @@ AFRAME.registerComponent('pick-up-object', {
             let ingameEl = document.querySelector("#ingame");
             let colliedTarget = context.el.getAttribute('data-trash-type');
             
-            if(collider == colliedTarget){
-                console.log("SAME");
-                e.detail.target.el.setAttribute('visible', false);
-                context.data.score += 10;
-                ingameEl.setAttribute("ingame", "score: " + context.data.score);
+            if(e.detail.body.el.getAttribute('class') == 'bin'){
+                if(collider == colliedTarget){
+                    console.log("SAME");
+                    e.detail.target.el.setAttribute('visible', false);
+                    context.data.score += 10;
+                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                setTimeout(function() {
-                    if(e.detail.target.el){
-                        e.detail.target.el.remove();
-                    }
-                }, 0);
-            }
-            else{
-                console.log("NOT THE SAME");
-                context.data.score -= 10;
-                ingameEl.setAttribute("ingame", "score: " + context.data.score);
+                    setTimeout(function() {
+                        if(e.detail.target.el){
+                            e.detail.target.el.remove();
+                        }
+                    }, 0);
+                }
+                else{
+                    console.log("NOT THE SAME");
+                    context.data.score -= 10;
+                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                setTimeout(function() {
-                    if(e.detail.target.el){
-                        e.detail.target.el.remove();
-                    }
-                }, 0);
+                    setTimeout(function() {
+                        if(e.detail.target.el){
+                            e.detail.target.el.remove();
+                        }
+                    }, 0);
+                }
             }
         });
     },
