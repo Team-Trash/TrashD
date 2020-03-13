@@ -7,7 +7,7 @@ AFRAME.registerComponent('pick-up-object', {
     },
 
     init : function() {
-        console.log('Initialize Pick Up Object');
+        //console.log('Initialize Pick Up Object');
         //Init context
         const context = this;
 

@@ -16,6 +16,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
+            //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
             });
@@ -24,39 +25,9 @@ AFRAME.registerComponent('interact-start-menu', {
                 menuButton.object3D.scale.set(1.0, 1.0, 1.0);
             });
 
+            //Desktop Listeners
             menuButton.addEventListener('click', function(e){
-                let menuID = menuButton.getAttribute('id');
-                let roomID = menuButton.getAttribute('data-room');
-                
-                switch(menuID){
-                    case 'singleButton':
-                        context.enterSingle();
-                        break;
-
-                    case 'multiButton':
-                        context.multiList();
-                        break;
-
-                    case 'newRoom':
-                        socket.emit('new-room');
-                        socket.on('return-room-id', function(data){
-                            context.enterMulti(data);
-                        });
-                        break;
-                    
-                    case 'back':
-                        socket.close();
-                        context.startMenu();
-                        break;
-                }
-
-                if(roomID){
-                    socket.emit('join-room', roomID);
-                    socket.on('return-room-id', function(data){
-                        context.enterMulti(data);
-                    });
-                }
-
+                context.clickMenu(menuButton);
             });
         });
     },
@@ -215,11 +186,47 @@ AFRAME.registerComponent('interact-start-menu', {
         this.multiMenu();
     },
 
+    clickMenu: function(menuButton){
+        let menuID = menuButton.getAttribute('id');
+        let roomID = menuButton.getAttribute('data-room');
+        
+        switch(menuID){
+            case 'singleButton':
+                context.enterSingle();
+                break;
+
+            case 'multiButton':
+                context.multiList();
+                break;
+
+            case 'newRoom':
+                socket.emit('new-room');
+                socket.on('return-room-id', function(data){
+                    context.enterMulti(data);
+                });
+                break;
+            
+            case 'back':
+                socket.close();
+                context.startMenu();
+                break;
+        }
+
+        if(roomID){
+            socket.emit('join-room', roomID);
+            socket.on('return-room-id', function(data){
+                context.enterMulti(data);
+            });
+        }
+    },
+
     enterSingle: function(){
         console.log('Entering SinglePlayer');
+        
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
+        let scene = document.getElementById('scene');
 
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
@@ -227,6 +234,10 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('ingame', '');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
         ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        
+        if(scene.is('vr-mode') == true){
+            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+        }
     },
 
     enterMulti: function(data){
