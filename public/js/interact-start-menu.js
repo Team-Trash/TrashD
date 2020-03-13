@@ -16,6 +16,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
+            //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
             });
@@ -24,39 +25,22 @@ AFRAME.registerComponent('interact-start-menu', {
                 menuButton.object3D.scale.set(1.0, 1.0, 1.0);
             });
 
+            //Desktop Listeners
             menuButton.addEventListener('click', function(e){
-                let menuID = menuButton.getAttribute('id');
-                let roomID = menuButton.getAttribute('data-room');
-                
-                switch(menuID){
-                    case 'singleButton':
-                        context.enterSingle();
-                        break;
+                context.clickMenu();
+            });
 
-                    case 'multiButton':
-                        context.multiList();
-                        break;
+            //VR Listeners
+            menuButton.addEventListener('xbuttondown', function(e){
+                context.clickMenu();
+            });
 
-                    case 'newRoom':
-                        socket.emit('new-room');
-                        socket.on('return-room-id', function(data){
-                            context.enterMulti(data);
-                        });
-                        break;
-                    
-                    case 'back':
-                        socket.close();
-                        context.startMenu();
-                        break;
-                }
+            menuButton.addEventListener('abuttondown', function(e){
+                context.clickMenu();
+            });
 
-                if(roomID){
-                    socket.emit('join-room', roomID);
-                    socket.on('return-room-id', function(data){
-                        context.enterMulti(data);
-                    });
-                }
-
+            menuButton.addEventListener('triggerdown', function(e){
+                context.clickMenu();
             });
         });
     },
@@ -177,6 +161,40 @@ AFRAME.registerComponent('interact-start-menu', {
         });
 
         this.multiMenu();
+    },
+
+    clickMenu: function(){
+        let menuID = menuButton.getAttribute('id');
+        let roomID = menuButton.getAttribute('data-room');
+        
+        switch(menuID){
+            case 'singleButton':
+                context.enterSingle();
+                break;
+
+            case 'multiButton':
+                context.multiList();
+                break;
+
+            case 'newRoom':
+                socket.emit('new-room');
+                socket.on('return-room-id', function(data){
+                    context.enterMulti(data);
+                });
+                break;
+            
+            case 'back':
+                socket.close();
+                context.startMenu();
+                break;
+        }
+
+        if(roomID){
+            socket.emit('join-room', roomID);
+            socket.on('return-room-id', function(data){
+                context.enterMulti(data);
+            });
+        }
     },
 
     enterSingle: function(){
