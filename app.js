@@ -5,7 +5,7 @@ const server    = http.createServer(app);
 const socketIO  = require('socket.io')(server);
 let rooms = 0;
 
-const LISTEN_PORT = 3000;
+const LISTEN_PORT = process.env.PORT || 3000;
 
 app.use((express.static(__dirname + '/public'))); //set root dir to the public folder
 
