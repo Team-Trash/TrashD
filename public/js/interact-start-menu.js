@@ -73,6 +73,42 @@ AFRAME.registerComponent('interact-start-menu', {
         context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
+    //Generate Pause Menu
+    pauseMenu : function(){
+        console.log("Pause menu created!");
+
+        var startMenu = document.getElementById('pauseMenu');
+        var pauseLogo = document.createElement('a-image');
+        var resumeButton = document.createElement('a-image');
+        var exitButton = document.createElement('a-image');
+
+        pauseLogo.setAttribute('src', '#pause-logo');
+        pauseLogo.setAttribute('position', '0 1 -2');
+        pauseLogo.setAttribute('width', '3.7');
+        pauseLogo.setAttribute('height', '1');
+        pauseLogo.setAttribute('scale', '0.8 0.8 0.8');
+
+        resumeButton.setAttribute('class', 'menu');
+        resumeButton.setAttribute('id', 'resumeButton');
+        resumeButton.setAttribute('src', '#single-button');
+        resumeButton.setAttribute('position', '0 0 -2');
+        resumeButton.setAttribute('width', '1.29');
+        resumeButton.setAttribute('height', '.363');
+
+        exitButton.setAttribute('class', 'menu');
+        exitButton.setAttribute('id', 'exitButton');
+        exitButton.setAttribute('src', '#exit-button');
+        exitButton.setAttribute('position', '0 2 -2');
+        exitButton.setAttribute('width', '1.29');
+        exitButton.setAttribute('height', '.363');
+
+
+        startMenu.append(trashLogo);
+        startMenu.append(pauseLogo);
+
+        context.menuEventListener(context.el.querySelectorAll('.menu'));
+    },
+
     multiMenu: function(){
         var startMenu = document.getElementById('startMenu');
         var multiList = document.createElement('a-entity');
