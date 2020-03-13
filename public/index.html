@@ -46,6 +46,10 @@
 
 
                 <!--3D MODELS-->
+
+                <!--ROOM-->
+                <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
+
                 <!--BELT-->
                 <a-asset-item id="belt-obj" src="assets/models/belt.obj"></a-asset-item>
                 <a-asset-item id="belt-mtl" src="assets/models/belt.mtl"></a-asset-item>
@@ -97,10 +101,23 @@
 
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
+
+                <!--ADDING ROOM-->
+                <a-entity   id          = "room"
+                            obj-model   = "obj:#room-obj;"
+                            position    = "0 1 0"
+                            scale       = "0.04 0.04 0.04"></a-entity>
+
+                <!--ADDING THE PLANE-->
+                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                            material = "color: gray"
+                            rotation = "-90 0 0"
+                            static-body></a-entity>
+
                 <!--CAMERA-->
                 <a-entity 	id="game-camera"
                             camera="active: false"
-                            position="0 1.15 0.5">
+                            position="0 1.15 3">
                     <a-entity 	id = "game-cursor"
                                 geometry="primitive: circle; radius: 0.01"
                                 material="color: red"
@@ -139,11 +156,7 @@
                     </a-text>
                 </a-entity>
                 
-                <!--ADDING THE PLANE-->
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: #f4eed7"
-                            rotation = "-90 0 0"
-                            static-body></a-entity>
+                
                 
                 <!--GARBAGE BIN OURSIDE-->
                 <a-entity   id          = "garbageBinPlastic"
@@ -194,56 +207,7 @@
                             position    = "1 0 0"
                             scale       = "0.10 0.10 0.10" 
                             static-body></a-entity>
-
-                <!--ADD CONVEYOR-->
-                <a-entity   id          = "conveyor"
-                            obj-model   = "obj:#belt-obj; mtl:#belt-mtl"
-                            position    = "0 0.738 -3"
-                            scale       = "0.25 0.25 0.25" 
-                            static-body></a-entity>
-                
-                <!--ADD BIN (OTHER SIDE)-->
-                <a-entity   id          = "garbageBinPlastic2"
-                            obj-model   = "obj:#garbageBin-obj;"
-                            material    = "src:#garbageBin-green;" 
-                            position    = "0 0 -4.5"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>
-                
-                <a-entity   id          = "garbageBinMetal2"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-blue"
-                            position    = "-1 0 -5"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>
-                            
-                <a-entity   id          = "garbageBinGlass2"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1.5 0 -6"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>
-
-                <a-entity   id          = "garbageBinCompost2"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "-1.5 0 -6"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>
-                
-                <a-entity   id          = "garbageBinTrash2"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1 0 -5"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>    
-                
-                <a-entity   id          = "garbageBinGlass"
-                            obj-model   = "obj:#garbageBin-obj"
-                            material    = "src:#garbageBin-green"
-                            position    = "1 0 -7"
-                            scale       = "0.10 0.10 0.10" 
-                            static-body></a-entity>   
+                 
             </a-entity>
 
         </a-scene>
