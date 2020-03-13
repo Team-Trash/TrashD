@@ -86,25 +86,32 @@
                             position="0 0 0">
                     <a-entity 	id = "menu-cursor"
                                 cursor ="rayOrigin:mouse;"
-                                raycaster="objects: .menu;">
-                    </a-entity>
+                                raycaster="objects: .menu;"></a-entity>
                 </a-entity>
                 <a-entity   hand-controls="left"
-                            position="0 0 0"></a-entity >
+                            position="0 0 0">
+                    <a-entity 	
+                                cursor ="rayOrigin:entity;"
+                                raycaster="objects: .menu;"></a-entity>
+                </a-entity >
                 <a-entity   hand-controls="right"
-                            position="0 0 0"></a-entity>
+                            position="0 0 0">
+                    <a-entity 
+                                cursor ="rayOrigin:entity;"
+                                raycaster="objects: .menu;"></a-entity>
+                </a-entity >
 
                 <!--MENU-->
                 <a-entity   id = "startMenu" interact-start-menu></a-entity>
-            </a-entity>
+                </a-entity>
 
-            <!--PAUSE MENU SCENE-->
+                <!--PAUSE MENU SCENE-->
 
 
-            <script>gtFunction()</script>
+                <script>gtFunction()</script>
 
-            <!--INGAME-->
-            <a-entity id="ingame" visible="false">
+                <!--INGAME-->
+                <a-entity id="ingame" visible="false">
 
                 <!--ADDING ROOM-->
                 <a-entity   id          = "room"
