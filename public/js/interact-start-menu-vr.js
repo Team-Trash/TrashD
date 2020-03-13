@@ -6,11 +6,17 @@ AFRAME.registerComponent('interact-start-menu-vr', {
     init : function() {       
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
-        
+        //let ray = new THREE.ray;
+        console.log(this.data.cursor.getAttribute('raycaster'));
+
         this.menuEventListener();
     },
 
-    menuEventListener: function(){
+    tick : function(){
+        //this.drawRaycastLine(this.data.cursor.getAttribute('raycaster'));
+    },
+
+    menuEventListener : function(){
         let startMenu = document.querySelector('#startMenu');
         let menuButtons = startMenu.querySelectorAll('.menu')
         let currentButton;
@@ -46,6 +52,4 @@ AFRAME.registerComponent('interact-start-menu-vr', {
             }
         });
     },
-
-    
 });

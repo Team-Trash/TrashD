@@ -10,6 +10,7 @@ AFRAME.registerComponent('pick-up-object', {
         //console.log('Initialize Pick Up Object');
         //Init context
         const context = this;
+        let vr = document.getElementById('scene').is('vr-mode');
 
         context.clickFunction = function(e){
             console.log("Pick Up Object")
@@ -23,54 +24,58 @@ AFRAME.registerComponent('pick-up-object', {
             context.data.cursor.setAttribute("material", {color: 'red'});
         });
 
-        context.el.addEventListener('mousedown', function(e){
-            context.pickUpObject();
-            context.data.pickUpStatus = true;
-            console.log(context.data.pickUpStatus);
-        });
+        if(vr == false){
+            context.el.addEventListener('mousedown', function(e){
+                context.pickUpObject();
+                context.data.pickUpStatus = true;
+                console.log(context.data.pickUpStatus);
+            });
 
-        document.addEventListener('mouseup', function(e){
-            if(context.data.pickUpStatus == true){
-                if(e.button == 0){
-                    context.dropObject();
-                    //console.log("drop");
-                    context.data.pickUpStatus = false;
+            document.addEventListener('mouseup', function(e){
+                if(context.data.pickUpStatus == true){
+                    if(e.button == 0){
+                        context.dropObject();
+                        //console.log("drop");
+                        context.data.pickUpStatus = false;
+                    }
+                    if(e.button == 2){
+                        context.throwObject();
+                        //console.log("throw");
+                        context.data.pickUpStatus = false;
+                    }
                 }
-                if(e.button == 2){
-                    context.throwObject();
-                    //console.log("throw");
-                    context.data.pickUpStatus = false;
-                }
-            }
-        });
+            });
+        }
 
         context.el.addEventListener('collide', function(e){
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let ingameEl = document.querySelector("#ingame");
             let colliedTarget = context.el.getAttribute('data-trash-type');
             
-            if(collider == colliedTarget){
-                console.log("SAME");
-                e.detail.target.el.setAttribute('visible', false);
-                context.data.score += 10;
-                ingameEl.setAttribute("ingame", "score: " + context.data.score);
+            if(e.detail.body.el.getAttribute('class') == 'bin'){
+                if(collider == colliedTarget){
+                    console.log("SAME");
+                    e.detail.target.el.setAttribute('visible', false);
+                    context.data.score += 10;
+                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                setTimeout(function() {
-                    if(e.detail.target.el){
-                        e.detail.target.el.remove();
-                    }
-                }, 0);
-            }
-            else{
-                console.log("NOT THE SAME");
-                context.data.score -= 10;
-                ingameEl.setAttribute("ingame", "score: " + context.data.score);
+                    setTimeout(function() {
+                        if(e.detail.target.el){
+                            e.detail.target.el.remove();
+                        }
+                    }, 0);
+                }
+                else{
+                    console.log("NOT THE SAME");
+                    context.data.score -= 10;
+                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                setTimeout(function() {
-                    if(e.detail.target.el){
-                        e.detail.target.el.remove();
-                    }
-                }, 0);
+                    setTimeout(function() {
+                        if(e.detail.target.el){
+                            e.detail.target.el.remove();
+                        }
+                    }, 0);
+                }
             }
         });
     },

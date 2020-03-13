@@ -15,7 +15,7 @@ AFRAME.registerComponent('ingame', {
         scoreEl.setAttribute("position", hudX + " " + hudY + " -1");
     },
 
-    tick : function(){
+    tick : function(){ //Add time argument later, more refined
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
         

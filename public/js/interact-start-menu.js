@@ -16,6 +16,11 @@ AFRAME.registerComponent('interact-start-menu', {
 
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
+            let scene = document.getElementById('scene');
+            var trashLogo = document.getElementById('singleButton');
+            var singlePlayer = document.getElementById('singleButton');
+            var multiplePlayer = document.getElementById('singleButton');
+
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
@@ -29,6 +34,11 @@ AFRAME.registerComponent('interact-start-menu', {
             menuButton.addEventListener('click', function(e){
                 context.clickMenu(menuButton);
             });
+
+            //Enter/Exit VR
+            scene.addEventListener('enter-vr', function(e){
+                trashLogo.setAttribute('position', '0 2 -2');
+            });
         });
     },
 
@@ -36,6 +46,7 @@ AFRAME.registerComponent('interact-start-menu', {
     startMenu : function(){
         console.log("Start menu created!");
 
+        let scene = document.getElementById('scene');
         var startMenu = document.getElementById('startMenu');
         var trashLogo = document.createElement('a-image');
         var singlePlayer = document.createElement('a-image');
@@ -46,8 +57,13 @@ AFRAME.registerComponent('interact-start-menu', {
             startMenu.removeChild(startMenu.lastChild);
         }
 
+        trashLogo.setAttribute('id', '#startLogo');
         trashLogo.setAttribute('src', '#logo');
-        trashLogo.setAttribute('position', '0 1 -2');
+        if(scene.is('vr-mode')){
+            trashLogo.setAttribute('position', '0 2 -2');
+        } else {
+            trashLogo.setAttribute('position', '0 1 -2');
+        }
         trashLogo.setAttribute('width', '3.7');
         trashLogo.setAttribute('height', '1');
         trashLogo.setAttribute('scale', '0.8 0.8 0.8');
@@ -55,14 +71,22 @@ AFRAME.registerComponent('interact-start-menu', {
         singlePlayer.setAttribute('class', 'menu');
         singlePlayer.setAttribute('id', 'singleButton');
         singlePlayer.setAttribute('src', '#single-button');
-        singlePlayer.setAttribute('position', '-0.8 0 -2');
+        if(scene.is('vr-mode')){
+            singlePlayer.setAttribute('position', '-0.8 1 -2');
+        } else {
+            singlePlayer.setAttribute('position', '-0.8 0 -2');
+        }
         singlePlayer.setAttribute('width', '1.29');
         singlePlayer.setAttribute('height', '.363');
 
         multiplePlayer.setAttribute('class', 'menu');
         multiplePlayer.setAttribute('id', 'multiButton');
         multiplePlayer.setAttribute('src', '#multi-button');
-        multiplePlayer.setAttribute('position', '0.8 0 -2');
+        if(scene.is('vr-mode')){
+            multiplePlayer.setAttribute('position', '0.8 1 -2');
+        } else {
+            multiplePlayer.setAttribute('position', '0.8 0 -2');
+        }
         multiplePlayer.setAttribute('width', '1.29');
         multiplePlayer.setAttribute('height', '.363');
 
@@ -222,7 +246,6 @@ AFRAME.registerComponent('interact-start-menu', {
 
     enterSingle: function(){
         console.log('Entering SinglePlayer');
-        
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
