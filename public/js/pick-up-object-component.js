@@ -11,6 +11,8 @@ AFRAME.registerComponent('pick-up-object', {
         //Init context
         const context = this;
         let vr = document.getElementById('scene').is('vr-mode');
+        let left = document.getElementById('hand-left');
+        let right = document.getElementById('hand-right');
 
         context.clickFunction = function(e){
             console.log("Pick Up Object")
@@ -44,6 +46,25 @@ AFRAME.registerComponent('pick-up-object', {
                         context.data.pickUpStatus = false;
                     }
                 }
+            });
+        }
+
+        if(vr == true){
+            left.addEventListener('gripdown', function(e){
+                console.log('left');
+                context.pickUpObject(left);
+            });
+            right.addEventListener('gripdown', function(e){
+                console.log('right');
+                context.pickUpObject(right);
+            });
+            left.addEventListener('gripup', function(e){
+                console.log('left');
+                context.dropObject();
+            });
+            right.addEventListener('gripup', function(e){
+                console.log('right');
+                context.dropObject();
             });
         }
 
@@ -81,14 +102,23 @@ AFRAME.registerComponent('pick-up-object', {
     },
 
     //This is how the object that is selected will be follow the mouse
-    pickUpObject: function(){
+    pickUpObject: function(hand){
         var camera = document.querySelector("#game-camera");
         this.el.removeAttribute("dynamic-body");
-        this.el.object3D.position.set(0, 0, -2)
+        let vr = document.getElementById('scene').is('vr-mode');
+        
         this.el.object3D.rotation.x = 0;
         this.el.object3D.rotation.y = 0;
         this.el.object3D.rotation.z = 0;
-        camera.object3D.add(this.el.object3D);
+        
+        if(vr == false){
+            this.el.object3D.position.set(0, 0, -2)
+            camera.object3D.add(this.el.object3D);
+        }
+        if (vr == true){
+            this.el.object3D.position.set(0, 0, 0);
+            hand.object3D.add(this.el.object3D);
+        }
 
         //STOP THE ANIMATION FROM THE TRASH
         this.el.removeAttribute('animation');
