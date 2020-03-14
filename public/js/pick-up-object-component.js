@@ -47,6 +47,10 @@ AFRAME.registerComponent('pick-up-object', {
             });
         }
 
+        if(vr == true){
+
+        }
+
         context.el.addEventListener('collide', function(e){
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let ingameEl = document.querySelector("#ingame");

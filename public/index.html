@@ -24,6 +24,7 @@
                 <img id="logo" src="assets/logo.png">
                 <img id="single-button" src="assets/SinglePlayer.png">
                 <img id="multi-button" src="assets/Multiplayer.png">
+                <img id="multi-list" src="assets/multiplayer_list.png">
                 <img id="pause-logo" src="assets/pauseLogo.png">
                 <img id="resume-button" src="assets/resumeButton.png">
                 <img id="exit-button" src="assets/exitButton.png">
@@ -210,22 +211,31 @@
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .clickable;">
                     </a-entity>
-                    <a-text font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "black"
+                    <a-entity
+                                cursor ="rayOrigin:mouse;"
+                                raycaster="objects: .menu;"></a-entity>
+                    <a-text id="youText"
+                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                            color = "white"
                             value = "You"
+                            scale = "0.7 0.7 0.7"
+                            align="right"
                             position = "-0.25 0.75 -1"
                             width = "2"></a-text>
                     
-                    <a-text font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "black"
+                    <a-text id="opponentText"
+                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                            color = "white"
                             position = "0.2 0.75 -1"
+                            scale = "0.7 0.7 0.7"
                             value = "Opponent"
+                            align="right"
                             width = "2"></a-text>   
 
                     <a-text id="timer"
                             value="Timer"
                             font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="black"
+                            color="white"
                             align="left"
                             position="-1.2 0.5 -1"
                             width="2">
@@ -234,23 +244,36 @@
                     <a-text id="score"   
                             value="0 PTS"
                             font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="black"
+                            color="white"
                             align="right"
                             position="1.2 0.5 -1"
                             width="2">
                     </a-text>
+
+                    <a-text id="opponentScore"   
+                            value="0 PTS"
+                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                            color="white"
+                            align="right"
+                            position="1.2 0.5 -1"
+                            width="2">
+                    </a-text>
+
+                    <a-entity   id="pauseMenu"
+                                position="0 -2 -0.1">
+                    </a-entity>
                 </a-entity>
                 
                 <!--VR Hands-->
                 <a-entity   hand-controls="left"
-                            position="0 0 0">
+                            position="0 0 3">
                     <a-entity 	id = "vr-raycast-left"
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .menu; showLine: true"
                                 line="color: blue; opacity: 0.7"></a-entity>
                 </a-entity >
                 <a-entity   hand-controls="right"
-                            position="0 0 0">
+                            position="0 0 3">
                     <a-entity   id = "vr-raycast-right"
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .menu; showLine: true"

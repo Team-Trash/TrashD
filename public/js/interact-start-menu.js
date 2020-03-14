@@ -280,7 +280,12 @@ AFRAME.registerComponent('interact-start-menu', {
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
+        ingame.setAttribute('ingame', 'multiplayer: true');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
         ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+
+        if(scene.is('vr-mode') == true){
+            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+        }
     }
 });

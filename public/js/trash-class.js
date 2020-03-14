@@ -37,7 +37,7 @@ class Trash{
         var trash = document.createElement('a-entity');
         //Set random number for texture and models.
         var randomNum = Math.floor(Math.random() * 5);
-        console.log("This is the type: " + this.type);
+        //console.log("This is the type: " + this.type);
         switch(this.type){
             case 'plastic':
                 trash.setAttribute('material', 'src:#bottle-texture');
