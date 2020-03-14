@@ -265,14 +265,16 @@
                 </a-entity>
                 
                 <!--VR Hands-->
-                <a-entity   hand-controls="left"
+                <a-entity   id="hand-left"
+                            hand-controls="left"
                             position="0 0 3">
                     <a-entity 	id = "vr-raycast-left"
                                 cursor ="rayOrigin:entity;"
                                 raycaster="objects: .menu; showLine: true"
                                 line="color: blue; opacity: 0.7"></a-entity>
                 </a-entity >
-                <a-entity   hand-controls="right"
+                <a-entity   id="hand-right"
+                            hand-controls="right"
                             position="0 0 3">
                     <a-entity   id = "vr-raycast-right"
                                 cursor ="rayOrigin:entity;"
