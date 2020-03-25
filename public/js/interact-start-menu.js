@@ -20,6 +20,7 @@ AFRAME.registerComponent('interact-start-menu', {
             var trashLogo = document.getElementById('startLogo');
             var singlePlayer = document.getElementById('singleButton');
             var multiplePlayer = document.getElementById('multiButton');
+            var controlButton = document.getElementById('controlsButton');
 
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
@@ -40,12 +41,14 @@ AFRAME.registerComponent('interact-start-menu', {
                 trashLogo.setAttribute('position', '0 2 -2');
                 singlePlayer.setAttribute('position', '-0.8 1 -2');
                 multiplePlayer.setAttribute('position', '0.8 1 -2');
+                controlButton.setAttribute('position', '-0.8 2 -2');
             });
 
             scene.addEventListener('exit-vr', function(e){
                 trashLogo.setAttribute('position', '0 1 -2');
                 singlePlayer.setAttribute('position', '-0.8 0 -2');
                 multiplePlayer.setAttribute('position', '0.8 0 -2');
+                controlButton.setAttribute('position', '0 2 -2');
             });
         });
     },
@@ -59,6 +62,7 @@ AFRAME.registerComponent('interact-start-menu', {
         var trashLogo = document.createElement('a-image');
         var singlePlayer = document.createElement('a-image');
         var multiplePlayer = document.createElement('a-image');
+        var controlsButton = document.createElement('a-image');
 
         //Empty start menu of child nodes
         while (startMenu.firstChild) {
@@ -98,9 +102,21 @@ AFRAME.registerComponent('interact-start-menu', {
         multiplePlayer.setAttribute('width', '1.29');
         multiplePlayer.setAttribute('height', '.363');
 
+        controlsButton.setAttribute('class', 'menu');
+        controlsButton.setAttribute('id', 'controlsButton');
+        controlsButton.setAttribute('src', '#controls-button');
+        if(scene.is('vr-mode')){
+            controlsButton.setAttribute('position', '0 0.5 -2');
+        } else {
+            controlsButton.setAttribute('position', '0 -0.5 -2');
+        }
+        controlsButton.setAttribute('width', '1.29');
+        controlsButton.setAttribute('height', '.363');
+
         startMenu.append(trashLogo);
         startMenu.append(singlePlayer);
         startMenu.append(multiplePlayer);
+        startMenu.append(controlsButton);
 
         context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
