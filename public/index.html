@@ -29,6 +29,7 @@
                 <img id="resume-button" src="assets/resumeButton.png">
                 <img id="exit-button" src="assets/exitButton.png">
                 <img id="control-button" src="assets/controlButton.png">
+                <img id="mouse-icon" src="assets/cursor/cursor.png">
 
                 <!--TEXTURE-->
                 <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
@@ -88,12 +89,13 @@
             <a-entity id="start" visible="true">
                 <!--CAMERA-->
                 <a-entity 	id="start-camera"
-                            camera="active: true"
-                            position="0 0 0">
-                    <a-entity 	id = "menu-cursor"
-                                cursor ="rayOrigin:mouse;"
-                                raycaster="objects: .menu;"></a-entity>
+                                camera="active: true"
+                                position="0 0 0">
+                        <a-entity 	id = "menu-cursor"
+                                        cursor ="rayOrigin:mouse;"
+                                        raycaster="objects: .menu;"></a-entity>
                 </a-entity>
+
                 <a-entity   hand-controls="left"
                             interact-start-menu-vr="cursor: #vr-raycast-left"
                             position="0 0 0">

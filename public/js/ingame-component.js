@@ -75,22 +75,22 @@ AFRAME.registerComponent('ingame', {
         var exitButton = document.createElement('a-image');
 
         pauseLogo.setAttribute('src', '#pause-logo');
-        pauseLogo.setAttribute('position', '0 3 -2');
+        pauseLogo.setAttribute('position', '0 2.7 -2');
         pauseLogo.setAttribute('width', '3.7');
         pauseLogo.setAttribute('height', '1');
-        pauseLogo.setAttribute('scale', '0.8 0.8 0.8');
+        pauseLogo.setAttribute('scale', '0.5 0.5 0.5');
 
         resumeButton.setAttribute('class', 'menu');
         resumeButton.setAttribute('id', 'resumeButton');
         resumeButton.setAttribute('src', '#resume-button');
-        resumeButton.setAttribute('position', '0 2.5 -2');
+        resumeButton.setAttribute('position', '0 2.2 -2');
         resumeButton.setAttribute('width', '1.29');
         resumeButton.setAttribute('height', '.363');
 
         exitButton.setAttribute('class', 'menu');
         exitButton.setAttribute('id', 'exitButton');
         exitButton.setAttribute('src', '#exit-button');
-        exitButton.setAttribute('position', '0 2 -2');
+        exitButton.setAttribute('position', '0 1.7 -2');
         exitButton.setAttribute('width', '1.29');
         exitButton.setAttribute('height', '.363');
 
@@ -99,7 +99,6 @@ AFRAME.registerComponent('ingame', {
 
         pauseMenu.append(pauseLogo);
         pauseMenu.append(resumeButton);
-        pauseMenu.append(pauseLogo);
         pauseMenu.append(exitButton);
 
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
