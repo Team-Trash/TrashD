@@ -32,7 +32,7 @@ class Trash{
         trash.setAttribute('pick-up-object', '');
         return trash;
     }
-    //GET THE PLASTIC MODELS
+    //GET MODELS
     generatingAttribute2(){
         var trash = document.createElement('a-entity');
         //Set random number for texture and models.

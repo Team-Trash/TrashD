@@ -122,7 +122,17 @@
 
             <!--INGAME-->
             <a-entity id="ingame" visible="false">
-                <script>gtFunction()</script>
+                <script>//CONNECT TO THE SERVER
+                        //IO connection
+                        socket = io();
+                        //Connection event
+                        socket.on('connect', function(){
+                            console.log("Generating trash js connected!");
+                        });
+                        
+                        //Putting the data back to the socket
+                        socket.emit('generating-trash', gtFunction())
+                        </script>
 
                 <!--ADDING ROOM-->
                 <a-entity   id          = "room"
