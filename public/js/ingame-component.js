@@ -19,6 +19,7 @@ AFRAME.registerComponent('ingame', {
         pauseGame = false;
         victory = false;
         context = this;
+        instructionGame = false;
 
         document.addEventListener('keydown', function(e) {
             if(e.keyCode === 27){
@@ -29,6 +30,22 @@ AFRAME.registerComponent('ingame', {
                     pauseGame = false;
                 }
             }
+        });
+
+        //IF PLAYER PRESS 'I' WILL SHOW THE INSTRUCTION
+        document.addEventListener('keydown', function(e){
+            if(pauseGame == false){
+                if(e.keyCode === 73){
+                    if(instructionGame == false){
+                        console.log("TEST!");
+                        instructionGame = true;
+                        context.instructionGame();
+                    } else {
+                        instructionGame = false;
+                    }
+                }
+            }
+            
         });
 
         if(this.data.multiplayer == false){
@@ -59,7 +76,7 @@ AFRAME.registerComponent('ingame', {
                 timerEl.setAttribute("value", Math.floor(this.data.time / 100));
             }
         }
-
+        
         scoreEl.setAttribute("value", this.data.score + " PTS");
     },
 
@@ -137,20 +154,56 @@ AFRAME.registerComponent('ingame', {
 
             startMenu.components['interact-start-menu'].startMenu();
         }
+
         if(menuID == 'resumeButton'){
             var pauseMenu = document.getElementById('pauseMenu');
             let cursor = document.getElementById('game-cursor');
             let camera = document.getElementById('game-camera');
+
+            var instructionMenu = document.getElementById('instructionMenu');
+
 
             pauseMenu.setAttribute('visible', 'false');
             cursor.setAttribute('visible', 'true');
             camera.setAttribute('fps-look-controls', 'userHeight: 0');
 
             pauseGame = false;
+
+            instructionMenu.setAttribute('visible', 'false');
+
+            instructionGame = false;
         }
     },
-
     //Generate Pause Menu
+    instructionGame : function(){
+        var instructionMenu = document.getElementById('instructionMenu');
+        let cursor = document.getElementById('game-cursor');
+        let camera = document.getElementById('game-camera');
+        var instructionPicture = document.createElement('a-image');
+        var resumeButton = document.createElement('a-image');
+
+        instructionPicture.setAttribute('src', '#instruction');
+        instructionPicture.setAttribute('position', '0 2.3 -2');
+        instructionPicture.setAttribute('width', '5');
+        instructionPicture.setAttribute('height', '2.5');
+
+        resumeButton.setAttribute('class', 'menu');
+        resumeButton.setAttribute('id', 'resumeButton');
+        resumeButton.setAttribute('src', '#resume-button');
+        resumeButton.setAttribute('position', '0 0.7 -2');
+        resumeButton.setAttribute('width', '1.29');
+        resumeButton.setAttribute('height', '.363');
+
+        cursor.setAttribute('visible', 'false');
+        camera.removeAttribute('fps-look-controls');
+
+        instructionMenu.append(instructionPicture);
+        instructionMenu.append(resumeButton);
+
+        context.menuEventListener(instructionMenu.querySelectorAll('.menu'));
+    },
+
+    //Generate Victory Menu
     victoryMenu : function(){
         console.log("Victory created!");
 
