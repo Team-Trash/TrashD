@@ -19,75 +19,89 @@
     <body>
         <!--BEGIN A SCENE-->
         <a-scene id="scene" physics>
-                <!--LOADING ASSETS-->
-                <a-assets>
-                        <img id="logo" src="assets/logo.png">
-                        <img id="single-button" src="assets/SinglePlayer.png">
-                        <img id="multi-button" src="assets/Multiplayer.png">
-                        <img id="multi-list" src="assets/multiplayer_list.png">
-                        <img id="pause-logo" src="assets/pauseLogo.png">
-                        <img id="resume-button" src="assets/resumeButton.png">
-                        <img id="exit-button" src="assets/exitButton.png">
-                        <img id="controls-button" src="assets/instructionsButton.png">
-                        <!--MOUSE ICON-->
-                        <img id="mouse-icon" src="assets/cursor/cursor.png">
-                        <!--INSTRUCTION-->
-                        <img id="intruct-img-1" src="assets/Instruction.jpg">
-                        <img id="intruct-img-2" src="assets/controls.jpg">
+            <!--LOADING ASSETS-->
+            <a-assets>
+                <img id="logo" src="assets/logo.png">
+                <img id="single-button" src="assets/SinglePlayer.png">
+                <img id="multi-button" src="assets/Multiplayer.png">
+                <img id="multi-list" src="assets/multiplayer_list.png">
+                <img id="pause-logo" src="assets/pauseLogo.png">
+                <img id="resume-button" src="assets/resumeButton.png">
+                <img id="exit-button" src="assets/exitButton.png">
+                <img id="controls-button" src="assets/instructionsButton.png">
+                <!--MOUSE ICON-->
+                <img id="mouse-icon" src="assets/cursor/cursor.png">
+                <!--INSTRUCTION-->
+                <img id="intruct-img-1" src="assets/Instruction.jpg">
+                <img id="intruct-img-2" src="assets/controls.jpg">
 
-                        <!--TEXTURE-->
-                        <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
-                        <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
-                        <img crossorigin="anonymous" id="garbageBin-yellow" src="assets/textures/garbageBin_Yellow.png">
-                        <img crossorigin="anonymous" id="garbageBin-red" src="assets/textures/garbageBin_Red.png">
-                        <img crossorigin="anonymous" id="garbageBin-black" src="assets/textures/garbageBin_Black.png">
-                                        
-                        <!--TEXTURE PAPER-->
-                        <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
-                        <img crossorigin="anonymous" id="pizza2-texture" src="assets/textures/pizzatexture2.png">
-                        <img crossorigin="anonymous" id="coffee-texture" src="assets/textures/coffeeCupTexture.png">
-                        
-                        <!--TEXTURE METAL-->
-                        <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaText.png">
 
-                        <!--TEXTURE PLASTIC-->
-                        <img crossorigin="anonymous" id="bottle-texture" src="assets/textures/bottleTexture.png">
+                <!--TEXTURE-->
+                <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
+                <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
+                <img crossorigin="anonymous" id="garbageBin-yellow" src="assets/textures/garbageBin_Yellow.png">
+                <img crossorigin="anonymous" id="garbageBin-red" src="assets/textures/garbageBin_Red.png">
+                <img crossorigin="anonymous" id="garbageBin-black" src="assets/textures/garbageBin_Black.png">
+                
+                
+                <!--TEXTURE PAPER-->
+                <img crossorigin="anonymous" id="pizza2-texture" src="assets/textures/pizzatexture2.png">
+                <img crossorigin="anonymous" id="coffee-texture" src="assets/textures/coffeeCupTexture.png">
+                <img crossorigin="anonymous" id="eggCarton-texture" src="assets/textures/eggCarton.png">
 
-                        <!--TEXTURE COMPOST-->
-                        <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
+                <!--TEXTURE METAL-->
+                <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaTexture.png">
 
-                        <!-----------------
-                        ----------3D MODELS
-                        ------------------>
+                <!--TEXTURE PLASTIC-->
+                <img crossorigin="anonymous" id="bottle-texture" src="assets/textures/bottleTexture.png">
+                <img crossorigin="anonymous" id="plasticBag-texture" src="assets/textures/plasticbagTexture.png">
 
-                        <!--ROOM-->
-                        <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
-                        <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
-                        <img crossorigin="anonymous" id="room-texture" src="assets/textures/room_texture.png">
-                        <a-asset-item id="walls-obj" src="assets/models/walls.obj"></a-asset-item>
-                        <img crossorigin="anonymous" id="walls-texture" src="assets/textures/walls_texture.png">
+                <!--TEXTURE COMPOST-->
+                <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
+                
+                <!--TEXTURE TRASH-->
+                <img crossorigin="anonymous" id="aluminumFoil-texture" src="assets/textures/aluminumTexture.png">
+                <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
+                <img crossorigin="anonymous" id="plate-texture" src="assets/textures/plateTexture.png">
+                <img crossorigin="anonymous" id="qTip-texture" src="assets/textures/qTipTexture.png">
 
-                        <!--BIN MODELS-->
-                        <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
+                <!--3D MODELS-->
+                <!------------------------------------------------------------------------------------->
+                <!--ROOM-->
+                <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
+                <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
+                <img crossorigin="anonymous" id="room-texture" src="assets/textures/room_texture.png">
+                <a-asset-item id="walls-obj" src="assets/models/walls.obj"></a-asset-item>
+                <img crossorigin="anonymous" id="walls-texture" src="assets/textures/walls_texture.png">
 
-                        <!--PAPER MODELS-->
-                        <a-asset-item id="pizzaBox-obj" src="assets/models/paper/pizzaBox.obj"></a-asset-item>
-                        <a-asset-item id="cardBoard-obj" src="assets/models/paper/cardBoardBox.obj"></a-asset-item>
+                <!--BIN MODELS-->
+                <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
 
-                        
-                        <!--TRASH MODELS-->
-                        <a-asset-item id="chipBag-obj" src="assets/models/trashes/chipBag.obj"></a-asset-item>
+                <!--PAPER MODELS-->
+                <a-asset-item id="pizzaBox-obj" src="assets/models/paper/pizzaBox.obj"></a-asset-item>
+                <a-asset-item id="cardBoard-obj" src="assets/models/paper/cardBoardBox.obj"></a-asset-item>
+                <a-asset-item id="eggCarton-obj" src="assets/models/paper/eggCarton.obj"></a-asset-item>
 
-                        <!--COMPOST MODELS-->
-                        <a-asset-item id="bananaPeel-obj" src="assets/models/compost/bananaPeel.obj"></a-asset-item>
+                
+                <!--TRASH MODELS-->
+                <a-asset-item id="chipBag-obj" src="assets/models/trashes/chipBag.obj"></a-asset-item>
+                <a-asset-item id="plate-obj" src="assets/models/trashes/plate.obj"></a-asset-item>
+                <a-asset-item id="aluninumFoil-obj" src="assets/models/trashes/aluminumFoil.obj"></a-asset-item>
+                <a-asset-item id="qTip-obj" src="assets/models/trashes/qTip-obj"></a-asset-item>
 
-                        <!--METAL MODELS-->
-                        <a-asset-item id="colaCan-obj" src="assets/models/metals/colaCan.obj"></a-asset-item>
+                <!--COMPOST MODELS-->
+                <a-asset-item id="bananaPeel-obj" src="assets/models/compost/bananaPeel.obj"></a-asset-item>
 
-                        <!--PLASTIC MODELS-->
-                        <a-asset-item id="bottle-obj" src="assets/models/plastic/bottle.obj"></a-asset-item>
-                        <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>
-                </a-assets>
+                <!--METAL MODELS-->
+                <a-asset-item id="colaCan-obj" src="assets/models/metals/colaCan.obj"></a-asset-item>
+
+                <!--PLASTIC MODELS-->
+                <a-asset-item id="bottle-obj" src="assets/models/plastic/bottle.obj"></a-asset-item>
+                <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>
+                
+            </a-assets>
+
+            
 
                 <!--START MENU SCENE-->
                 <a-entity id="start" visible="true">
