@@ -21,6 +21,7 @@ AFRAME.registerComponent('ingame', {
         context = this;
         instructionGame = false;
 
+        //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
             if(e.keyCode === 27){
                 if(pauseGame == false){
@@ -37,7 +38,6 @@ AFRAME.registerComponent('ingame', {
             if(pauseGame == false){
                 if(e.keyCode === 73){
                     if(instructionGame == false){
-                        console.log("TEST!");
                         instructionGame = true;
                         context.instructionGame();
                     } else {
@@ -91,12 +91,14 @@ AFRAME.registerComponent('ingame', {
         var resumeButton = document.createElement('a-image');
         var exitButton = document.createElement('a-image');
 
+        //Pause logo
         pauseLogo.setAttribute('src', '#pause-logo');
         pauseLogo.setAttribute('position', '0 2.7 -2');
         pauseLogo.setAttribute('width', '3.7');
         pauseLogo.setAttribute('height', '1');
         pauseLogo.setAttribute('scale', '0.5 0.5 0.5');
 
+        //Resume Button
         resumeButton.setAttribute('class', 'menu');
         resumeButton.setAttribute('id', 'resumeButton');
         resumeButton.setAttribute('src', '#resume-button');
@@ -104,6 +106,7 @@ AFRAME.registerComponent('ingame', {
         resumeButton.setAttribute('width', '1.29');
         resumeButton.setAttribute('height', '.363');
 
+        //Exit Button
         exitButton.setAttribute('class', 'menu');
         exitButton.setAttribute('id', 'exitButton');
         exitButton.setAttribute('src', '#exit-button');
@@ -174,6 +177,7 @@ AFRAME.registerComponent('ingame', {
             instructionGame = false;
         }
     },
+    
     //Generate Pause Menu
     instructionGame : function(){
         var instructionMenu = document.getElementById('instructionMenu');

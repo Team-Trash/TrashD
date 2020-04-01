@@ -7,7 +7,7 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
         //let ray = new THREE.ray;
-        console.log(this.data.cursor.getAttribute('raycaster'));
+        //console.log(this.data.cursor.getAttribute('raycaster'));
 
         this.menuEventListener();
     },

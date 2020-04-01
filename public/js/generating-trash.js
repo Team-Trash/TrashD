@@ -46,5 +46,4 @@ function gtFunction(){
         trashDeleting.parentNode.removeChild(trashDeleting);
         trashDeletingID += 1;
     }
-
 }
