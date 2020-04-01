@@ -19,341 +19,345 @@
     <body>
         <!--BEGIN A SCENE-->
         <a-scene id="scene" physics>
-            <!--LOADING ASSETS-->
-            <a-assets>
-                <img id="logo" src="assets/logo.png">
-                <img id="single-button" src="assets/SinglePlayer.png">
-                <img id="multi-button" src="assets/Multiplayer.png">
-                <img id="multi-list" src="assets/multiplayer_list.png">
-                <img id="pause-logo" src="assets/pauseLogo.png">
-                <img id="resume-button" src="assets/resumeButton.png">
-                <img id="exit-button" src="assets/exitButton.png">
-                <img id="controls-button" src="assets/controlButton.png">
-                <!--MOUSE ICON-->
-                <img id="mouse-icon" src="assets/cursor/cursor.png">
-                <!--INSTRUCTION-->
-                <img id="instruction" src="assets/Instruction.jpg">
+                <!--LOADING ASSETS-->
+                <a-assets>
+                        <img id="logo" src="assets/logo.png">
+                        <img id="single-button" src="assets/SinglePlayer.png">
+                        <img id="multi-button" src="assets/Multiplayer.png">
+                        <img id="multi-list" src="assets/multiplayer_list.png">
+                        <img id="pause-logo" src="assets/pauseLogo.png">
+                        <img id="resume-button" src="assets/resumeButton.png">
+                        <img id="exit-button" src="assets/exitButton.png">
+                        <img id="controls-button" src="assets/instructionsButton.png">
+                        <!--MOUSE ICON-->
+                        <img id="mouse-icon" src="assets/cursor/cursor.png">
+                        <!--INSTRUCTION-->
+                        <img id="intruct-img-1" src="assets/Instruction.jpg">
+                        <img id="intruct-img-2" src="assets/controls.jpg">
 
-
-                <!--TEXTURE-->
-                <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
-                <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
-                <img crossorigin="anonymous" id="garbageBin-yellow" src="assets/textures/garbageBin_Yellow.png">
-                <img crossorigin="anonymous" id="garbageBin-red" src="assets/textures/garbageBin_Red.png">
-                <img crossorigin="anonymous" id="garbageBin-black" src="assets/textures/garbageBin_Black.png">
-                
-                
-                <!--TEXTURE PAPER-->
-                <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
-                <img crossorigin="anonymous" id="pizza2-texture" src="assets/textures/pizzatexture2.png">
-                <img crossorigin="anonymous" id="coffee-texture" src="assets/textures/coffeeCupTexture.png">
-                
-                <!--TEXTURE METAL-->
-                <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaText.png">
-
-                <!--TEXTURE PLASTIC-->
-                <img crossorigin="anonymous" id="bottle-texture" src="assets/textures/bottleTexture.png">
-
-                <!--TEXTURE COMPOST-->
-                <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
-
-
-                <!--3D MODELS-->
-
-                <!--ROOM-->
-                <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
-                <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
-                <img crossorigin="anonymous" id="room-texture" src="assets/textures/room_texture.png">
-                <a-asset-item id="walls-obj" src="assets/models/walls.obj"></a-asset-item>
-                <img crossorigin="anonymous" id="walls-texture" src="assets/textures/walls_texture.png">
-
-                <!--BIN MODELS-->
-                <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
-
-                <!--PAPER MODELS-->
-                <a-asset-item id="pizzaBox-obj" src="assets/models/paper/pizzaBox.obj"></a-asset-item>
-                <a-asset-item id="cardBoard-obj" src="assets/models/paper/cardBoardBox.obj"></a-asset-item>
-
-                
-                <!--TRASH MODELS-->
-                <a-asset-item id="chipBag-obj" src="assets/models/trashes/chipBag.obj"></a-asset-item>
-
-                <!--COMPOST MODELS-->
-                <a-asset-item id="bananaPeel-obj" src="assets/models/compost/bananaPeel.obj"></a-asset-item>
-
-                <!--METAL MODELS-->
-                <a-asset-item id="colaCan-obj" src="assets/models/metals/colaCan.obj"></a-asset-item>
-
-                <!--PLASTIC MODELS-->
-                <a-asset-item id="bottle-obj" src="assets/models/plastic/bottle.obj"></a-asset-item>
-                <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>
-            </a-assets>
-
-            <!--START MENU SCENE-->
-            <a-entity id="start" visible="true">
-                <!--CAMERA-->
-                <a-entity 	id="start-camera"
-                                camera="active: true"
-                                position="0 0 0">
-                        <a-entity 	id = "menu-cursor"
-                                        cursor ="rayOrigin:mouse;"
-                                        raycaster="objects: .menu;"></a-entity>
-                </a-entity>
-
-                <a-entity   hand-controls="left"
-                            interact-start-menu-vr="cursor: #vr-raycast-left"
-                            position="0 0 0">
-                    <a-entity 	id = "vr-raycast-left"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                <a-entity   hand-controls="right"
-                            interact-start-menu-vr="cursor: #vr-raycast-right"
-                            position="0 0 0">
-                    <a-entity   id = "vr-raycast-right"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity>
-
-                <!--MENU-->
-                <a-entity   id = "startMenu" interact-start-menu></a-entity>
-                </a-entity>
-
-                <!--PAUSE MENU SCENE-->
-
-
-            <!--INGAME-->
-            <a-entity id="ingame" visible="false">
-                <script>//CONNECT TO THE SERVER
-                        //IO connection
-                        socket = io();
-                        //Connection event
-                        socket.on('connect', function(){
-                            console.log("Generating trash js connected!");
-                        });
+                        <!--TEXTURE-->
+                        <img crossorigin="anonymous" id="garbageBin-green" src="assets/textures/garbageBin_Green.png">
+                        <img crossorigin="anonymous" id="garbageBin-blue" src="assets/textures/garbageBin_Blue.png">
+                        <img crossorigin="anonymous" id="garbageBin-yellow" src="assets/textures/garbageBin_Yellow.png">
+                        <img crossorigin="anonymous" id="garbageBin-red" src="assets/textures/garbageBin_Red.png">
+                        <img crossorigin="anonymous" id="garbageBin-black" src="assets/textures/garbageBin_Black.png">
+                                        
+                        <!--TEXTURE PAPER-->
+                        <img crossorigin="anonymous" id="chip-texture" src="assets/textures/chipsTexture.png">
+                        <img crossorigin="anonymous" id="pizza2-texture" src="assets/textures/pizzatexture2.png">
+                        <img crossorigin="anonymous" id="coffee-texture" src="assets/textures/coffeeCupTexture.png">
                         
-                        //Putting the data back to the socket
-                        socket.emit('generating-trash', gtFunction())
-                        </script>
+                        <!--TEXTURE METAL-->
+                        <img crossorigin="anonymous" id="cola-texture" src="assets/textures/colaText.png">
 
-                <!--ADDING ROOM-->
-                <a-entity   id          = "room"
-                            obj-model   = "obj:#room-obj;"
-                            material    = "src:#room-texture"
-                            position    = "0 1 0"
-                            scale       = "0.04 0.04 0.04"></a-entity>
+                        <!--TEXTURE PLASTIC-->
+                        <img crossorigin="anonymous" id="bottle-texture" src="assets/textures/bottleTexture.png">
 
-                <a-entity   id          = "walls"
-                            obj-model   = "obj:#walls-obj;"
-                            material    = "src:#walls-texture"
-                            position    = "0 1 0"
-                            scale       = "0.04 0.04 0.04"></a-entity>
+                        <!--TEXTURE COMPOST-->
+                        <img crossorigin="anonymous" id="banana-texture" src="assets/textures/bananaPeelTexture.png">
 
-                <!--ADDING INVISIBLE PLANES -->
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "0 1.342 -7.194"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 0 0"
-                            static-body></a-entity>
+                        <!-----------------
+                        ----------3D MODELS
+                        ------------------>
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "-8.491 1.342 -0.709"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 90 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "7.207 1.342 -0.709"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 -90 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "-0.425 1.342 7.254"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 180 0"
-                            static-body></a-entity>
+                        <!--ROOM-->
+                        <a-asset-item id="room-obj" src="assets/models/room.obj"></a-asset-item>
+                        <a-asset-item id="room-mtl" src="assets/models/room.mtl"></a-asset-item>
+                        <img crossorigin="anonymous" id="room-texture" src="assets/textures/room_texture.png">
+                        <a-asset-item id="walls-obj" src="assets/models/walls.obj"></a-asset-item>
+                        <img crossorigin="anonymous" id="walls-texture" src="assets/textures/walls_texture.png">
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            visible = "false"
-                            position = "7.379 -1.601 -0.709"
-                            rotation = "-90 0 0"
-                            static-body></a-entity>
+                        <!--BIN MODELS-->
+                        <a-asset-item id="garbageBin-obj" src="assets/models/garbageBin.obj"></a-asset-item>
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: #343434"
-                            position = "7.379 7 -0.709"
-                            rotation = "90 0 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
-                            position = "-1.029 0.063 0.001"
-                            visible  = "false"
-                            material = "color: gray"
-                            position = "7.379 0.029 -0.709"
-                            static-body></a-entity>
-                            
-                <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                            position = "7.156 0 0.037"
-                            visible="false"
-                            material = "color: gray"
-                            static-body></a-entity> 
+                        <!--PAPER MODELS-->
+                        <a-asset-item id="pizzaBox-obj" src="assets/models/paper/pizzaBox.obj"></a-asset-item>
+                        <a-asset-item id="cardBoard-obj" src="assets/models/paper/cardBoardBox.obj"></a-asset-item>
 
-                <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                            position = "-8.201 0 0.037"
-                            visible="false"
-                            material = "color: gray"
-                            static-body></a-entity>            
+                        
+                        <!--TRASH MODELS-->
+                        <a-asset-item id="chipBag-obj" src="assets/models/trashes/chipBag.obj"></a-asset-item>
 
-                <!--CAMERA-->
-                <a-entity 	id="game-camera"
-                            camera="active: false"
-                            position="0 1.15 3">
-                    <a-entity 	id = "game-cursor"
-                                geometry="primitive: circle; radius: 0.01"
-                                material="color: red"
-                                position="0 0 -1.5"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .clickable;">
-                    </a-entity>
-                    <a-entity
-                                cursor ="rayOrigin:mouse;"
-                                raycaster="objects: .menu;"></a-entity>
-                    <a-text id="youText"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "white"
-                            value = "You"
-                            scale = "0.7 0.7 0.7"
-                            align="right"
-                            position = "-0.25 0.75 -1"
-                            width = "2"></a-text>
-                    
-                    <a-text id="opponentText"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "white"
-                            position = "0.2 0.75 -1"
-                            scale = "0.7 0.7 0.7"
-                            value = "Opponent"
-                            align="right"
-                            width = "2"></a-text>   
+                        <!--COMPOST MODELS-->
+                        <a-asset-item id="bananaPeel-obj" src="assets/models/compost/bananaPeel.obj"></a-asset-item>
 
-                    <a-text id="timer"
-                            value="Timer"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="left"
-                            position="-1.2 0.5 -1"
-                            width="2">
-                    </a-text>
+                        <!--METAL MODELS-->
+                        <a-asset-item id="colaCan-obj" src="assets/models/metals/colaCan.obj"></a-asset-item>
 
-                    <a-text id="score"   
-                            value="0 PTS"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="right"
-                            position="1.2 0.5 -1"
-                            width="2">
-                    </a-text>
+                        <!--PLASTIC MODELS-->
+                        <a-asset-item id="bottle-obj" src="assets/models/plastic/bottle.obj"></a-asset-item>
+                        <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>
+                </a-assets>
 
-                    <a-text id="opponentScore"   
-                            value="0 PTS"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="right"
-                            position="1.2 0.5 -1"
-                            width="2">
-                    </a-text>
+                <!--START MENU SCENE-->
+                <a-entity id="start" visible="true">
+                        <!--CAMERA-->
+                        <a-entity 	id="start-camera"
+                                        camera="active: true"
+                                        position="0 0 0">
+                                <a-entity 	id = "menu-cursor"
+                                                cursor ="rayOrigin:mouse;"
+                                                raycaster="objects: .menu;"></a-entity>
+                        </a-entity>
 
-                    <a-entity   id="pauseMenu"
-                                position="0 -2 -0.1">
-                    </a-entity>
+                        <!--VR Hands-->
+                        <a-entity   hand-controls="left"
+                                interact-start-menu-vr="cursor: #vr-raycast-left"
+                                position="0 0 0">
+                        <a-entity 	id = "vr-raycast-left"
+                                        cursor ="rayOrigin:entity;"
+                                        raycaster="objects: .menu; showLine: true"
+                                        line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        <a-entity   hand-controls="right"
+                                interact-start-menu-vr="cursor: #vr-raycast-right"
+                                position="0 0 0">
+                        <a-entity   id = "vr-raycast-right"
+                                        cursor ="rayOrigin:entity;"
+                                        raycaster="objects: .menu; showLine: true"
+                                        line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity>
 
-                    <a-entity   id="instructionMenu"
-                                position="0 -2 -0.1">
-                    </a-entity>
+                        <!--MENU-->
+                        <a-entity   id = "startMenu" interact-start-menu></a-entity>
                 </a-entity>
-                
-                <!--VR Hands-->
-                <a-entity   id="hand-left"
-                            hand-controls="left"
-                            position="0 0 3">
-                    <a-entity 	id = "vr-raycast-left"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                <a-entity   id="hand-right"
-                            hand-controls="right"
-                            position="0 0 3">
-                    <a-entity   id = "vr-raycast-right"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                
-                
-                <!--GARBAGE BIN-->
-                <a-entity   id                      = "plasticBin"
-                            class                   = "bin"
-                            data-trash-type         = "plastic"
-                            obj-model               = "obj:#garbageBin-obj;"
-                            material                = "src:#garbageBin-blue;"
-                            rotation                = "0 -90 0" 
-                            position                = "3 -1 1.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                
-                <a-entity   id                      = "metalBin"
-                            class                   = "bin"
-                            data-trash-type         = "metal"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-red"
-                            rotation                = "0 180 0"
-                            position                = "2 -1 5.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                            
-                <a-entity   id                      = "paperBin"
-                            class                   = "bin"
-                            data-trash-type         = "paper"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-yellow"
-                            rotation                = "0 0 0"
-                            position                = "-2 -1 -0.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
 
-                <a-entity   id                      = "compostBin"
-                            class                   = "bin"
-                            data-trash-type         = "compost"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-green"
-                            rotation                = "0 90 0"
-                            position                = "-1.6 -1 4.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                
-                <a-entity   id                      = "trashBin"
-                            class                   = "bin"
-                            data-trash-type         = "trash"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-black"
-                            rotation                = "0 90 0"
-                            position                = "-4.25 -1 4.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>    
-            </a-entity>
+
+                <!--INGAME-->
+                <a-entity id="ingame" visible="false">
+                        <script>//CONNECT TO THE SERVER
+                                //IO connection
+                                socket = io();
+                                //Connection event
+                                socket.on('connect', function(){
+                                console.log("Generating trash js connected!");
+                                });
+                                
+                                //Putting the data back to the socket
+                                //socket.emit('generating-trash', gtFunction())
+                                </script>
+
+                        <!--ADDING ROOM-->
+                        <a-entity   id          = "room"
+                                obj-model   = "obj:#room-obj;"
+                                material    = "src:#room-texture"
+                                position    = "0 1 0"
+                                scale       = "0.04 0.04 0.04"></a-entity>
+
+                        <a-entity   id          = "walls"
+                                obj-model   = "obj:#walls-obj;"
+                                material    = "src:#walls-texture"
+                                position    = "0 1 0"
+                                scale       = "0.04 0.04 0.04"></a-entity>
+
+                        <!--ADDING INVISIBLE PLANES -->
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "0 1.342 -7.194"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 0 0"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-8.491 1.342 -0.709"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 90 0"
+                                static-body></a-entity>
+                        
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "7.207 1.342 -0.709"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 -90 0"
+                                static-body></a-entity>
+                        
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-0.425 1.342 7.254"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 180 0"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                visible = "false"
+                                position = "7.379 -1.601 -0.709"
+                                rotation = "-90 0 0"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: #343434"
+                                position = "7.379 7 -0.709"
+                                rotation = "90 0 0"
+                                static-body></a-entity>
+                        
+                        <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
+                                position = "-1.029 0.063 0.001"
+                                visible  = "false"
+                                material = "color: gray"
+                                position = "7.379 0.029 -0.709"
+                                static-body></a-entity>
+                                
+                        <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
+                                position = "7.156 0 0.037"
+                                visible="false"
+                                material = "color: gray"
+                                static-body></a-entity> 
+
+                        <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
+                                position = "-8.201 0 0.037"
+                                visible="false"
+                                material = "color: gray"
+                                static-body></a-entity>            
+
+                        <!--CAMERA-->
+                        <a-entity 	id="game-camera"
+                                camera="active: false"
+                                position="0 1.15 3">
+                                <a-entity 	id = "game-cursor"
+                                                geometry="primitive: circle; radius: 0.01"
+                                                material="color: red"
+                                                position="0 0 -1.5"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .clickable;">
+                                </a-entity>
+                                <a-entity
+                                                cursor ="rayOrigin:mouse;"
+                                                raycaster="objects: .menu;"></a-entity>
+                                
+                                <a-entity id="HUD">
+                                        <a-text id="youText"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color = "white"
+                                                value = "You"
+                                                scale = "0.7 0.7 0.7"
+                                                align="right"
+                                                position = "-0.25 0.75 -1"
+                                                width = "2"></a-text>
+                                        
+                                        <a-text id="opponentText"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color = "white"
+                                                position = "0.2 0.75 -1"
+                                                scale = "0.7 0.7 0.7"
+                                                value = "Opponent"
+                                                align="right"
+                                                width = "2"></a-text>   
+
+                                        <a-text id="timer"
+                                                value="Timer"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="left"
+                                                position="-1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
+
+                                        <a-text id="score"   
+                                                value="0 PTS"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="right"
+                                                position="1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
+
+                                        <a-text id="opponentScore"   
+                                                value="0 PTS"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="right"
+                                                position="1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
+                                </a-entity>
+
+                                <!-- PAUSE MENU CONTAINER -->
+                                <a-entity   id="pauseMenu"
+                                                position="0 -2 -0.1">
+                                </a-entity>
+
+                                <!-- INSTRUCTION MENU CONTAINER -->
+                                <a-entity   id="instructionMenu"
+                                                position="0 -2 -0.1">
+                                </a-entity>
+                        </a-entity>
+                        
+                        <!--VR Hands-->
+                        <a-entity   id="hand-left"
+                                hand-controls="left"
+                                position="0 0 3">
+                                <a-entity 	id = "vr-raycast-left"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .menu; showLine: true"
+                                                line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        <a-entity   id="hand-right"
+                                hand-controls="right"
+                                position="0 0 3">
+                                <a-entity   id = "vr-raycast-right"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .menu; showLine: true"
+                                                line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        
+                        
+                        <!--GARBAGE BIN-->
+                        <a-entity   id                  = "plasticBin"
+                                class                   = "bin"
+                                data-trash-type         = "plastic"
+                                obj-model               = "obj:#garbageBin-obj;"
+                                material                = "src:#garbageBin-blue;"
+                                rotation                = "0 -90 0" 
+                                position                = "3 -1 1.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                        
+                        <a-entity   id                      = "metalBin"
+                                class                   = "bin"
+                                data-trash-type         = "metal"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-red"
+                                rotation                = "0 180 0"
+                                position                = "2 -1 5.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                                
+                        <a-entity   id                      = "paperBin"
+                                class                   = "bin"
+                                data-trash-type         = "paper"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-yellow"
+                                rotation                = "0 0 0"
+                                position                = "-2 -1 -0.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+
+                        <a-entity   id                      = "compostBin"
+                                class                   = "bin"
+                                data-trash-type         = "compost"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-green"
+                                rotation                = "0 90 0"
+                                position                = "-1.6 -1 4.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                        
+                        <a-entity   id                      = "trashBin"
+                                class                   = "bin"
+                                data-trash-type         = "trash"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-black"
+                                rotation                = "0 90 0"
+                                position                = "-4.25 -1 4.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>    
+                </a-entity>
 
         </a-scene>
 

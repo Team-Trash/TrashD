@@ -1,5 +1,4 @@
 let socket;
-let context;
 
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
@@ -8,13 +7,13 @@ AFRAME.registerComponent('interact-start-menu', {
 
     init : function() {
         console.log('Initalize Start Menu');
-        //Init context
-        context = this;
         
-        context.startMenu();
+        this.startMenu();
     },
 
+    //Add event listeners to button
     menuEventListener: function(menuButtons){
+        let context = this
         menuButtons.forEach(function(menuButton) {
             let scene = document.getElementById('scene');
             var trashLogo = document.getElementById('startLogo');
@@ -65,9 +64,7 @@ AFRAME.registerComponent('interact-start-menu', {
         var controlsButton = document.createElement('a-image');
 
         //Empty start menu of child nodes
-        while (startMenu.firstChild) {
-            startMenu.removeChild(startMenu.lastChild);
-        }
+        this.emptyElement(startMenu);
 
         trashLogo.setAttribute('id', 'startLogo');
         trashLogo.setAttribute('src', '#logo');
@@ -118,46 +115,11 @@ AFRAME.registerComponent('interact-start-menu', {
         startMenu.append(multiplePlayer);
         startMenu.append(controlsButton);
 
-        context.menuEventListener(context.el.querySelectorAll('.menu'));
-    },
-
-    //Generate Pause Menu
-    pauseMenu : function(){
-        console.log("Pause menu created!");
-
-        var startMenu = document.getElementById('pauseMenu');
-        var pauseLogo = document.createElement('a-image');
-        var resumeButton = document.createElement('a-image');
-        var exitButton = document.createElement('a-image');
-
-        pauseLogo.setAttribute('src', '#pause-logo');
-        pauseLogo.setAttribute('position', '0 1 -2');
-        pauseLogo.setAttribute('width', '3.7');
-        pauseLogo.setAttribute('height', '1');
-        pauseLogo.setAttribute('scale', '0.8 0.8 0.8');
-
-        resumeButton.setAttribute('class', 'menu');
-        resumeButton.setAttribute('id', 'resumeButton');
-        resumeButton.setAttribute('src', '#single-button');
-        resumeButton.setAttribute('position', '0 0 -2');
-        resumeButton.setAttribute('width', '1.29');
-        resumeButton.setAttribute('height', '.363');
-
-        exitButton.setAttribute('class', 'menu');
-        exitButton.setAttribute('id', 'exitButton');
-        exitButton.setAttribute('src', '#exit-button');
-        exitButton.setAttribute('position', '0 2 -2');
-        exitButton.setAttribute('width', '1.29');
-        exitButton.setAttribute('height', '.363');
-
-
-        startMenu.append(trashLogo);
-        startMenu.append(pauseLogo);
-
-        context.menuEventListener(context.el.querySelectorAll('.menu'));
+        this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
     multiMenu: function(){
+        let context = this;
         var startMenu = document.getElementById('startMenu');
         var multiList = document.createElement('a-entity');
         var multiBG =  document.createElement('a-image');
@@ -167,9 +129,7 @@ AFRAME.registerComponent('interact-start-menu', {
         let position = 0.45;
 
         //Empty start menu of child nodes
-        while (startMenu.firstChild) {
-            startMenu.removeChild(startMenu.lastChild);
-        }
+        this.emptyElement(startMenu);
 
         multiList.setAttribute('id', 'multiList');
         multiList.setAttribute('position', '0 0 -1');
@@ -178,7 +138,6 @@ AFRAME.registerComponent('interact-start-menu', {
         multiBG.setAttribute('scale', '1.5 1.5 1.5');
         multiBG.setAttribute('width', '1.29');
         multiBG.setAttribute('height', '.847');
-        startMenu.append(multiList);
 
         socket.emit('get-rooms');
         socket.on('return-rooms', function(data){
@@ -217,11 +176,63 @@ AFRAME.registerComponent('interact-start-menu', {
         back.setAttribute('position', '-0.6 -0.45 0.1');
         back.setAttribute('class', 'menu');
 
-        multiList.append(multiBG);
+        startMenu.append(multiList);
+        multiList.append(multiBG);        
         multiList.append(newRoom);
         multiList.append(back);
 
         context.menuEventListener(context.el.querySelectorAll('.menu'));
+    },
+
+    controlsMenu: function(state){
+        var startMenu = document.getElementById('startMenu');
+        var instCont = document.createElement('a-entity');
+        var img =  document.createElement('a-image');
+        var back =  document.createElement('a-entity');
+        var next =  document.createElement('a-entity');
+
+        //Empty start menu of child nodes
+        this.emptyElement(startMenu);
+
+        instCont.setAttribute('id', 'instCont');
+        instCont.setAttribute('position', '0 0 -1');
+
+        img.setAttribute('id', 'instructImg')
+        if(state == 'instructions'){
+            img.setAttribute('src', '#intruct-img-1');
+        } else if (state == 'controls') {
+            img.setAttribute('src', '#intruct-img-2');
+        }   
+        img.setAttribute('scale', '1.5 1.5 1.5');
+        img.setAttribute('width', '1.29');
+        img.setAttribute('height', '.847');
+
+        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 1;');
+        back.setAttribute('id', 'back');
+        back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
+        back.setAttribute('material', 'color: #697c37');
+        back.setAttribute('position', '-0.6 0.45 0.1');
+        back.setAttribute('class', 'menu');
+
+        if(state == 'instructions'){
+            next.setAttribute('text', 'value: Controls; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('data-state', 'controls');
+        } else if (state == 'controls') {
+            next.setAttribute('text', 'value: Instructions; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('data-state', 'instructions');
+        }  
+        next.setAttribute('id', 'next');
+        next.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
+        next.setAttribute('material', 'color: #697c37');
+        next.setAttribute('position', '0.6 0.45 0.1');
+        next.setAttribute('class', 'menu');
+
+        startMenu.append(instCont);
+        instCont.append(img);
+        instCont.append(back);
+        instCont.append(next);
+
+        this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
     multiList: function(){
@@ -235,6 +246,7 @@ AFRAME.registerComponent('interact-start-menu', {
     },
 
     clickMenu: function(menuButton){
+        let context = this;
         let menuID = menuButton.getAttribute('id');
         let roomID = menuButton.getAttribute('data-room');
         
@@ -253,11 +265,20 @@ AFRAME.registerComponent('interact-start-menu', {
                     context.enterMulti(data);
                 });
                 break;
-            
+                
+            case 'controlsButton':
+                context.controlsMenu('instructions');
+                break;
+
             case 'back':
                 socket.close();
                 context.startMenu();
                 break;
+            
+            case 'next':
+                context.controlsMenu(menuButton.getAttribute('data-state'));
+                break;
+
         }
 
         if(roomID){
@@ -268,6 +289,7 @@ AFRAME.registerComponent('interact-start-menu', {
         }
     },
 
+    //Enter singleplayer gamemode
     enterSingle: function(){
         console.log('Entering SinglePlayer');
 
@@ -275,6 +297,8 @@ AFRAME.registerComponent('interact-start-menu', {
         var ingame = document.getElementById('ingame');
         let scene = document.getElementById('scene');
 
+        // Remove/Hide start menu; move camera to ingame camera
+        this.emptyElement(startMenu);
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
@@ -287,12 +311,16 @@ AFRAME.registerComponent('interact-start-menu', {
         }
     },
 
+    //Enter multiplayer gamemode
     enterMulti: function(data){
         console.log('Entering ' + data);
 
         var start = document.getElementById('start');
+        var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
 
+        // Remove/Hide start menu; move camera to ingame camera
+        this.emptyElement(startMenu);
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
@@ -302,6 +330,12 @@ AFRAME.registerComponent('interact-start-menu', {
 
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+        }
+    },
+
+    emptyElement: function(element){
+        while (element.firstChild) {
+            element.removeChild(element.lastChild);
         }
     }
 });
