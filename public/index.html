@@ -28,11 +28,12 @@
                 <img id="pause-logo" src="assets/pauseLogo.png">
                 <img id="resume-button" src="assets/resumeButton.png">
                 <img id="exit-button" src="assets/exitButton.png">
-                <img id="controls-button" src="assets/controlButton.png">
+                <img id="controls-button" src="assets/instructionsButton.png">
                 <!--MOUSE ICON-->
                 <img id="mouse-icon" src="assets/cursor/cursor.png">
                 <!--INSTRUCTION-->
-                <img id="instruction" src="assets/Instruction.jpg">
+                <img id="intruct-img-1" src="assets/Instruction.jpg">
+                <img id="intruct-img-2" src="assets/controls.jpg">
 
                 <!--AUDIO AND SOUNDS-->
                 <audio id ="factoryAmbience-audio" src="assets/sounds/factoryAmbienceAudio.wav", preload="auto"></audio>
@@ -109,272 +110,277 @@
                 <a-asset-item id="plasticBag-obj" src="assets/models/plastic/plasticBag.obj"></a-asset-item>     
             </a-assets>
 
-            <!--START MENU SCENE-->
-            <a-entity id="start" visible="true">
-                <!--CAMERA-->
-                <a-entity 	id="start-camera"
-                                camera="active: true"
+            
+
+                <!--START MENU SCENE-->
+                <a-entity id="start" visible="true">
+                        <!--CAMERA-->
+                        <a-entity 	id="start-camera"
+                                        camera="active: true"
+                                        position="0 0 0">
+                                <a-entity 	id = "menu-cursor"
+                                                cursor ="rayOrigin:mouse;"
+                                                raycaster="objects: .menu;"></a-entity>
+                        </a-entity>
+
+                        <!--VR Hands-->
+                        <a-entity   hand-controls="left"
+                                interact-start-menu-vr="cursor: #vr-raycast-left"
                                 position="0 0 0">
-                        <a-entity 	id = "menu-cursor"
-                                        cursor ="rayOrigin:mouse;"
-                                        raycaster="objects: .menu;"></a-entity>
+                        <a-entity 	id = "vr-raycast-left"
+                                        cursor ="rayOrigin:entity;"
+                                        raycaster="objects: .menu; showLine: true"
+                                        line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        <a-entity   hand-controls="right"
+                                interact-start-menu-vr="cursor: #vr-raycast-right"
+                                position="0 0 0">
+                        <a-entity   id = "vr-raycast-right"
+                                        cursor ="rayOrigin:entity;"
+                                        raycaster="objects: .menu; showLine: true"
+                                        line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity>
+
+                        <!--MENU-->
+                        <a-entity   id = "startMenu" interact-start-menu></a-entity>
                 </a-entity>
 
-                <a-entity   hand-controls="left"
-                            interact-start-menu-vr="cursor: #vr-raycast-left"
-                            position="0 0 0">
-                    <a-entity 	id = "vr-raycast-left"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                <a-entity   hand-controls="right"
-                            interact-start-menu-vr="cursor: #vr-raycast-right"
-                            position="0 0 0">
-                    <a-entity   id = "vr-raycast-right"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity>
 
-                <!--MENU-->
-                <a-entity   id = "startMenu" interact-start-menu></a-entity>
-                </a-entity>
+                <!--INGAME-->
+                <a-entity id="ingame" visible="false">
+                        <!--<script>//CONNECT TO THE SERVER
+                                //IO connection
+                                socket = io();
+                                //Connection event
+                                socket.on('connect', function(){
+                                console.log("Generating trash js connected!");
+                                });
+                                
+                                //Putting the data back to the socket
+                                //socket.emit('generating-trash', gtFunction())
+                                </script>-->
 
-                <!--PAUSE MENU SCENE-->
+                        <!--ADDING ROOM-->
+                        <a-entity   id          = "room"
+                                obj-model   = "obj:#room-obj;"
+                                material    = "src:#room-texture"
+                                position    = "0 1 0"
+                                scale       = "0.04 0.04 0.04"></a-entity>
 
+                        <a-entity   id          = "walls"
+                                obj-model   = "obj:#walls-obj;"
+                                material    = "src:#walls-texture"
+                                position    = "0 1 0"
+                                scale       = "0.04 0.04 0.04"></a-entity>
 
-            <!--INGAME-->
-            <a-entity id="ingame" visible="false">
-                <!--<script>//CONNECT TO THE SERVER
-                        //IO connection
-                        socket = io();
-                        //Connection event
-                        socket.on('connect', function(){
-                            console.log("Generating trash js connected!");
-                        });
+                        <!--ADDING INVISIBLE PLANES -->
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "0 1.342 -7.194"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 0 0"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-8.491 1.342 -0.709"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 90 0"
+                                static-body></a-entity>
                         
-                        //Putting the data back to the socket
-                        socket.emit('generating-trash', gtFunction())
-                        </script>-->
-                
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "7.207 1.342 -0.709"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 -90 0"
+                                static-body></a-entity>
+                        
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-0.425 1.342 7.254"
+                                scale = "0.170 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 180 0"
+                                static-body></a-entity>
 
-                <!--ADDING ROOM-->
-                <a-entity   id          = "room"
-                            obj-model   = "obj:#room-obj;"
-                            material    = "src:#room-texture"
-                            position    = "0 1 0"
-                            scale       = "0.04 0.04 0.04"></a-entity>
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                visible = "false"
+                                position = "7.379 -1.601 -0.709"
+                                rotation = "-90 0 0"
+                                static-body></a-entity>
 
-                <a-entity   id          = "walls"
-                            obj-model   = "obj:#walls-obj;"
-                            material    = "src:#walls-texture"
-                            position    = "0 1 0"
-                            scale       = "0.04 0.04 0.04"></a-entity>
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: #343434"
+                                position = "7.379 7 -0.709"
+                                rotation = "90 0 0"
+                                static-body></a-entity>
+                        
+                        <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
+                                position = "-1.029 0.063 0.001"
+                                visible  = "false"
+                                material = "color: gray"
+                                position = "7.379 0.029 -0.709"
+                                static-body></a-entity>
+                                
+                        <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
+                                position = "7.156 0 0.037"
+                                visible="false"
+                                material = "color: gray"
+                                static-body></a-entity> 
 
-                <!--ADDING THE PLANE -->
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "0 1.342 -7.194"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 0 0"
-                            static-body></a-entity>
+                        <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
+                                position = "-8.201 0 0.037"
+                                visible="false"
+                                material = "color: gray"
+                                static-body></a-entity>            
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "-8.491 1.342 -0.709"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 90 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "7.207 1.342 -0.709"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 -90 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            position = "-0.425 1.342 7.254"
-                            scale = "0.170 0.125 0.170"
-                            visible = "false"
-                            rotation = "0 180 0"
-                            static-body></a-entity>
+                        <!--CAMERA-->
+                        <a-entity 	id="game-camera"
+                                camera="active: false"
+                                position="0 1.15 3">
+                                <a-entity 	id = "game-cursor"
+                                                geometry="primitive: circle; radius: 0.01"
+                                                material="color: red"
+                                                position="0 0 -1.5"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .clickable;">
+                                </a-entity>
+                                <a-entity
+                                                cursor ="rayOrigin:mouse;"
+                                                raycaster="objects: .menu;"></a-entity>
+                                
+                                <a-entity id="HUD">
+                                        <a-text id="youText"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color = "white"
+                                                value = "You"
+                                                scale = "0.7 0.7 0.7"
+                                                align="right"
+                                                position = "-0.25 0.75 -1"
+                                                width = "2"></a-text>
+                                        
+                                        <a-text id="opponentText"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color = "white"
+                                                position = "0.2 0.75 -1"
+                                                scale = "0.7 0.7 0.7"
+                                                value = "Opponent"
+                                                align="right"
+                                                width = "2"></a-text>   
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: gray"
-                            visible = "false"
-                            position = "7.379 -1.601 -0.709"
-                            rotation = "-90 0 0"
-                            static-body></a-entity>
+                                        <a-text id="timer"
+                                                value="Timer"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="left"
+                                                position="-1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
 
-                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
-                            material = "color: #343434"
-                            position = "7.379 7 -0.709"
-                            rotation = "90 0 0"
-                            static-body></a-entity>
-                
-                <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
-                            position = "-1.029 0.063 0.001"
-                            visible  = "false"
-                            material = "color: gray"
-                            position = "7.379 0.029 -0.709"
-                            static-body></a-entity>
-                            
-                <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                            position = "7.156 0 0.037"
-                            visible="false"
-                            material = "color: gray"
-                            static-body></a-entity> 
+                                        <a-text id="score"   
+                                                value="0 PTS"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="right"
+                                                position="1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
 
-                <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                            position = "-8.201 0 0.037"
-                            visible="false"
-                            material = "color: gray"
-                            static-body></a-entity>            
+                                        <a-text id="opponentScore"   
+                                                value="0 PTS"
+                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                color="white"
+                                                align="right"
+                                                position="1.2 0.5 -1"
+                                                width="2">
+                                        </a-text>
+                                </a-entity>
 
-                <!--CAMERA-->
-                <a-entity 	id="game-camera"
-                            camera="active: false"
-                            position="0 1.15 3">
-                    <a-entity 	id = "game-cursor"
-                                geometry="primitive: circle; radius: 0.01"
-                                material="color: red"
-                                position="0 0 -1.5"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .clickable;">
-                    </a-entity>
-                    <a-entity
-                                cursor ="rayOrigin:mouse;"
-                                raycaster="objects: .menu;"></a-entity>
-                    <a-text id="youText"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "white"
-                            value = "You"
-                            scale = "0.7 0.7 0.7"
-                            align="right"
-                            position = "-0.25 0.75 -1"
-                            width = "2"></a-text>
-                    
-                    <a-text id="opponentText"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color = "white"
-                            position = "0.2 0.75 -1"
-                            scale = "0.7 0.7 0.7"
-                            value = "Opponent"
-                            align="right"
-                            width = "2"></a-text>   
+                                <!-- PAUSE MENU CONTAINER -->
+                                <a-entity   id="pauseMenu"
+                                                position="0 -2 -0.1">
+                                </a-entity>
 
-                    <a-text id="timer"
-                            value="Timer"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="left"
-                            position="-1.2 0.5 -1"
-                            width="2">
-                    </a-text>
+                                <!-- INSTRUCTION MENU CONTAINER -->
+                                <a-entity   id="instructionMenu"
+                                                position="0 -2 -0.1">
+                                </a-entity>
+                        </a-entity>
+                        
+                        <!--VR Hands-->
+                        <a-entity   id="hand-left"
+                                hand-controls="left"
+                                position="0 0 3">
+                                <a-entity 	id = "vr-raycast-left"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .menu; showLine: true"
+                                                line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        <a-entity   id="hand-right"
+                                hand-controls="right"
+                                position="0 0 3">
+                                <a-entity   id = "vr-raycast-right"
+                                                cursor ="rayOrigin:entity;"
+                                                raycaster="objects: .menu; showLine: true"
+                                                line="color: blue; opacity: 0.7"></a-entity>
+                        </a-entity >
+                        
+                        
+                        <!--GARBAGE BIN-->
+                        <a-entity   id                  = "plasticBin"
+                                class                   = "bin"
+                                data-trash-type         = "plastic"
+                                obj-model               = "obj:#garbageBin-obj;"
+                                material                = "src:#garbageBin-blue;"
+                                rotation                = "0 -90 0" 
+                                position                = "0 -1 1.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                        
+                        <a-entity   id                      = "metalBin"
+                                class                   = "bin"
+                                data-trash-type         = "metal"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-red"
+                                rotation                = "0 180 0"
+                                position                = "2 -1 2.5     "
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                                
+                        <a-entity   id                      = "paperBin"
+                                class                   = "bin"
+                                data-trash-type         = "paper"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-yellow"
+                                rotation                = "0 0 0"
+                                position                = "-2 -1 2.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
 
-                    <a-text id="score"   
-                            value="0 PTS"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="right"
-                            position="1.2 0.5 -1"
-                            width="2">
-                    </a-text>
-
-                    <a-text id="opponentScore"   
-                            value="0 PTS"
-                            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                            color="white"
-                            align="right"
-                            position="1.2 0.5 -1"
-                            width="2">
-                    </a-text>
-
-                    <a-entity   id="pauseMenu"
-                                position="0 -2 -0.1">
-                    </a-entity>
-
-                    <a-entity   id="instructionMenu"
-                                position="0 -2 -0.1">
-                    </a-entity>
+                        <a-entity   id                      = "compostBin"
+                                class                   = "bin"
+                                data-trash-type         = "compost"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-green"
+                                rotation                = "0 90 0"
+                                position                = "1.5 -1 4.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>
+                        
+                        <a-entity   id                      = "trashBin"
+                                class                   = "bin"
+                                data-trash-type         = "trash"
+                                obj-model               = "obj:#garbageBin-obj"
+                                material                = "src:#garbageBin-black"
+                                rotation                = "0 90 0"
+                                position                = "-1.5 -1 4.5"
+                                scale                   = "0.05 0.05 0.05" 
+                                static-body></a-entity>    
                 </a-entity>
-                
-                <!--VR Hands-->
-                <a-entity   id="hand-left"
-                            hand-controls="left"
-                            position="0 0 3">
-                    <a-entity 	id = "vr-raycast-left"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                <a-entity   id="hand-right"
-                            hand-controls="right"
-                            position="0 0 3">
-                    <a-entity   id = "vr-raycast-right"
-                                cursor ="rayOrigin:entity;"
-                                raycaster="objects: .menu; showLine: true"
-                                line="color: blue; opacity: 0.7"></a-entity>
-                </a-entity >
-                
-                
-                <!--GARBAGE BIN-->
-                <a-entity   id                      = "plasticBin"
-                            class                   = "bin"
-                            data-trash-type         = "plastic"
-                            obj-model               = "obj:#garbageBin-obj;"
-                            material                = "src:#garbageBin-blue;"
-                            rotation                = "0 -90 0" 
-                            position                = "0 -1 1.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                
-                <a-entity   id                      = "metalBin"
-                            class                   = "bin"
-                            data-trash-type         = "metal"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-red"
-                            rotation                = "0 180 0"
-                            position                = "2 -1 2.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                            
-                <a-entity   id                      = "paperBin"
-                            class                   = "bin"
-                            data-trash-type         = "paper"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-yellow"
-                            rotation                = "0 0 0"
-                            position                = "-2 -1 2.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-
-                <a-entity   id                      = "compostBin"
-                            class                   = "bin"
-                            data-trash-type         = "compost"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-green"
-                            rotation                = "0 90 0"
-                            position                = "1.5 -1 4.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>
-                
-                <a-entity   id                      = "trashBin"
-                            class                   = "bin"
-                            data-trash-type         = "trash"
-                            obj-model               = "obj:#garbageBin-obj"
-                            material                = "src:#garbageBin-black"
-                            rotation                = "0 90 0"
-                            position                = "-1.5 -1 4.5"
-                            scale                   = "0.05 0.05 0.05" 
-                            static-body></a-entity>    
-            </a-entity>
 
         </a-scene>
 
