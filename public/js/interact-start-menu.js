@@ -312,7 +312,6 @@ AFRAME.registerComponent('interact-start-menu', {
 
         ingame.append(factoryAudio);
 
-
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
         }
