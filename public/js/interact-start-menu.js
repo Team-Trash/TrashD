@@ -147,7 +147,7 @@ AFRAME.registerComponent('interact-start-menu', {
                 if(room.includes("room") && data[room].length < 2){
                     position -= 0.15;
                     rooms[roomCount] = document.createElement('a-entity');
-                    rooms[roomCount].setAttribute('text', 'value: Room ' + roomCount + '; color: #f4eed7; align: center; height: 2; width: 1;');
+                    rooms[roomCount].setAttribute('text', 'value: Room ' + roomCount + '; color: #f4eed7; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt');
                     rooms[roomCount].setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
                     rooms[roomCount].setAttribute('material', 'color: #3b3836');
                     rooms[roomCount].setAttribute('position',  '-0.65 ' + position + ' 0.1');
@@ -162,14 +162,14 @@ AFRAME.registerComponent('interact-start-menu', {
             }
         });
 
-        newRoom.setAttribute('text', 'value: New Room; color: #fff; align: center; height: 2; width: 1;');
+        newRoom.setAttribute('text', 'value: New Room; color: #fff; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
         newRoom.setAttribute('id', 'newRoom');
         newRoom.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
         newRoom.setAttribute('material', 'color: #fe9801');
         newRoom.setAttribute('position',  '-0.65 ' + position + ' 0.1');
         newRoom.setAttribute('class', 'menu');
 
-        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 1;');
+        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 0.9; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
         back.setAttribute('id', 'back');
         back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
         back.setAttribute('material', 'color: #697c37');

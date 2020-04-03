@@ -43,7 +43,11 @@ function gtFunction(){
 
     function deletingTrashFunction(){
         var trashDeleting = document.getElementById("trash" +trashDeletingID);
-        trashDeleting.parentNode.removeChild(trashDeleting);
+        
+        setTimeout(function() {
+            trashDeleting.parentNode.removeChild(trashDeleting);
+        }, 0);
+
         trashDeletingID += 1;
     }
 }
