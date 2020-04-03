@@ -8,24 +8,24 @@ AFRAME.registerComponent('pick-up-object', {
 
     init : function() {
         //console.log('Initialize Pick Up Object');
+        
         //Init context
         const context = this;
         let vr = document.getElementById('scene').is('vr-mode');
         let left = document.getElementById('hand-left');
         let right = document.getElementById('hand-right');
 
-        context.clickFunction = function(e){
-            console.log("Pick Up Object")
-        }
-
+        //Mouse hover over object
         context.el.addEventListener('raycaster-intersected', function(e){
             context.data.cursor.setAttribute("material", {color: 'green'});
         });
 
+        //Mouse hover out of object
         context.el.addEventListener('raycaster-intersected-cleared', function(e){
             context.data.cursor.setAttribute("material", {color: 'red'});
         });
 
+        //Pickup and drop on dektop
         if(vr == false){
             context.el.addEventListener('mousedown', function(e){
                 context.pickUpObject();
@@ -49,6 +49,7 @@ AFRAME.registerComponent('pick-up-object', {
             });
         }
 
+        //Pickup and drop on VR
         if(vr == true){
             left.addEventListener('gripdown', function(e){
                 console.log('left');
@@ -68,30 +69,29 @@ AFRAME.registerComponent('pick-up-object', {
             });
         }
 
+        //Object collide on
         context.el.addEventListener('collide', function(e){
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let ingameEl = document.querySelector("#ingame");
             let colliedTarget = context.el.getAttribute('data-trash-type');
             
-            if(e.detail.body.el.getAttribute('class') == 'bin'){
+            if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
                 if(collider == colliedTarget){
-                    console.log("SAME");
-                    e.detail.target.el.setAttribute('visible', false);
+                    //e.detail.target.el.setAttribute('visible', false);
                     context.data.score += 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                    setTimeout(function() {
+                    setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
                         }
                     }, 0);
                 }
-                else{
-                    console.log("NOT THE SAME");
+                else{ //Object is not the same type as bin
                     context.data.score -= 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
-                    setTimeout(function() {
+                    setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
                         }
