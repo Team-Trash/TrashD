@@ -2,7 +2,7 @@ let socket;
 
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
-        startCount: {default: 0}
+        startCount: {type: 'int', default: 0}
     },
 
     init : function() {
@@ -352,14 +352,15 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        if(this.data.startCount == 0){
+        console.log(this.data.startCount);
+        if(this.data.startCount <= 1){
             ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
             ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');
         }
         
-        factoryAudio.setAttribute('id', 'factoryAudio');
-        factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
+        //factoryAudio.setAttribute('id', 'factoryAudio');
+        //factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
 
         ingame.append(factoryAudio);
 
@@ -385,7 +386,7 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', 'multiplayer: true');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        if(this.data.startCount == 0){
+        if(this.data.startCount <= 1){
             ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
             ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');

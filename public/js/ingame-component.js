@@ -94,7 +94,7 @@ AFRAME.registerComponent('ingame', {
                 }
 
                 //Degenerate Trash
-                console.log(this.data.trashArray.length);
+                //console.log(this.data.trashArray.length);
                 if(this.data.trashArray.length >= 25){
                     document.getElementById(this.data.trashArray[0].id).remove();
                     this.data.trashArray.shift();

@@ -6,14 +6,11 @@ AFRAME.registerComponent('interact-start-menu-vr', {
     init : function() {       
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
-        //let ray = new THREE.ray;
-        //console.log(this.data.cursor.getAttribute('raycaster'));
+        let scene = document.getElementById('scene');
 
-        this.menuEventListener();
-    },
-
-    tick : function(){
-        //this.drawRaycastLine(this.data.cursor.getAttribute('raycaster'));
+        if(scene.is('vr-mode')){
+            this.menuEventListener();
+        }
     },
 
     menuEventListener : function(){
