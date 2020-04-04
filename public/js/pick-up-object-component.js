@@ -63,11 +63,11 @@ AFRAME.registerComponent('pick-up-object', {
 
         //Object collide on
         context.el.addEventListener('collide', function(e){
-            let collider = e.detail.body.el.getAttribute('data-trash-type');
             let ingameEl = document.querySelector("#ingame");
+            let collider = e.detail.body.el.getAttribute('data-trash-type');
             let collidedTarget = context.el.getAttribute('data-trash-type');
             
-            if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
+            /*if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
                 if(collider == collidedTarget){
                     context.data.score += 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
@@ -75,7 +75,7 @@ AFRAME.registerComponent('pick-up-object', {
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
-                            ingameEl.components['ingame'].data.trashArray.shift();
+                            //ingameEl.components['ingame'].data.trashArray.shift();//needs to be the same index as removed trash
                         }
                     }, 0);
                 }
@@ -86,7 +86,7 @@ AFRAME.registerComponent('pick-up-object', {
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
-                            ingameEl.components['ingame'].data.trashArray.shift();
+                            //ingameEl.components['ingame'].data.trashArray.shift();
                         }
                     }, 0);
                 }
@@ -94,10 +94,10 @@ AFRAME.registerComponent('pick-up-object', {
                 setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                     if(e.detail.target.el){
                         e.detail.target.el.remove();
-                        ingameEl.components['ingame'].data.trashArray.shift();
+                        //ingameEl.components['ingame'].data.trashArray.shift();
                     }
                 }, 0);
-            }
+            }*/
         });
     },
 
