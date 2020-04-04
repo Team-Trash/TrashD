@@ -9,12 +9,12 @@
         <script src = "https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
         <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
         <script src = "js/trash-class.js"></script>
+        <script src = "js/conveyor-class.js"></script>
         <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
         <script src = "js/interact-start-menu-vr.js"></script>
         <script src = "js/ingame-component.js"></script>
-        <script src = "js/generating-trash.js"></script>
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -148,30 +148,20 @@
 
                 <!--INGAME-->
                 <a-entity id="ingame" visible="false">
-                        <!--<script>//CONNECT TO THE SERVER
-                                //IO connection
-                                socket = io();
-                                //Connection event
-                                socket.on('connect', function(){
-                                console.log("Generating trash js connected!");
-                                });
-                                
-                                //Putting the data back to the socket
-                                //socket.emit('generating-trash', gtFunction())
-                                </script>-->
 
                         <!--ADDING ROOM-->
                         <a-entity   id          = "room"
-                                obj-model   = "obj:#room-obj;"
-                                material    = "src:#room-texture"
-                                position    = "0 1 0"
-                                scale       = "0.04 0.04 0.04"></a-entity>
+                                obj-model       = "obj:#room-obj;"
+                                material        = "src:#room-texture"
+                                position        = "0 1 0"
+                                visible         = "false"
+                                scale           = "0.04 0.04 0.04"></a-entity>
 
                         <a-entity   id          = "walls"
-                                obj-model   = "obj:#walls-obj;"
-                                material    = "src:#walls-texture"
-                                position    = "0 1 0"
-                                scale       = "0.04 0.04 0.04"></a-entity>
+                                obj-model       = "obj:#walls-obj;"
+                                material        = "src:#walls-texture"
+                                position        = "0 1 0"
+                                scale           = "0.04 0.04 0.04"></a-entity>
 
                         <!--ADDING INVISIBLE PLANES -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
@@ -224,7 +214,7 @@
                                 visible  = "false"
                                 material = "color: gray"
                                 position = "7.379 0.029 -0.709"
-                                static-body></a-entity>
+                                ></a-entity>
                                 
                         <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
                                 position = "7.156 0 0.037"
@@ -236,7 +226,9 @@
                                 position = "-8.201 0 0.037"
                                 visible="false"
                                 material = "color: gray"
-                                static-body></a-entity>            
+                                static-body></a-entity>     
+                        
+                        
 
                         <!--CAMERA-->
                         <a-entity 	id="game-camera"
@@ -305,10 +297,6 @@
                                                 position="0 -2 -0.1">
                                 </a-entity>
 
-                                <!-- INSTRUCTION MENU CONTAINER -->
-                                <a-entity   id="instructionMenu"
-                                                position="0 -2 -0.1">
-                                </a-entity>
                         </a-entity>
                         
                         <!--VR Hands-->

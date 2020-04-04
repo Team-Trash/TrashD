@@ -5,9 +5,13 @@ AFRAME.registerComponent('ingame', {
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: 'false'},
         host : {type: 'boolean', default: 'true'},
+        trashID: {type: 'int', default: 0},
+        trashDeletingID: {type: 'int', default: 0},
     },
 
     init : function() {
+        let ingame = document.getElementById('ingame');
+        let conveyor = document.querySelector(".conveyor");
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
         let opponentScoreEl = document.querySelector("#opponentScore");
@@ -46,6 +50,11 @@ AFRAME.registerComponent('ingame', {
             youEl.setAttribute('visible', 'false');
         }
         
+        //Generate first Conveyor
+        let initConveyor = new Conveyor(-15, 7000);
+        ingame.append(initConveyor.generateElement());
+
+
         //Adjust HUD to browser
         timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
         scoreEl.setAttribute("position", hudX + " " + hudY + " -1");
@@ -69,9 +78,33 @@ AFRAME.registerComponent('ingame', {
                 timerEl.setAttribute("value", Math.floor(this.data.time / 100));
             }
         }
-        
+
         //Display the updated score
         scoreEl.setAttribute("value", this.data.score + " PTS");
+
+        //Generate
+
+        //Generate Trash
+        if(this.data.time < 12000){// When time is less than 120s
+            if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                this.generateTrash();
+            }
+        }
+        if (this.data.time < 10000) {// When time is less than 100s
+            if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                this.generateTrash();
+            }
+        }
+        if (this.data.time < 5000) {// When time is less than 50s
+            if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                this.generateTrash();
+            }
+        }
+        if (this.data.time < 2000) {// When time is less than 20s
+            if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                this.generateTrash();
+            }
+        }
     },
 
     //Generate Pause Menu
@@ -283,4 +316,59 @@ AFRAME.registerComponent('ingame', {
 
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
     },
+
+    //Generate Trash
+    generateTrash : function(){
+        var scene = document.getElementById('ingame');
+        let trashID = this.data.trashID;
+        let trashes = [];
+
+        //Get the random number
+        var randomNum = Math.floor(Math.random() * 5);
+        switch(randomNum) {
+            case 0:
+                plasticTrash = new Trash('plastic', "trash" + trashID);
+                trashes.push(plasticTrash.generateAttribute());
+                scene.append(plasticTrash.generateAttribute());
+                break;
+            case 1:
+                metalTrash = new Trash('metal', "trash" + trashID);
+                trashes.push(metalTrash.generateAttribute());
+                scene.append(metalTrash.generateAttribute());
+                break;
+            case 2:
+                compostTrash = new Trash('compost',"trash" + trashID);
+                trashes.push(compostTrash.generateAttribute());
+                scene.append(compostTrash.generateAttribute());
+                break;
+            case 3:
+                paperTrash = new Trash('paper', "trash" + trashID);
+                trashes.push(paperTrash.generateAttribute());
+                scene.append(paperTrash.generateAttribute());
+                break;
+            case 4:
+                trashTrash = new Trash('trash',"trash" + trashID);
+                trashes.push(trashTrash.generateAttribute());
+                scene.append(trashTrash.generateAttribute());
+                break;
+        }
+        trashID += 1;
+    },
+
+    //Delete Trash
+    deleteTrash : function(){
+        trashDeletingID = this.data.trashDeletingID;
+        var trashDeleting = document.getElementById("trash" + trashDeletingID);
+        
+        setTimeout(function() {
+            trashDeleting.parentNode.removeChild(trashDeleting);
+        }, 0);
+
+        trashDeletingID += 1;
+    },
+
+    //Generate Conveyor
+    generateConveyor : function(){
+        
+    }
 });

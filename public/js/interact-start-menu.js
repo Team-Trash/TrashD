@@ -315,17 +315,6 @@ AFRAME.registerComponent('interact-start-menu', {
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
         }
-
-        //GET THE GENERATING FUNCTION FROM THE SERVER
-        //IO connection
-        socket = io();
-        //Connection event
-        socket.on('connect', function(){
-            console.log("Generating trash js connected!");
-        });
-        
-        //Putting the data back to the socket
-        socket.emit('generating-trash', gtFunction())
     },
 
     //Enter multiplayer gamemode
