@@ -66,9 +66,11 @@ AFRAME.registerComponent('pick-up-object', {
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let ingameEl = document.querySelector("#ingame");
             let collidedTarget = context.el.getAttribute('data-trash-type');
-            
+            var trashBinClosingAudio = document.getElementById('trashBinClosing');
+
             if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
                 if(collider == collidedTarget){
+                    trashBinClosingAudio.components.sound.playSound();
                     //e.detail.target.el.setAttribute('visible', false);
                     context.data.score += 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
@@ -82,6 +84,7 @@ AFRAME.registerComponent('pick-up-object', {
                 else{ //Object is not the same type as bin
                     context.data.score -= 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
+                    trashBinClosingAudio.components.sound.playSound();
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){

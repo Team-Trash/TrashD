@@ -355,7 +355,7 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
         
         factoryAudio.setAttribute('id', 'factoryAudio');
-        factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
+        factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true; volume: 0.25');
 
         ingame.append(factoryAudio);
 
