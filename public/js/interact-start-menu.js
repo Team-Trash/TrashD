@@ -315,17 +315,6 @@ AFRAME.registerComponent('interact-start-menu', {
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
         }
-
-        //GET THE GENERATING FUNCTION FROM THE SERVER
-        //IO connection
-        socket = io();
-        //Connection event
-        socket.on('connect', function(){
-            console.log("Generating trash js connected!");
-        });
-        
-        //Putting the data back to the socket
-        socket.emit('generating-trash', gtFunction())
     },
 
     //Enter multiplayer gamemode
@@ -350,9 +339,18 @@ AFRAME.registerComponent('interact-start-menu', {
         }
     },
 
-    emptyElement: function(element){
-        while (element.firstChild) {
-            element.removeChild(element.lastChild);
+    emptyElement: function(element, name){
+        if(!name){
+            while (element.firstChild) {
+                element.removeChild(element.lastChild);
+            }
+        } else if (name) {
+            for (var i = 0; i < element.childNodes.length; i++) {
+                if (element.childNodes[i].className == name) {
+                    console.log('test');
+                    element.removeChild(element.childNodes[i]);
+                }        
+            }
         }
     }
 });

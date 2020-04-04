@@ -9,12 +9,12 @@
         <script src = "https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
         <script src = "https://unpkg.com/aframe-fps-look-controls-component/dist/aframe-fps-look-controls-component.min.js"></script>
         <script src = "js/trash-class.js"></script>
+        <script src = "js/conveyor-class.js"></script>
         <script src = "/socket.io/socket.io.js"></script>
         <script src = "js/pick-up-object-component.js"></script>
         <script src = "js/interact-start-menu.js"></script>
         <script src = "js/interact-start-menu-vr.js"></script>
         <script src = "js/ingame-component.js"></script>
-        <script src = "js/generating-trash.js"></script>
     </head>
     <body>
         <!--BEGIN A SCENE-->
@@ -148,32 +148,24 @@
 
                 <!--INGAME-->
                 <a-entity id="ingame" visible="false">
-                        <!--<script>//CONNECT TO THE SERVER
-                                //IO connection
-                                socket = io();
-                                //Connection event
-                                socket.on('connect', function(){
-                                console.log("Generating trash js connected!");
-                                });
-                                
-                                //Putting the data back to the socket
-                                //socket.emit('generating-trash', gtFunction())
-                                </script>-->
 
                         <!--ADDING ROOM-->
                         <a-entity   id          = "room"
-                                obj-model   = "obj:#room-obj;"
-                                material    = "src:#room-texture"
-                                position    = "0 1 0"
-                                scale       = "0.04 0.04 0.04"></a-entity>
+                                obj-model       = "obj:#room-obj;"
+                                material        = "src:#room-texture"
+                                position        = "0 1 0"
+                                visible         = "true"
+                                scale           = "0.04 0.04 0.04"></a-entity>
 
                         <a-entity   id          = "walls"
-                                obj-model   = "obj:#walls-obj;"
-                                material    = "src:#walls-texture"
-                                position    = "0 1 0"
-                                scale       = "0.04 0.04 0.04"></a-entity>
+                                obj-model       = "obj:#walls-obj;"
+                                material        = "src:#walls-texture"
+                                position        = "0 1 0"
+                                visible         = "true"
+                                scale           = "0.04 0.04 0.04"></a-entity>
 
                         <!--ADDING INVISIBLE PLANES -->
+                        <!-- Front wall -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: gray"
                                 position = "0 1.342 -7.194"
@@ -182,14 +174,40 @@
                                 rotation = "0 0 0"
                                 static-body></a-entity>
 
+                        <!-- Left wall -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: gray"
-                                position = "-8.491 1.342 -0.709"
-                                scale = "0.170 0.125 0.170"
+                                position = "-8.491 1.342 4.72"
+                                scale = "0.08 0.125 0.170"
+                                visible = "false"
+                                rotation = "0 90 0"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-8.491 1.342 -4.72"
+                                scale = "0.08 0.125 0.170"
                                 visible = "false"
                                 rotation = "0 90 0"
                                 static-body></a-entity>
                         
+                        <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-8.491 4.98 0"
+                                scale = "0.08 0.05 0.170"
+                                visible = "false"
+                                rotation = "0 90 0"
+                                static-body></a-entity>
+
+                                <a-entity   geometry = "primitive: plane; height: 100; width: 100"
+                                material = "color: gray"
+                                position = "-8.491 -1.98 0"
+                                scale = "0.08 0.05 0.170"
+                                visible = "false"
+                                rotation = "0 90 0"
+                                static-body></a-entity>
+                        
+                        <!-- right wall-->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: gray"
                                 position = "7.207 1.342 -0.709"
@@ -198,6 +216,7 @@
                                 rotation = "0 -90 0"
                                 static-body></a-entity>
                         
+                        <!-- back wall -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: gray"
                                 position = "-0.425 1.342 7.254"
@@ -205,7 +224,8 @@
                                 visible = "false"
                                 rotation = "0 180 0"
                                 static-body></a-entity>
-
+                        
+                        <!-- floor -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: gray"
                                 visible = "false"
@@ -213,30 +233,54 @@
                                 rotation = "-90 0 0"
                                 static-body></a-entity>
 
+                        <!-- ceiling -->
                         <a-entity   geometry = "primitive: plane; height: 100; width: 100"
                                 material = "color: #343434"
                                 position = "7.379 7 -0.709"
                                 rotation = "90 0 0"
                                 static-body></a-entity>
                         
-                        <a-entity   geometry = "primitive: box; height: 2.290; width: 14.840"
-                                position = "-1.029 0.063 0.001"
-                                visible  = "false"
-                                material = "color: gray"
-                                position = "7.379 0.029 -0.709"
-                                static-body></a-entity>
-                                
+                        <!-- conveyor ends -->
                         <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                                position = "7.156 0 0.037"
-                                visible="false"
-                                material = "color: gray"
-                                static-body></a-entity> 
+                                class = "delete"
+                                position = "6.77 1.52 0"
+                                scale = "0.22 0.4 1"
+                                material = "color: black"
+                                static-body></a-entity>
 
                         <a-entity   geometry = "primitive: box; height: 5.360; width: 4.5; depth: 3.270"
-                                position = "-8.201 0 0.037"
-                                visible="false"
+                                position = "-7.8 1.52 0"
+                                scale = "0.22 0.4 1"
+                                material = "color: black"></a-entity>
+
+                        <!-- generate box -->
+                        <a-entity   geometry = "primitive: plane; height: 3; width: 3;"
+                                position = "-10.256 1.520 -0.427"
+                                scale = "1 1 1"
                                 material = "color: gray"
-                                static-body></a-entity>            
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 3; width: 3;"
+                                position = "-10.256 1.520 0.427"
+                                rotation = "0 180 0"
+                                scale = "1 1 1"
+                                material = "color: gray"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 3; width: 3;"
+                                position = "-11.691 1.520 0"
+                                rotation = "0 90 0"
+                                scale = "1 1 1"
+                                material = "color: gray"
+                                static-body></a-entity>
+
+                        <a-entity   geometry = "primitive: plane; height: 3; width: 3;"
+                                position = "-10.256 2.918 0"
+                                rotation = "90 90 0"
+                                scale = "1 1 1"
+                                visible = "false"
+                                material = "color: gray"
+                                static-body></a-entity>
 
                         <!--CAMERA-->
                         <a-entity 	id="game-camera"
@@ -305,10 +349,6 @@
                                                 position="0 -2 -0.1">
                                 </a-entity>
 
-                                <!-- INSTRUCTION MENU CONTAINER -->
-                                <a-entity   id="instructionMenu"
-                                                position="0 -2 -0.1">
-                                </a-entity>
                         </a-entity>
                         
                         <!--VR Hands-->
@@ -329,57 +369,66 @@
                                                 line="color: blue; opacity: 0.7"></a-entity>
                         </a-entity >
                         
-                        
-                        <!--GARBAGE BIN-->
-                        <a-entity   id                  = "plasticBin"
-                                class                   = "bin"
-                                data-trash-type         = "plastic"
-                                obj-model               = "obj:#garbageBin-obj;"
-                                material                = "src:#garbageBin-blue;"
-                                rotation                = "0 -90 0" 
-                                position                = "0 -1 1.5"
-                                scale                   = "0.05 0.05 0.05" 
+                        <!-- CONVEYOR CONTAINER -->
+                        <a-entity   id="conveyorContainer">
+                        </a-entity>
+                        <a-entity geometry = "primitive: box; height: 0.160; width: 24"
+                                position = "0 1 0"
+                                material = "color: #888"
                                 static-body></a-entity>
                         
-                        <a-entity   id                      = "metalBin"
-                                class                   = "bin"
-                                data-trash-type         = "metal"
-                                obj-model               = "obj:#garbageBin-obj"
-                                material                = "src:#garbageBin-red"
-                                rotation                = "0 215 0"
-                                position                = "1.8 -1 2.5"
-                                scale                   = "0.05 0.05 0.05" 
-                                static-body></a-entity>
+                        <!--PLAYER GARBAGE BIN-->
+                        <a-entity id = "playerBins">
+                                <a-entity   id                  = "plasticBin"
+                                        class                   = "bin"
+                                        data-trash-type         = "plastic"
+                                        obj-model               = "obj:#garbageBin-obj;"
+                                        material                = "src:#garbageBin-blue;"
+                                        rotation                = "0 -90 0" 
+                                        position                = "0 -1 1.5"
+                                        scale                   = "0.05 0.05 0.05" 
+                                        static-body></a-entity>
                                 
-                        <a-entity   id                      = "paperBin"
-                                class                   = "bin"
-                                data-trash-type         = "paper"
-                                obj-model               = "obj:#garbageBin-obj"
-                                material                = "src:#garbageBin-yellow"
-                                rotation                = "0 -35 0"
-                                position                = "-1.8 -1 2.5"
-                                scale                   = "0.05 0.05 0.05" 
-                                static-body></a-entity>
+                                <a-entity   id                      = "metalBin"
+                                        class                   = "bin"
+                                        data-trash-type         = "metal"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-red"
+                                        rotation                = "0 215 0"
+                                        position                = "1.8 -1 2.5"
+                                        scale                   = "0.05 0.05 0.05" 
+                                        static-body></a-entity>
+                                        
+                                <a-entity   id                      = "paperBin"
+                                        class                   = "bin"
+                                        data-trash-type         = "paper"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-yellow"
+                                        rotation                = "0 -35 0"
+                                        position                = "-1.8 -1 2.5"
+                                        scale                   = "0.05 0.05 0.05" 
+                                        static-body></a-entity>
 
-                        <a-entity   id                      = "compostBin"
-                                class                   = "bin"
-                                data-trash-type         = "compost"
-                                obj-model               = "obj:#garbageBin-obj"
-                                material                = "src:#garbageBin-green"
-                                rotation                = "0 -225 0"
-                                position                = "1.5 -1 4.5"
-                                scale                   = "0.05 0.05 0.05" 
-                                static-body></a-entity>
-                        
-                        <a-entity   id                      = "trashBin"
-                                class                   = "bin"
-                                data-trash-type         = "trash"
-                                obj-model               = "obj:#garbageBin-obj"
-                                material                = "src:#garbageBin-black"
-                                rotation                = "0 55 0"
-                                position                = "-1.5 -1 4.5"
-                                scale                   = "0.05 0.05 0.05" 
-                                static-body></a-entity>    
+                                <a-entity   id                      = "compostBin"
+                                        class                   = "bin"
+                                        data-trash-type         = "compost"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-green"
+                                        rotation                = "0 -225 0"
+                                        position                = "1.5 -1 4.5"
+                                        scale                   = "0.05 0.05 0.05" 
+                                        static-body></a-entity>
+                                
+                                <a-entity   id                      = "trashBin"
+                                        class                   = "bin"
+                                        data-trash-type         = "trash"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-black"
+                                        rotation                = "0 55 0"
+                                        position                = "-1.5 -1 4.5"
+                                        scale                   = "0.05 0.05 0.05" 
+                                        static-body></a-entity>
+                        </a-entity>
                 </a-entity>
 
         </a-scene>
