@@ -1,6 +1,6 @@
 //CLASS FOR TRASH
 class Trash{
-    classTrash = 'clickable';
+    classTrash = 'clickable trash';
     
     srcPaper = ['#pizzaBox-obj'];
     srcTrash = ['#chipBag-obj'];
@@ -10,33 +10,22 @@ class Trash{
     materialtrash = ['#chip-texture'];
     materialCompost = [];
 
-    positionX = '-5';
+    /*positionX = '-5';
     positionY = '2';
-    positionZ = '-3';
+    positionZ = '-3';*/
     scaleX = 0.5;
     scaleY = 0.5;
     scaleZ = 0.5;
+
     constructor(type, id){
         this.type = type;
         this.id = id;
     }
     
-    generatingAttribute(){
-        var trash = document.createElement('a-entity');
-        trash.setAttribute('id', this.id);
-        trash.setAttribute('class', this.classTrash);
-        trash.setAttribute('geometry', 'primitive: box; depth: 1; height: 1; width: 1');
-        trash.setAttribute('position', this.positionX , this.positionY, this.positionZ);
-        trash.setAttribute('scale', '0.5 0.5 0.5');
-        trash.setAttribute('animation', 'property: position; from: -9 0.8 0; to: 9 0.8 0; dur: 7000; easing: linear');
-        trash.setAttribute('pick-up-object', '');
-        return trash;
-    }
     //GET MODELS
-    generatingAttribute2(){
+    generateAttribute(){
         var trash = document.createElement('a-entity');
         //Set random number for texture and models.
-        var randomNum = Math.floor(Math.random() * 5);
         //console.log("This is the type: " + this.type);
         switch(this.type){
             case 'plastic':
@@ -69,9 +58,9 @@ class Trash{
         trash.setAttribute('id', this.id);
         trash.setAttribute('data-trash-type', this.type);
         trash.setAttribute('class', this.classTrash);
-        trash.setAttribute('position', this.positionX , this.positionY, this.positionZ);
-        trash.setAttribute('animation', 'property: position; from: -9 1.27 0; to: 9 1.27 0; dur: 7000; easing: linear');
+        trash.setAttribute('position', '-10.5 1.3 0');
         trash.setAttribute('pick-up-object', '');
+        trash.setAttribute('dynamic-body', '');
         return trash;
     }
 }
