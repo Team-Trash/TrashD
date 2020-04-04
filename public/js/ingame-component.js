@@ -366,22 +366,5 @@ AFRAME.registerComponent('ingame', {
                 break;
         }
         trashID += 1;
-    },
-
-    //Delete Trash
-    deleteTrash : function(){
-        trashDeletingID = this.data.trashDeletingID;
-        var trashDeleting = document.getElementById("trash" + trashDeletingID);
-        
-        setTimeout(function() {
-            trashDeleting.parentNode.removeChild(trashDeleting);
-        }, 0);
-
-        trashDeletingID += 1;
-    },
-
-    //Generate Conveyor
-    generateConveyor : function(){
-        
     }
 });

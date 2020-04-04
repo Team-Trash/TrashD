@@ -58,8 +58,7 @@ class Trash{
         trash.setAttribute('id', this.id);
         trash.setAttribute('data-trash-type', this.type);
         trash.setAttribute('class', this.classTrash);
-        trash.setAttribute('position', '0 1.5 0');
-        //trash.setAttribute('animation', 'property: position; from: -9 1.27 0; to: 9 1.27 0; dur: 7000; easing: linear');
+        trash.setAttribute('position', '-10.5 1.3 0');
         trash.setAttribute('pick-up-object', '');
         trash.setAttribute('dynamic-body', '');
         return trash;
