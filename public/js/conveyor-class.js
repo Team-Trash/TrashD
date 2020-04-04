@@ -3,7 +3,7 @@ class Conveyor{
     constructor(x, s){
         this.initX = x;
         this.speed = s;
-        this.id = this.makeid(5);
+        this.id = makeid(5);
         this.object3D = this.generateElement(this.id);
     }
 
@@ -31,14 +31,4 @@ class Conveyor{
 
         return element.object3D;
     }
-
-    makeid(length){
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-           result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-     }
 }

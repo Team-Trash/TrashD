@@ -69,13 +69,13 @@ AFRAME.registerComponent('pick-up-object', {
             
             if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
                 if(collider == collidedTarget){
-                    //e.detail.target.el.setAttribute('visible', false);
                     context.data.score += 10;
                     ingameEl.setAttribute("ingame", "score: " + context.data.score);
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
+                            ingameEl.components['ingame'].data.trashArray.shift();
                         }
                     }, 0);
                 }
@@ -86,14 +86,15 @@ AFRAME.registerComponent('pick-up-object', {
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
+                            ingameEl.components['ingame'].data.trashArray.shift();
                         }
                     }, 0);
                 }
-            }
-            if(e.detail.body.el.getAttribute('class') == 'delete'){ //Object is same type as bin
+            } else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
                 setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                     if(e.detail.target.el){
                         e.detail.target.el.remove();
+                        ingameEl.components['ingame'].data.trashArray.shift();
                     }
                 }, 0);
             }
