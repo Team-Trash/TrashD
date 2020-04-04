@@ -6,8 +6,7 @@ AFRAME.registerComponent('ingame', {
         multiplayer : {type: 'boolean', default: false},
         host : {type: 'boolean', default: true},
         conveyorArray: {type: 'array'},
-        trashID: {type: 'int', default: 0},
-        trashDeletingID: {type: 'int', default: 0},
+        trashArray: {type: 'array'},
     },
 
     init : function() {
@@ -32,8 +31,6 @@ AFRAME.registerComponent('ingame', {
                 if(pauseGame == false){
                     pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
-                    //startCamera.setAttribute('fps-look-controls', 'enabled: false');
-                    //startCamera.removeAttribute('fps-look-controls');
                     document.exitPointerLock();
                     context.pauseMenu();
                 } else {
@@ -66,13 +63,42 @@ AFRAME.registerComponent('ingame', {
     tick : function(){
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
-        if(pauseGame == false){
+        if(pauseGame == false){ //Not paused
             if(this.data.time <= 0 && victory == false) {
                 context.victoryMenu();
                 victory = true;
-            } else if (victory == false){
+            } else if (victory == false){ //No game over
                 this.data.time--;
                 timerEl.setAttribute("value", Math.floor(this.data.time / 100));
+
+                //Generate Trash
+                if(this.data.time < 12000){// When time is less than 120s
+                    if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                    }
+                }
+                if (this.data.time < 10000) {// When time is less than 100s
+                    if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                    }
+                }
+                if (this.data.time < 5000) {// When time is less than 50s
+                    if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                    }
+                }
+                if (this.data.time < 2000) {// When time is less than 20s
+                    if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                    }
+                }
+
+                //Degenerate Trash
+                console.log(this.data.trashArray.length);
+                if(this.data.trashArray.length >= 25){
+                    document.getElementById(this.data.trashArray[0].id).remove();
+                    this.data.trashArray.shift();
+                }
             }
         }
 
@@ -87,28 +113,6 @@ AFRAME.registerComponent('ingame', {
         if(this.data.conveyorArray[0].object3D.position.x == 16){
             document.getElementById(this.data.conveyorArray[0].id).remove();
             this.data.conveyorArray.shift();
-        }
-
-        //Generate Trash
-        if(this.data.time < 12000){// When time is less than 120s
-            if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 10000) {// When time is less than 100s
-            if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 5000) {// When time is less than 50s
-            if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 2000) {// When time is less than 20s
-            if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                this.generateTrash();
-            }
         }
     },
 
@@ -213,7 +217,7 @@ AFRAME.registerComponent('ingame', {
                 //Reset game values
                 this.el.removeAttribute('ingame');
                 cursor.setAttribute('visible', 'true');
-                camera.setAttribute('fps-look-controls', 'userHeight: 1');    
+                camera.setAttribute('fps-look-controls');    
 
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 this.el.setAttribute('visible', 'false');
@@ -328,43 +332,5 @@ AFRAME.registerComponent('ingame', {
         victoryMenu.append(exitButton);
 
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
-    },
-
-    //Generate Trash
-    generateTrash : function(){
-        var scene = document.getElementById('scene');
-        let trashID = this.data.trashID;
-        let trashes = [];
-
-        //Get the random number
-        var randomNum = Math.floor(Math.random() * 5);
-        switch(randomNum) {
-            case 0:
-                plasticTrash = new Trash('plastic', "trash" + trashID);
-                trashes.push(plasticTrash.generateAttribute());
-                scene.append(plasticTrash.generateAttribute());
-                break;
-            case 1:
-                metalTrash = new Trash('metal', "trash" + trashID);
-                trashes.push(metalTrash.generateAttribute());
-                scene.append(metalTrash.generateAttribute());
-                break;
-            case 2:
-                compostTrash = new Trash('compost',"trash" + trashID);
-                trashes.push(compostTrash.generateAttribute());
-                scene.append(compostTrash.generateAttribute());
-                break;
-            case 3:
-                paperTrash = new Trash('paper', "trash" + trashID);
-                trashes.push(paperTrash.generateAttribute());
-                scene.append(paperTrash.generateAttribute());
-                break;
-            case 4:
-                trashTrash = new Trash('trash',"trash" + trashID);
-                trashes.push(trashTrash.generateAttribute());
-                scene.append(trashTrash.generateAttribute());
-                break;
-        }
-        trashID += 1;
     }
 });

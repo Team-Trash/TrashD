@@ -2,7 +2,7 @@ let socket;
 
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
-        
+        startCount: {default: 0}
     },
 
     init : function() {
@@ -305,7 +305,11 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        if(this.data.startCount == 0){
+            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        } else {
+            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');
+        }
         
         factoryAudio.setAttribute('id', 'factoryAudio');
         factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
@@ -315,11 +319,13 @@ AFRAME.registerComponent('interact-start-menu', {
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
         }
+
+        this.data.startCount++
     },
 
     //Enter multiplayer gamemode
     enterMulti: function(data){
-        console.log('Entering ' + data);
+        console.log('Entering ' + data);        
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');
@@ -332,11 +338,17 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', 'multiplayer: true');
         ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        if(this.data.startCount == 0){
+            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        } else {
+            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');
+        }
 
         if(scene.is('vr-mode') == true){
             ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
         }
+
+        this.data.startCount++
     },
 
     emptyElement: function(element, name){
@@ -347,7 +359,6 @@ AFRAME.registerComponent('interact-start-menu', {
         } else if (name) {
             for (var i = 0; i < element.childNodes.length; i++) {
                 if (element.childNodes[i].className == name) {
-                    console.log('test');
                     element.removeChild(element.childNodes[i]);
                 }        
             }
