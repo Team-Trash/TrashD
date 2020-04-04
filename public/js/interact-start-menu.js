@@ -339,9 +339,18 @@ AFRAME.registerComponent('interact-start-menu', {
         }
     },
 
-    emptyElement: function(element){
-        while (element.firstChild) {
-            element.removeChild(element.lastChild);
+    emptyElement: function(element, name){
+        if(!name){
+            while (element.firstChild) {
+                element.removeChild(element.lastChild);
+            }
+        } else if (name) {
+            for (var i = 0; i < element.childNodes.length; i++) {
+                if (element.childNodes[i].className == name) {
+                    console.log('test');
+                    element.removeChild(element.childNodes[i]);
+                }        
+            }
         }
     }
 });

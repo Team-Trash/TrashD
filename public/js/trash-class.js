@@ -1,6 +1,6 @@
 //CLASS FOR TRASH
 class Trash{
-    classTrash = 'clickable';
+    classTrash = 'clickable trash';
     
     srcPaper = ['#pizzaBox-obj'];
     srcTrash = ['#chipBag-obj'];

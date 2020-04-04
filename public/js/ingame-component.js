@@ -3,15 +3,14 @@ AFRAME.registerComponent('ingame', {
         time : {type: 'int', default: 12000},
         score : {type: 'int', default: 0},
         opponentScore : {type: 'int', default: 0},
-        multiplayer : {type: 'boolean', default: 'false'},
-        host : {type: 'boolean', default: 'true'},
+        multiplayer : {type: 'boolean', default: false},
+        host : {type: 'boolean', default: true},
+        conveyorArray: {type: 'array'},
         trashID: {type: 'int', default: 0},
         trashDeletingID: {type: 'int', default: 0},
     },
 
     init : function() {
-        let ingame = document.getElementById('ingame');
-        let conveyor = document.querySelector(".conveyor");
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
         let opponentScoreEl = document.querySelector("#opponentScore");
@@ -51,9 +50,7 @@ AFRAME.registerComponent('ingame', {
         }
         
         //Generate first Conveyor
-        let initConveyor = new Conveyor(-15, 7000);
-        ingame.append(initConveyor.generateElement());
-
+        this.data.conveyorArray.push(new Conveyor(-2, 4065)); 
 
         //Adjust HUD to browser
         timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
@@ -66,7 +63,7 @@ AFRAME.registerComponent('ingame', {
         youEl.setAttribute("position", hudX + " " + hudY + " -1");
     },
 
-    tick : function(){ //Add time argument later, more refined
+    tick : function(){
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
         if(pauseGame == false){
@@ -82,7 +79,15 @@ AFRAME.registerComponent('ingame', {
         //Display the updated score
         scoreEl.setAttribute("value", this.data.score + " PTS");
 
-        //Generate
+        //Generate conveyor. 225.81/s is speed
+        let conveyors = document.querySelectorAll('.conveyor');
+        if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
+            this.data.conveyorArray.push(new Conveyor(-16, 7000));
+        }
+        if(this.data.conveyorArray[0].object3D.position.x == 16){
+            document.getElementById(this.data.conveyorArray[0].id).remove();
+            this.data.conveyorArray.shift();
+        }
 
         //Generate Trash
         if(this.data.time < 12000){// When time is less than 120s
@@ -201,7 +206,9 @@ AFRAME.registerComponent('ingame', {
                 break;
 
             case 'exitButton':
+                let scene = document.getElementById('scene');
                 let start = document.getElementById('start');
+                let conveyor = document.getElementById('conveyorContainer');
 
                 //Reset game values
                 this.el.removeAttribute('ingame');
@@ -213,6 +220,12 @@ AFRAME.registerComponent('ingame', {
                 start.querySelector('#start-camera').setAttribute('camera', 'active: true');
                 start.setAttribute('visible', 'true');
                 document.querySelector('#game-camera').setAttribute('camera', 'active: false');
+
+                //empty conveyor
+                startMenu.components['interact-start-menu'].emptyElement(conveyor);
+
+                //empty trash
+                startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
 
                 startMenu.components['interact-start-menu'].startMenu();
                 break;
@@ -319,7 +332,7 @@ AFRAME.registerComponent('ingame', {
 
     //Generate Trash
     generateTrash : function(){
-        var scene = document.getElementById('ingame');
+        var scene = document.getElementById('scene');
         let trashID = this.data.trashID;
         let trashes = [];
 
