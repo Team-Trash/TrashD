@@ -125,9 +125,9 @@
                         </a-entity>
 
                         <!--VR Hands-->
-                        <a-entity   hand-controls="left"
-                                interact-start-menu-vr="cursor: #vr-raycast-left"
-                                position="0 0 0">
+                        <a-entity       hand-controls="left"
+                                        interact-start-menu-vr="cursor: #vr-raycast-left"
+                                        position="0 0 0">
                         <a-entity 	id = "vr-raycast-left"
                                         cursor ="rayOrigin:entity;"
                                         raycaster="objects: .menu; showLine: true"
@@ -287,9 +287,9 @@
                                         static-body></a-entity>
 
                         <!--CAMERA-->
-                        <a-entity 	id="game-camera"
-                                camera="active: false"
-                                position="0 1.15 3">
+                        <a-entity       id="game-camera"
+                                        camera="active: false"
+                                        position="0 1.15 3">
                                 <a-entity 	id = "game-cursor"
                                                 geometry="primitive: circle; radius: 0.01"
                                                 material="color: red"
@@ -381,7 +381,6 @@
                                         static-body></a-entity>
                         
                         <!--PLAYER GARBAGE BIN-->
-<<<<<<< HEAD
                         <a-entity       id = "playerBins">
                                 <a-entity       id = "plasticBin"
                                                 class = "bin"
@@ -473,61 +472,6 @@
                                                         visible = "false"
                                                         static-body></a-entity>
                                 </a-entity>
-=======
-                        <a-entity id = "playerBins">
-                                <a-entity   id                  = "plasticBin"
-                                        class                   = "bin"
-                                        obj-model               = "obj:#garbageBin-obj;"
-                                        material                = "src:#garbageBin-blue;"
-                                        rotation                = "0 -90 0" 
-                                        position                = "0 -1 1.5"
-                                        scale                   = "0.05 0.05 0.05">
-                                        <a-entity   geometry = "primitive: plane; height: 1; width: 1;"
-                                                position = 
-                                                rotation = 
-                                                scale = "10 10 10"
-                                                material = "color: gray"
-                                                class = 
-                                                 = "plastic"
-                                                static-body></a-entity>
-                                </a-entity>
-                                
-                                <a-entity   id                      = "metalBin"
-                                        class                   = "bin"
-                                        obj-model               = "obj:#garbageBin-obj"
-                                        material                = "src:#garbageBin-red"
-                                        rotation                = "0 215 0"
-                                        position                = "1.8 -1 2.5"
-                                        scale                   = "0.05 0.05 0.05"
-                                        data-trash-type         = "metal"></a-entity>
-                                        
-                                <a-entity   id                  = "paperBin"
-                                        class                   = "bin"
-                                        obj-model               = "obj:#garbageBin-obj"
-                                        material                = "src:#garbageBin-yellow"
-                                        rotation                = "0 -35 0"
-                                        position                = "-1.8 -1 2.5"
-                                        scale                   = "0.05 0.05 0.05"
-                                        data-trash-type         = "paper"></a-entity>
-
-                                <a-entity   id                      = "compostBin"
-                                        class                   = "bin"
-                                        obj-model               = "obj:#garbageBin-obj"
-                                        material                = "src:#garbageBin-green"
-                                        rotation                = "0 -225 0"
-                                        position                = "1.5 -1 4.5"
-                                        scale                   = "0.05 0.05 0.05"
-                                        data-trash-type = "compost"></a-entity>
-                                
-                                <a-entity   id                      = "trashBin"
-                                        class                   = "bin"
-                                        obj-model               = "obj:#garbageBin-obj"
-                                        material                = "src:#garbageBin-black"
-                                        rotation                = "0 55 0"
-                                        position                = "-1.5 -1 4.5"
-                                        scale                   = "0.05 0.05 0.05"
-                                        data-trash-type         = "trash"></a-entity>
->>>>>>> 35cd5f659b5a653829fab00ab847e8737a9c1249
                         </a-entity>
                 </a-entity>
         </a-scene>
