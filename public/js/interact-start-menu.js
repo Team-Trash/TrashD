@@ -53,7 +53,7 @@ AFRAME.registerComponent('interact-start-menu', {
         });
     },
 
-    //Generate Start Menu
+    //START MENU
     startMenu : function(){
         console.log("Start menu created!");
 
@@ -166,6 +166,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
+    //MULTIPLAYERS ROOM
     multiMenu: function(){
         let context = this;
         var startMenu = document.getElementById('startMenu');
@@ -232,6 +233,7 @@ AFRAME.registerComponent('interact-start-menu', {
         context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
+    //CONTROL MENU
     controlsMenu: function(state){
         var startMenu = document.getElementById('startMenu');
         var instCont = document.createElement('a-entity');
@@ -293,6 +295,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.multiMenu();
     },
 
+    //CLICK MENU FUNCTION
     clickMenu: function(menuButton){
         let context = this;
         let menuID = menuButton.getAttribute('id');
@@ -339,7 +342,7 @@ AFRAME.registerComponent('interact-start-menu', {
         }
     },
 
-    //Enter singleplayer gamemode
+    //ENTER SINGLE PLAYER GAMEMODE
     enterSingle: function(){
         console.log('Entering SinglePlayer');
 
@@ -386,6 +389,7 @@ AFRAME.registerComponent('interact-start-menu', {
 
     //Enter multiplayer gamemode
     enterMulti: function(data, hostStatus){
+
         console.log('Entering ' + data);        
 
         var start = document.getElementById('start');
@@ -422,6 +426,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.data.startCount++
     },
 
+    //REMOVE ELEMENT FUNCTION
     emptyElement: function(element, name){
         if(!name){
             while (element.firstChild) {

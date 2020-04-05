@@ -11,7 +11,7 @@ class Trash{
         var trash = document.createElement('a-entity');
 
         var randomNum = Math.floor(Math.random() * 5);
-
+        //CHECK WITH TYPES OF TRASH IS IT
         switch(randomNum){
             case 0:
                 trash.setAttribute('material', 'src:#bottle-texture');
@@ -49,7 +49,8 @@ class Trash{
                 trash.setAttribute('pick-up-object', '');
                 break;
         }
-
+        
+        //SET INITAL ATTRIBUTE FOR THE TRASH
         trash.setAttribute('id', this.id);
         trash.setAttribute('class', 'clickable trash');
         trash.setAttribute('position', x + " " + y + " " + z);
@@ -60,6 +61,7 @@ class Trash{
     }
 }
 
+//MAKE ID FUNCTION
 function makeid(length){
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
