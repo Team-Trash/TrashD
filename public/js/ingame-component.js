@@ -7,6 +7,8 @@ AFRAME.registerComponent('ingame', {
         host : {type: 'boolean', default: true},
         conveyorArray: {type: 'array'},
         trashArray: {type: 'array'},
+        pauseGame: {type: 'boolean', default: false},
+        gameOver: {type: 'boolean', default: false},
     },
 
     init : function() {
@@ -20,21 +22,20 @@ AFRAME.registerComponent('ingame', {
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
 
         context = this;
-        pauseGame = false;
-        victory = false;
+        
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
             let camera = document.getElementById('game-camera');
 
             if(e.keyCode === 27){
-                if(pauseGame == false){
-                    pauseGame = true;
+                if(context.data.pauseGame == false){
+                    context.data.pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
                     document.exitPointerLock();
                     context.pauseMenu();
                 } else {
-                    pauseGame = false;
+                    pauseGame.data.pauseGame = false;
                 }
             }
         });
@@ -47,7 +48,10 @@ AFRAME.registerComponent('ingame', {
         }
         
         //Generate first Conveyor
-        this.data.conveyorArray.push(new Conveyor(-2, 4065)); 
+        this.data.conveyorArray.push(new Conveyor(0, 3613));
+
+        //Generate Bin Walls. Doing it this way as workaround for bug that encloses trash on generation
+        this.generateBinSides();
 
         //Adjust HUD to browser
         timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
@@ -61,40 +65,45 @@ AFRAME.registerComponent('ingame', {
     },
 
     tick : function(){
+        let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
-        if(pauseGame == false){ //Not paused
-            if(this.data.time <= 0 && victory == false) {
+        if(this.data.pauseGame == false){ //Not paused
+            if(this.data.time <= 0 && this.data.gameOver == false) {
+                //empty trash
+                startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+
                 context.victoryMenu();
-                victory = true;
-            } else if (victory == false){ //No game over
+                this.data.gameOver = true;
+            } else if (this.data.gameOver == false){ //No game over
                 this.data.time--;
                 timerEl.setAttribute("value", Math.floor(this.data.time / 100));
 
                 //Generate Trash
-                if(this.data.time < 12000){// When time is less than 120s
+                if(this.data.time < 12000){// When time is less than 120s //-10.5
                     if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                        if(this.data.trashArray.length < 1){
+                            this.data.trashArray.push(new Trash(0, 1.4, 0));
+                        }
                     }
                 }
                 if (this.data.time < 10000) {// When time is less than 100s
                     if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
                     }
                 }
                 if (this.data.time < 5000) {// When time is less than 50s
                     if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
                     }
                 }
                 if (this.data.time < 2000) {// When time is less than 20s
                     if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                        this.data.trashArray.push(new Trash(-10.5, 1.3, 0)); 
+                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
                     }
                 }
 
                 //Degenerate Trash
-                //console.log(this.data.trashArray.length);
                 if(this.data.trashArray.length >= 25){
                     document.getElementById(this.data.trashArray[0].id).remove();
                     this.data.trashArray.shift();
@@ -205,7 +214,7 @@ AFRAME.registerComponent('ingame', {
                 cursor.setAttribute('visible', 'true');
                 camera.setAttribute('fps-look-controls', 'userHeight: 0');
 
-                pauseGame = false;
+                this.data.pauseGame = false;
                 instructionGame = false;
                 break;
 
@@ -332,5 +341,49 @@ AFRAME.registerComponent('ingame', {
         victoryMenu.append(exitButton);
 
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
+    },
+
+    generateBinSides(){
+        let bins = document.getElementById('playerBins');
+
+        for (let bin of document.querySelectorAll(".bin")){
+            let binSide = [];
+
+            for(var i = 0; i < 4; i++){
+                binSide[i] = document.createElement('a-plane');
+
+                binSide[i].setAttribute('height', "1;");
+                binSide[i].setAttribute('width', "1;");
+                binSide[i].setAttribute('scale', "20 40 20");
+                binSide[i].setAttribute('visible', "false");
+                binSide[i].setAttribute('static-body', "");
+
+                switch(i){
+                    
+                    case 0: //right
+                        binSide[i].setAttribute('position', "0 3.166 -10.1");
+                        binSide[i].setAttribute('rotation', "0 0 0");
+                        break;
+
+                    case 1: //left
+                        binSide[i].setAttribute('position', "0 3.166 10.1");
+                        binSide[i].setAttribute('rotation', "0 180 0");
+                        break;
+
+                    case 2: //back
+                        binSide[i].setAttribute('position', "10.1 3.166 0");
+                        binSide[i].setAttribute('rotation', "0 -90 0");
+                        break;
+
+                    case 3: //front
+                        binSide[i].setAttribute('position', "-10.1 7.758 0");
+                        binSide[i].setAttribute('rotation', "0 90 0");
+                        break;
+                }
+
+                bin.append(binSide[i]);
+            }
+        }
+
     }
 });

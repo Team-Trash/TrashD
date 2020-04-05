@@ -63,30 +63,32 @@ AFRAME.registerComponent('pick-up-object', {
 
         //Object collide on
         context.el.addEventListener('collide', function(e){
-            let ingameEl = document.querySelector("#ingame");
+            let ingame = document.querySelector("#ingame");
             let collider = e.detail.body.el.getAttribute('data-trash-type');
-            let collidedTarget = context.el.getAttribute('data-trash-type');
+            let colliderTarget = context.el.getAttribute('data-trash-type');
             
-            /*if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
-                if(collider == collidedTarget){
+            //console.log(e);
+
+            /*if(e.detail.body.el.getAttribute('class') == 'binCollider'){ //Object is same type as bin
+                if(collider == colliderTarget){
                     context.data.score += 10;
-                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
+                    ingame.setAttribute("ingame", "score: " + context.data.score);
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
-                            //ingameEl.components['ingame'].data.trashArray.shift();//needs to be the same index as removed trash
+                            //ingame.components['ingame'].data.trashArray.shift();//needs to be the same index as removed trash
                         }
                     }, 0);
                 }
                 else{ //Object is not the same type as bin
                     context.data.score -= 10;
-                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
+                    ingame.setAttribute("ingame", "score: " + context.data.score);
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
                             e.detail.target.el.remove();
-                            //ingameEl.components['ingame'].data.trashArray.shift();
+                            //ingame.components['ingame'].data.trashArray.shift();
                         }
                     }, 0);
                 }
@@ -94,7 +96,7 @@ AFRAME.registerComponent('pick-up-object', {
                 setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                     if(e.detail.target.el){
                         e.detail.target.el.remove();
-                        //ingameEl.components['ingame'].data.trashArray.shift();
+                        //ingame.components['ingame'].data.trashArray.shift();
                     }
                 }, 0);
             }*/

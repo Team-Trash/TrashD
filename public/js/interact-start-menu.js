@@ -254,7 +254,7 @@ AFRAME.registerComponent('interact-start-menu', {
         img.setAttribute('width', '1.29');
         img.setAttribute('height', '.847');
 
-        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 1;');
+        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 0.9; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
         back.setAttribute('id', 'back');
         back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
         back.setAttribute('material', 'color: #697c37');
@@ -262,10 +262,10 @@ AFRAME.registerComponent('interact-start-menu', {
         back.setAttribute('class', 'menu');
 
         if(state == 'instructions'){
-            next.setAttribute('text', 'value: Controls; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('text', 'value: Controls; color: #f4eed7; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
             next.setAttribute('data-state', 'controls');
         } else if (state == 'controls') {
-            next.setAttribute('text', 'value: Instructions; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('text', 'value: Instructions; color: #f4eed7; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
             next.setAttribute('data-state', 'instructions');
         }  
         next.setAttribute('id', 'next');
@@ -318,7 +318,9 @@ AFRAME.registerComponent('interact-start-menu', {
                 break;
 
             case 'back':
-                socket.close();
+                if(socket){
+                    socket.close();
+                }
                 context.startMenu();
                 break;
             

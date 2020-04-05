@@ -8,6 +8,7 @@ class Trash{
     //GET MODELS
     generateElement(x , y, z){
         let scene = document.getElementById('scene');
+        let ingame = document.getElementById('ingame');
         var trash = document.createElement('a-entity');
 
         var randomNum = Math.floor(Math.random() * 5);
