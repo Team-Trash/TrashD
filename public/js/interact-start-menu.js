@@ -352,6 +352,11 @@ AFRAME.registerComponent('interact-start-menu', {
         let scene = document.getElementById('scene');
         var factoryAudio = document.createElement('a-entity');
 
+        var score = document.getElementById('score');
+        var timer = document.getElementById('timer');
+
+        
+
         //Add menu cursor raycaster to new camera
         if(document.getElementById('menu-raycast') == null){
             var menuRaycast = document.createElement('a-entity');
@@ -384,6 +389,10 @@ AFRAME.registerComponent('interact-start-menu', {
             gameCamera.setAttribute('visible', 'false');
         }
 
+        //Fixing position of the score and time
+        score.setAttribute('position', '0.25 0.65 -1');
+        timer.setAttribute('position', '-0.25 0.65 -1');
+
         this.data.startCount++
     },
 
@@ -396,6 +405,13 @@ AFRAME.registerComponent('interact-start-menu', {
         var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
         var gameCamera = document.getElementById('game-camera');
+
+        //Fixing timer and score position
+        var timer = document.getElementById('timer');
+        var score = document.getElementById('score');
+        var youText = document.getElementById('youText');
+        var opponentScore = document.getElementById('opponentScore');
+        var opponentText = document.getElementById('opponentText');
 
         //Add menu cursor raycaster to new camera
         if(document.getElementById('menu-raycast') == null){
@@ -422,6 +438,14 @@ AFRAME.registerComponent('interact-start-menu', {
         if(scene.is('vr-mode') == true){
             gameCamera.setAttribute('visible', 'false');
         }
+
+        //Fixing position of the score and time
+        //timer.setAttribute('position', '-0.15 0.75 -1');
+        youText.setAttribute('position', '0.75 0.75 -1');
+        score.setAttribute('position', '0.75 0.65 -1');
+        opponentText.setAttribute('position', '0.75 0.55 -1');
+        opponentScore.setAttribute('position', '0.75 0.45 -1');
+        timer.setAttribute('position', '-0.75 0.65 -1');
 
         this.data.startCount++
     },
