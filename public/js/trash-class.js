@@ -8,7 +8,6 @@ class Trash{
     //GET MODELS
     generateElement(x , y, z){
         let scene = document.getElementById('scene');
-        let ingame = document.getElementById('ingame');
         var trash = document.createElement('a-entity');
 
         var randomNum = Math.floor(Math.random() * 5);
@@ -29,19 +28,19 @@ class Trash{
             case 2:
                 trash.setAttribute('material', 'src:#banana-texture');
                 trash.setAttribute('obj-model', 'obj:#bananaPeel-obj');
-                trash.setAttribute('scale', '0.02 0.02 0.02');
+                trash.setAttribute('scale', '0.03 0.03 0.03');
                 trash.setAttribute('data-trash-type', 'compost');
                 break;
             case 3:
                 trash.setAttribute('material', 'src:#pizza2-texture');
                 trash.setAttribute('obj-model', 'obj:#pizzaBox-obj');
-                trash.setAttribute('scale', '0.1 0.1 0.1');
+                trash.setAttribute('scale', '0.07 0.07 0.07');
                 trash.setAttribute('data-trash-type', 'paper');
                 break;
             case 4:
                 trash.setAttribute('material', 'color: grey');
                 trash.setAttribute('obj-model', 'obj:#plasticBag-obj');
-                trash.setAttribute('scale', '0.1 0.1 0.1');
+                trash.setAttribute('scale', '0.07 0.07 0.07');
                 trash.setAttribute('data-trash-type', 'trash');
                 break;
         }
