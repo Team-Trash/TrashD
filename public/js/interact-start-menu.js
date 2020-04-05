@@ -14,6 +14,7 @@ AFRAME.registerComponent('interact-start-menu', {
     //Add event listeners to button
     menuEventListener: function(menuButtons){
         let context = this
+
         menuButtons.forEach(function(menuButton) {
             let scene = document.getElementById('scene');
             var trashLogo = document.getElementById('startLogo');
@@ -312,7 +313,7 @@ AFRAME.registerComponent('interact-start-menu', {
             case 'newRoom':
                 socket.emit('new-room');
                 socket.on('return-room-id', function(data){
-                    context.enterMulti(data);
+                    context.enterMulti(data, true);
                 });
                 break;
                 
@@ -336,7 +337,7 @@ AFRAME.registerComponent('interact-start-menu', {
         if(roomID){
             socket.emit('join-room', roomID);
             socket.on('return-room-id', function(data){
-                context.enterMulti(data);
+                context.enterMulti(data, false);
             });
         }
     },
@@ -347,8 +348,18 @@ AFRAME.registerComponent('interact-start-menu', {
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
+        var gameCamera = document.getElementById('game-camera');
         let scene = document.getElementById('scene');
         var factoryAudio = document.createElement('a-entity');
+
+        //Add menu cursor raycaster to new camera
+        if(document.getElementById('menu-raycast') == null){
+            var menuRaycast = document.createElement('a-entity');
+            menuRaycast.setAttribute("id", "menu-raycast");
+            menuRaycast.setAttribute("cursor", "rayOrigin:mouse;");
+            menuRaycast.setAttribute("raycaster", "objects: .menu;");
+            gameCamera.append(menuRaycast);
+        }
 
         // Remove/Hide start menu; move camera to ingame camera
         this.emptyElement(startMenu);
@@ -356,12 +367,12 @@ AFRAME.registerComponent('interact-start-menu', {
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
-        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
+        gameCamera.setAttribute('camera', 'active: true');
         console.log(this.data.startCount);
-        if(this.data.startCount <= 1){
-            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        if(this.data.startCount <= 0){
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
-            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
         }
         
         //factoryAudio.setAttribute('id', 'factoryAudio');
@@ -370,35 +381,46 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.append(factoryAudio);
 
         if(scene.is('vr-mode') == true){
-            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+            gameCamera.setAttribute('visible', 'false');
         }
 
         this.data.startCount++
     },
 
-    //ENTER MULTIPLAYER GAMEMODE
-    enterMulti: function(data){
+    //Enter multiplayer gamemode
+    enterMulti: function(data, hostStatus){
+
         console.log('Entering ' + data);        
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
+        var gameCamera = document.getElementById('game-camera');
+
+        //Add menu cursor raycaster to new camera
+        if(document.getElementById('menu-raycast') == null){
+            var menuRaycast = document.createElement('a-entity');
+            menuRaycast.setAttribute("id", "menu-raycast");
+            menuRaycast.setAttribute("cursor", "rayOrigin:mouse;");
+            menuRaycast.setAttribute("raycaster", "objects: .menu;");
+            gameCamera.append(menuRaycast);
+        }
 
         // Remove/Hide start menu; move camera to ingame camera
         this.emptyElement(startMenu);
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
-        ingame.setAttribute('ingame', 'multiplayer: true');
-        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        if(this.data.startCount <= 1){
-            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        ingame.setAttribute('ingame', 'multiplayer: true; host: ');
+        gameCamera.setAttribute('camera', 'active: true');
+        if(this.data.startCount <= 0){
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
-            ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 0');
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
         }
 
         if(scene.is('vr-mode') == true){
-            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+            gameCamera.setAttribute('visible', 'false');
         }
 
         this.data.startCount++

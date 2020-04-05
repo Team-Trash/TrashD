@@ -43,9 +43,9 @@ socketIO.on('connection', function(socket) {
         socket.join(data);
         socket.emit('return-room-id', data);
     });
-    socket.on('generating-trash', function(data){
-        var trashGenertating = data;
-        socketIO.sockets.emit('generating-trash', data);
+
+    socket.on('get-trash', function(data){
+        socketIO.sockets.emit('send-trash', data);
     });
 
 });

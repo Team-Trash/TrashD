@@ -18,30 +18,35 @@ class Trash{
                 trash.setAttribute('obj-model', 'obj:#bottle-obj');
                 trash.setAttribute('scale', '0.1 0.1 0.1');
                 trash.setAttribute('data-trash-type', 'plastic');
+                trash.setAttribute('pick-up-object', 'scoreValue: 15');
                 break;
             case 1:
                 trash.setAttribute('material', 'src:#cola-texture');
                 trash.setAttribute('obj-model', 'obj:#colaCan-obj');
                 trash.setAttribute('scale', '0.1 0.1 0.1');
                 trash.setAttribute('data-trash-type', 'metal');
+                trash.setAttribute('pick-up-object', 'scoreValue: 15');
                 break;
             case 2:
                 trash.setAttribute('material', 'src:#banana-texture');
                 trash.setAttribute('obj-model', 'obj:#bananaPeel-obj');
-                trash.setAttribute('scale', '0.025 0.025 0.025');
+                trash.setAttribute('scale', '0.02 0.03 0.02');
                 trash.setAttribute('data-trash-type', 'compost');
+                trash.setAttribute('pick-up-object', 'scoreValue: 20');
                 break;
             case 3:
                 trash.setAttribute('material', 'src:#pizza2-texture');
                 trash.setAttribute('obj-model', 'obj:#pizzaBox-obj');
-                trash.setAttribute('scale', '0.07 0.07 0.07');
+                trash.setAttribute('scale', '0.06 0.06 0.06');
                 trash.setAttribute('data-trash-type', 'paper');
+                trash.setAttribute('pick-up-object', '');
                 break;
             case 4:
                 trash.setAttribute('material', 'color: grey');
                 trash.setAttribute('obj-model', 'obj:#plasticBag-obj');
                 trash.setAttribute('scale', '0.07 0.07 0.07');
                 trash.setAttribute('data-trash-type', 'trash');
+                trash.setAttribute('pick-up-object', '');
                 break;
         }
         
@@ -49,7 +54,6 @@ class Trash{
         trash.setAttribute('id', this.id);
         trash.setAttribute('class', 'clickable trash');
         trash.setAttribute('position', x + " " + y + " " + z);
-        trash.setAttribute('pick-up-object', '');
         trash.setAttribute('dynamic-body', '');
         scene.append(trash);
 

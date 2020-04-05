@@ -297,9 +297,6 @@
                                                 cursor ="rayOrigin:entity;"
                                                 raycaster="objects: .clickable;">
                                 </a-entity>
-                                <a-entity
-                                                cursor ="rayOrigin:mouse;"
-                                                raycaster="objects: .menu;"></a-entity>
                                 
                                 <a-entity id="HUD">
                                         <a-text id="youText"
@@ -381,24 +378,16 @@
                                         static-body></a-entity>
                         
                         <!--PLAYER GARBAGE BIN-->
-                        <a-entity       id = "playerBins">
-                                <a-entity       id = "plasticBin"
-                                                class = "bin"
-                                                obj-model = "obj:#garbageBin-obj;"
-                                                material = "src:#garbageBin-blue;"
-                                                rotation = "0 -90 0" 
-                                                position = "0 -1 1.5"
-                                                scale = "0.05 0.05 0.05">
-                                        <a-entity       geometry = "primitive: plane; height: 1; width: 1;"
-                                                        position = "0 0 0"
-                                                        rotation = "-90 0 0"
-                                                        scale = "10 10 10"
-                                                        material = "color: gray"
-                                                        class = "binCollider"
-                                                        data-trash-type = "plastic"
-                                                        visible = "true"
-                                                        static-body></a-entity>
-                                </a-entity>
+                        <a-entity id = "playerBins">
+                                <a-entity   id                  = "plasticBin"
+                                        class                   = "bin"
+                                        obj-model               = "obj:#garbageBin-obj;"
+                                        material                = "src:#garbageBin-blue;"
+                                        rotation                = "0 -90 0" 
+                                        position                = "0 -1 1.5"
+                                        scale                   = "0.05 0.05 0.05"
+                                        data-trash-type         = "plastic"></a-entity>
+
                                 
                                 <a-entity       id = "metalBin"
                                                 class = "bin"
@@ -406,17 +395,7 @@
                                                 material = "src:#garbageBin-red"
                                                 rotation = "0 215 0"
                                                 position = "1.8 -1 2.5"
-                                                scale = "0.05 0.05 0.05">
-                                        <a-entity       geometry = "primitive: plane; height: 1; width: 1;"
-                                                        position = "0 0 0"
-                                                        rotation = "-90 0 0"
-                                                        scale = "10 10 10"
-                                                        material = "color: gray"
-                                                        class = "binCollider"
-                                                        data-trash-type = "metal"
-                                                        visible = "false"
-                                                        static-body></a-entity> 
-                                </a-entity>
+                                                scale = "0.05 0.05 0.05"></a-entity>
                                         
                                 <a-entity       id = "paperBin"
                                                 class = "bin"
@@ -424,54 +403,25 @@
                                                 material = "src:#garbageBin-yellow"
                                                 rotation = "0 -35 0"
                                                 position = "-1.8 -1 2.5"
-                                                scale = "0.05 0.05 0.05">
-                                        <a-entity       geometry = "primitive: plane; height: 1; width: 1;"
-                                                        position = "0 0 0"
-                                                        rotation = "-90 0 0"
-                                                        scale = "10 10 10"
-                                                        material = "color: gray"
-                                                        class = "binCollider"
-                                                        data-trash-type = "paper"
-                                                        visible = "false"
-                                                        static-body></a-entity>
-                                        
-                                </a-entity>
+                                                scale = "0.05 0.05 0.05"></a-entity>
 
-                                <a-entity       id = "compostBin"
-                                                class = "bin"
-                                                obj-model = "obj:#garbageBin-obj"
-                                                material = "src:#garbageBin-green"
-                                                rotation = "0 -225 0"
-                                                position = "1.5 -1 4.5"
-                                                scale = "0.05 0.05 0.05">
-                                        <a-entity       geometry = "primitive: plane; height: 1; width: 1;"
-                                                        position = "0 0 0"
-                                                        rotation = "-90 0 0"
-                                                        scale = "10 10 10"
-                                                        material = "color: gray"
-                                                        class = "binCollider"
-                                                        data-trash-type = "compost"
-                                                        visible = "false"
-                                                        static-body></a-entity>
-                                </a-entity>
+                                <a-entity   id                      = "compostBin"
+                                        class                   = "bin"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-green"
+                                        rotation                = "0 -225 0"
+                                        position                = "1.4 -1 4.5"
+                                        scale                   = "0.05 0.05 0.05"
+                                        data-trash-type         = "compost"></a-entity>
                                 
-                                <a-entity       id = "trashBin"
-                                                class = "bin"
-                                                obj-model = "obj:#garbageBin-obj"
-                                                material = "src:#garbageBin-black"
-                                                rotation = "0 55 0"
-                                                position = "-1.5 -1 4.5"
-                                                scale                   = "0.05 0.05 0.05">
-                                        <a-entity       geometry = "primitive: plane; height: 1; width: 1;"
-                                                        position = "0 0 0"
-                                                        rotation = "-90 0 0"
-                                                        scale = "10 10 10"
-                                                        material = "color: gray"
-                                                        class = "binCollider"
-                                                        data-trash-type = "trash"
-                                                        visible = "false"
-                                                        static-body></a-entity>
-                                </a-entity>
+                                <a-entity   id                      = "trashBin"
+                                        class                   = "bin"
+                                        obj-model               = "obj:#garbageBin-obj"
+                                        material                = "src:#garbageBin-black"
+                                        rotation                = "0 55 0"
+                                        position                = "-1.4 -1 4.5"
+                                        scale                   = "0.05 0.05 0.05"
+                                        data-trash-type         = "trash"></a-entity>
                         </a-entity>
                 </a-entity>
         </a-scene>
