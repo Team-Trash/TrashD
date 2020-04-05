@@ -4,7 +4,8 @@ AFRAME.registerComponent('ingame', {
         score : {type: 'int', default: 0},
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: false},
-        host : {type: 'boolean', default: true},
+        host : {type: 'boolean'},
+        full: {type: 'boolean'},
         conveyorArray: {type: 'array'},
         trashArray: {type: 'array'},
         pauseGame: {type: 'boolean', default: false},
@@ -22,7 +23,6 @@ AFRAME.registerComponent('ingame', {
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
 
         context = this;
-        
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
@@ -34,12 +34,16 @@ AFRAME.registerComponent('ingame', {
                 if(context.data.pauseGame == false){
                     context.data.pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
-                    for(let conveyor of conveyors){
-                        conveyor.components['animation'].pause();
+                    if(context.data.multiplayer == false){
+                        for(let conveyor of conveyors){
+                            conveyor.components['animation'].pause();
+                        }
                     }
                     for(let trash of trashArray){
-                        if(trash.components['dynamic-body']){
-                            trash.components['dynamic-body'].pause();
+                        if(context.data.multiplayer == false){
+                            if(trash.components['dynamic-body']){
+                                trash.components['dynamic-body'].pause();
+                            }
                         }
                     }
                     context.pauseMenu();
@@ -48,6 +52,20 @@ AFRAME.registerComponent('ingame', {
                 }
             }
         });
+
+        //Multiplayer standby
+        if(context.data.multiplayer == true && context.data.host == true && context.data.full == false){
+            let pauseMenu = document.getElementById('pauseMenu');
+            let waiting = document.createElement('a-text');
+
+            waiting.setAttribute('value', 'Waiting for Player 2');
+            waiting.setAttribute('align', 'center');
+            waiting.setAttribute('height', '2');
+            waiting.setAttribute('width', '0.5');
+            waiting.setAttribute('font', 'https://cdn.aframe.io/fonts/Exo2Bold.fnt');
+            waiting.setAttribute('position', "0 2 0");
+            pauseMenu.append(waiting);
+        }
 
         //Hide multiplayer HUD elements on single player
         if(this.data.multiplayer == false){
@@ -77,6 +95,10 @@ AFRAME.registerComponent('ingame', {
         let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
+
+        //Display the updated score
+        scoreEl.setAttribute("value", this.data.score + " PTS");
+        
         if(this.data.pauseGame == false){ //Not paused
             if(this.data.time <= 0 && this.data.gameOver == false) {
                 //empty trash
@@ -113,22 +135,15 @@ AFRAME.registerComponent('ingame', {
                 }
 
                 //Degenerate Trash
-                if (this.data.time > 5000) {// When time is less than 50s
-                    if(this.data.trashArray.length >= 25){
-                        document.getElementById(this.data.trashArray[0].id).remove();
-                        this.data.trashArray.shift();
-                    }
-                } else {
-                    if(this.data.trashArray.length >= 50){
-                        document.getElementById(this.data.trashArray[0].id).remove();
-                        this.data.trashArray.shift();
-                    }
+                if(this.data.trashArray.length >= 30){
+                    document.getElementById(this.data.trashArray[0].id).remove();
+                    this.data.trashArray.shift();
                 }
+
             }
         }
 
-        //Display the updated score
-        scoreEl.setAttribute("value", this.data.score + " PTS");
+        
 
         //Generate conveyor. 225.81/s is speed
         let conveyors = document.querySelectorAll('.conveyor');

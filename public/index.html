@@ -294,9 +294,6 @@
                                                 cursor ="rayOrigin:entity;"
                                                 raycaster="objects: .clickable;">
                                 </a-entity>
-                                <a-entity
-                                                cursor ="rayOrigin:mouse;"
-                                                raycaster="objects: .menu;"></a-entity>
                                 
                                 <a-entity id="HUD">
                                         <a-text id="youText"
@@ -386,8 +383,8 @@
                                         material                = "src:#garbageBin-blue;"
                                         rotation                = "0 -90 0" 
                                         position                = "0 -1 1.5"
-                                        scale                   = "0.05 0.05 0.05">
-                                </a-entity>
+                                        scale                   = "0.05 0.05 0.05"
+                                        data-trash-type         = "plastic"></a-entity>
                                 
                                 <a-entity   id                      = "metalBin"
                                         class                   = "bin"
@@ -412,7 +409,7 @@
                                         obj-model               = "obj:#garbageBin-obj"
                                         material                = "src:#garbageBin-green"
                                         rotation                = "0 -225 0"
-                                        position                = "1.5 -1 4.5"
+                                        position                = "1.4 -1 4.5"
                                         scale                   = "0.05 0.05 0.05"
                                         data-trash-type         = "compost"></a-entity>
                                 
@@ -421,7 +418,7 @@
                                         obj-model               = "obj:#garbageBin-obj"
                                         material                = "src:#garbageBin-black"
                                         rotation                = "0 55 0"
-                                        position                = "-1.5 -1 4.5"
+                                        position                = "-1.4 -1 4.5"
                                         scale                   = "0.05 0.05 0.05"
                                         data-trash-type         = "trash"></a-entity>
                         </a-entity>

@@ -85,7 +85,7 @@ AFRAME.registerComponent('pick-up-object', {
                             }
                         }, 0);
 
-                        context.data.destroyStatus = true;
+                        //context.data.destroyStatus = true;
                     }
                     else{ //Object is not the same type as bin
                         ingame.components['ingame'].data.score -= 10;
@@ -98,7 +98,7 @@ AFRAME.registerComponent('pick-up-object', {
                             }
                         }, 0);
 
-                        context.data.destroyStatus = true;
+                        //context.data.destroyStatus = true;
                     }
                 } else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
@@ -109,7 +109,7 @@ AFRAME.registerComponent('pick-up-object', {
                         }
                     }, 0);
 
-                    context.data.destroyStatus = true;
+                    //context.data.destroyStatus = true;
                 }
             }
         });
