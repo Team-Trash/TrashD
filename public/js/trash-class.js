@@ -28,7 +28,7 @@ class Trash{
             case 2:
                 trash.setAttribute('material', 'src:#banana-texture');
                 trash.setAttribute('obj-model', 'obj:#bananaPeel-obj');
-                trash.setAttribute('scale', '0.03 0.03 0.03');
+                trash.setAttribute('scale', '0.025 0.025 0.025');
                 trash.setAttribute('data-trash-type', 'compost');
                 break;
             case 3:
@@ -64,4 +64,8 @@ function makeid(length){
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+ }
+
+ function checkId(trash){
+    return trash.id == this;
  }
