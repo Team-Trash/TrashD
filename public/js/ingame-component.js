@@ -42,7 +42,7 @@ AFRAME.registerComponent('ingame', {
                     }
                     context.pauseMenu();
                 } else {
-                    pauseGame.data.pauseGame = false;
+                    context.data.pauseGame = false;
                 }
             }
         });
@@ -90,27 +90,27 @@ AFRAME.registerComponent('ingame', {
                 //Generate Trashes
                 if(this.data.time < 12000){// When time is less than 120s //-10.5
                     if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                            this.data.trashArray.push(new Trash(0, 1.4, 0));
+                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
                     }
                 }
                 if (this.data.time < 10000) {// When time is less than 100s
                     if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
+                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                     }
                 }
                 if (this.data.time < 5000) {// When time is less than 50s
                     if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
+                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                     }
                 }
                 if (this.data.time < 2000) {// When time is less than 20s
                     if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                        //this.data.trashArray.push(new Trash(0, 1.4, 0)); 
+                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                     }
                 }
 
                 //Degenerate Trash
-                if(this.data.trashArray.length >= 25){
+                if(this.data.trashArray.length >= 15){
                     document.getElementById(this.data.trashArray[0].id).remove();
                     this.data.trashArray.shift();
                 }
@@ -210,6 +210,7 @@ AFRAME.registerComponent('ingame', {
     clickMenu : function(menuButton){
         let menuID = menuButton.getAttribute('id');
         var pauseMenu = document.getElementById('pauseMenu');
+        var startMenu = document.getElementById('startMenu');
         let cursor = document.getElementById('game-cursor');
         let camera = document.getElementById('game-camera');
         let hud = document.getElementById('HUD');
@@ -238,22 +239,22 @@ AFRAME.registerComponent('ingame', {
                 let start = document.getElementById('start');
                 let conveyor = document.getElementById('conveyorContainer');
 
-                //Reset game values
-                this.el.removeAttribute('ingame');
-                cursor.setAttribute('visible', 'true');
-                camera.setAttribute('fps-look-controls');    
-
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 this.el.setAttribute('visible', 'false');
                 start.querySelector('#start-camera').setAttribute('camera', 'active: true');
                 start.setAttribute('visible', 'true');
-                document.querySelector('#game-camera').setAttribute('camera', 'active: false');
+                camera.setAttribute('camera', 'active: false');
 
                 //empty conveyor
                 startMenu.components['interact-start-menu'].emptyElement(conveyor);
 
                 //empty trash
                 startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+
+                //Reset game values
+                this.el.removeAttribute('ingame');
+                cursor.setAttribute('visible', 'true');
+                camera.setAttribute('fps-look-controls');
 
                 startMenu.components['interact-start-menu'].startMenu();
                 break;
@@ -367,34 +368,47 @@ AFRAME.registerComponent('ingame', {
         for (let bin of document.querySelectorAll(".bin")){
             let binSide = [];
 
-            for(var i = 0; i < 4; i++){
+            for(var i = 0; i < 5; i++){
                 binSide[i] = document.createElement('a-plane');
 
                 binSide[i].setAttribute('height', "1;");
                 binSide[i].setAttribute('width', "1;");
-                binSide[i].setAttribute('scale', "20 40 20");
+                
                 binSide[i].setAttribute('visible', "false");
                 binSide[i].setAttribute('static-body', "");
 
+                if(i == 0){
+                    binSide[i].setAttribute('scale', "10 10 10");
+                } else {
+                    binSide[i].setAttribute('scale', "25 40 20");
+                }
+
                 switch(i){
                     
-                    case 0: //right
-                        binSide[i].setAttribute('position', "0 3.166 -10.1");
+                    case 0: //bottom
+                        binSide[i].setAttribute('position', "0 0 0");
+                        binSide[i].setAttribute('rotation', "-90 0 0");
+                        binSide[i].setAttribute('class', "binCollider");
+                        binSide[i].setAttribute('data-trash-type', bin.getAttribute("data-trash-type"));
+                        break;
+
+                    case 1: //right
+                        binSide[i].setAttribute('position', "0 3.166 -11.923");
                         binSide[i].setAttribute('rotation', "0 0 0");
                         break;
 
-                    case 1: //left
-                        binSide[i].setAttribute('position', "0 3.166 10.1");
+                    case 2: //left
+                        binSide[i].setAttribute('position', "0 3.166 11.923");
                         binSide[i].setAttribute('rotation', "0 180 0");
                         break;
 
-                    case 2: //back
-                        binSide[i].setAttribute('position', "10.1 3.166 0");
+                    case 3: //back
+                        binSide[i].setAttribute('position', "11.923 3.166 0");
                         binSide[i].setAttribute('rotation', "0 -90 0");
                         break;
 
-                    case 3: //front
-                        binSide[i].setAttribute('position', "-10.1 7.758 0");
+                    case 4: //front
+                        binSide[i].setAttribute('position', "-11.923 7.758 0");
                         binSide[i].setAttribute('rotation', "0 90 0");
                         break;
                 }

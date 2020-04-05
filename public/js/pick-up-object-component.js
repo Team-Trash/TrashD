@@ -68,8 +68,6 @@ AFRAME.registerComponent('pick-up-object', {
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let colliderTarget = context.el.getAttribute('data-trash-type');
             
-            //console.log(e);
-
             if(e.detail.body.el.getAttribute('class') == 'binCollider'){ //Object is same type as bin
                 if(collider == colliderTarget){
                     context.data.score += 10;
@@ -77,8 +75,9 @@ AFRAME.registerComponent('pick-up-object', {
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
+                            let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
                             e.detail.target.el.remove();
-                            //ingame.components['ingame'].data.trashArray.shift();//needs to be the same index as removed trash
+                            ingame.components['ingame'].data.trashArray.splice(index,1);
                         }
                     }, 0);
                 }
@@ -88,19 +87,20 @@ AFRAME.registerComponent('pick-up-object', {
 
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){
+                            let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
                             e.detail.target.el.remove();
-                            //ingame.components['ingame'].data.trashArray.shift();
+                            ingame.components['ingame'].data.trashArray.splice(index,1);
                         }
                     }, 0);
                 }
-            } else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
+            } /*else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
                 setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                     if(e.detail.target.el){
                         e.detail.target.el.remove();
                         //ingame.components['ingame'].data.trashArray.shift();
                     }
                 }, 0);
-            }
+            }*/
         });
     },
 
@@ -148,5 +148,5 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.setAttribute("dynamic-body", '');
         scene.object3D.add(this.el.object3D);
         this.el.body.applyLocalImpulse(new CANNON.Vec3(0, 1, -40), new CANNON.Vec3(0, 0, 0));
-    }
+    },    
 });
