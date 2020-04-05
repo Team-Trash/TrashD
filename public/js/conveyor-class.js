@@ -6,7 +6,7 @@ class Conveyor{
         this.id = makeid(5);
         this.object3D = this.generateElement(this.id);
     }
-
+    //GENERATING FUNCTION
     generateElement(id){
         let ingame = document.getElementById('conveyorContainer');
         let element = document.createElement('a-entity');

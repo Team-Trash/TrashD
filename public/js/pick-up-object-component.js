@@ -6,6 +6,7 @@ AFRAME.registerComponent('pick-up-object', {
         score : {type: 'int', default: 0},
     },
 
+    //INITIAL FUNCTION
     init : function() {
         
         //Init context
@@ -126,6 +127,7 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.removeAttribute('animation');
     },
 
+    //DROP OBJECT FUNCTION
     dropObject: function(){
         var scene = document.getElementById("scene");
         
@@ -136,6 +138,7 @@ AFRAME.registerComponent('pick-up-object', {
         scene.object3D.add(this.el.object3D);
     },
 
+    //THROW OBJECT FUNCTION
     throwObject: function(){
         var scene = document.getElementById("scene");
         

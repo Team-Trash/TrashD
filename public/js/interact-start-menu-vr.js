@@ -3,6 +3,7 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         cursor: {type: 'selector'},
     },
 
+    //INITIAL FUNCTION
     init : function() {       
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
@@ -13,6 +14,7 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         }
     },
 
+    //MENU LISTENER FUNCTION
     menuEventListener : function(){
         let startMenu = document.querySelector('#startMenu');
         let menuButtons = startMenu.querySelectorAll('.menu')
