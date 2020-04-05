@@ -38,7 +38,9 @@ AFRAME.registerComponent('ingame', {
                         conveyor.components['animation'].pause();
                     }
                     for(let trash of trashArray){
-                        trash.components['dynamic-body'].pause();
+                        if(trash.components['dynamic-body']){
+                            trash.components['dynamic-body'].pause();
+                        }
                     }
                     context.pauseMenu();
                 } else {
@@ -78,6 +80,8 @@ AFRAME.registerComponent('ingame', {
         if(this.data.pauseGame == false){ //Not paused
             if(this.data.time <= 0 && this.data.gameOver == false) {
                 //empty trash
+                conveyor.components['animation'].pause();
+                trash.components['dynamic-body'].pause();
                 startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
 
                 context.victoryMenu();
@@ -109,9 +113,16 @@ AFRAME.registerComponent('ingame', {
                 }
 
                 //Degenerate Trash
-                if(this.data.trashArray.length >= 15){
-                    document.getElementById(this.data.trashArray[0].id).remove();
-                    this.data.trashArray.shift();
+                if (this.data.time > 5000) {// When time is less than 50s
+                    if(this.data.trashArray.length >= 25){
+                        document.getElementById(this.data.trashArray[0].id).remove();
+                        this.data.trashArray.shift();
+                    }
+                } else {
+                    if(this.data.trashArray.length >= 50){
+                        document.getElementById(this.data.trashArray[0].id).remove();
+                        this.data.trashArray.shift();
+                    }
                 }
             }
         }

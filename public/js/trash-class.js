@@ -28,13 +28,13 @@ class Trash{
             case 2:
                 trash.setAttribute('material', 'src:#banana-texture');
                 trash.setAttribute('obj-model', 'obj:#bananaPeel-obj');
-                trash.setAttribute('scale', '0.025 0.025 0.025');
+                trash.setAttribute('scale', '0.02 0.03 0.02');
                 trash.setAttribute('data-trash-type', 'compost');
                 break;
             case 3:
                 trash.setAttribute('material', 'src:#pizza2-texture');
                 trash.setAttribute('obj-model', 'obj:#pizzaBox-obj');
-                trash.setAttribute('scale', '0.07 0.07 0.07');
+                trash.setAttribute('scale', '0.06 0.06 0.06');
                 trash.setAttribute('data-trash-type', 'paper');
                 break;
             case 4:
