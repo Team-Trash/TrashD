@@ -27,12 +27,19 @@ AFRAME.registerComponent('ingame', {
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
             let camera = document.getElementById('game-camera');
+            let conveyors = document.querySelectorAll('.conveyor');
+            let trashArray = document.querySelectorAll('.trash');
 
             if(e.keyCode === 27){
                 if(context.data.pauseGame == false){
                     context.data.pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
-                    document.exitPointerLock();
+                    for(let conveyor of conveyors){
+                        conveyor.components['animation'].pause();
+                    }
+                    for(let trash of trashArray){
+                        trash.components['dynamic-body'].pause();
+                    }
                     context.pauseMenu();
                 } else {
                     pauseGame.data.pauseGame = false;
@@ -82,9 +89,7 @@ AFRAME.registerComponent('ingame', {
                 //Generate Trash
                 if(this.data.time < 12000){// When time is less than 120s //-10.5
                     if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                        if(this.data.trashArray.length < 1){
                             this.data.trashArray.push(new Trash(0, 1.4, 0));
-                        }
                     }
                 }
                 if (this.data.time < 10000) {// When time is less than 100s
@@ -206,6 +211,8 @@ AFRAME.registerComponent('ingame', {
         let cursor = document.getElementById('game-cursor');
         let camera = document.getElementById('game-camera');
         let hud = document.getElementById('HUD');
+        let conveyors = document.querySelectorAll('.conveyor')
+        let trashArray = document.querySelectorAll('.trash');
         
         switch (menuID){
 
@@ -213,6 +220,12 @@ AFRAME.registerComponent('ingame', {
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 cursor.setAttribute('visible', 'true');
                 camera.setAttribute('fps-look-controls', 'userHeight: 0');
+                for(let conveyor of conveyors){
+                    conveyor.components['animation'].play();
+                }
+                for(let trash of trashArray){
+                    trash.components['dynamic-body'].play();
+                }
 
                 this.data.pauseGame = false;
                 instructionGame = false;

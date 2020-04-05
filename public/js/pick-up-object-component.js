@@ -69,7 +69,7 @@ AFRAME.registerComponent('pick-up-object', {
             
             //console.log(e);
 
-            /*if(e.detail.body.el.getAttribute('class') == 'binCollider'){ //Object is same type as bin
+            if(e.detail.body.el.getAttribute('class') == 'binCollider'){ //Object is same type as bin
                 if(collider == colliderTarget){
                     context.data.score += 10;
                     ingame.setAttribute("ingame", "score: " + context.data.score);
@@ -99,7 +99,7 @@ AFRAME.registerComponent('pick-up-object', {
                         //ingame.components['ingame'].data.trashArray.shift();
                     }
                 }, 0);
-            }*/
+            }
         });
     },
 
