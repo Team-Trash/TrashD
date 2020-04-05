@@ -4,12 +4,15 @@ AFRAME.registerComponent('ingame', {
         score : {type: 'int', default: 0},
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: false},
-        host : {type: 'boolean', default: true},
+        host : {type: 'boolean'},
+        full: {type: 'boolean'},
         conveyorArray: {type: 'array'},
-        trashID: {type: 'int', default: 0},
-        trashDeletingID: {type: 'int', default: 0},
+        trashArray: {type: 'array'},
+        pauseGame: {type: 'boolean', default: false},
+        gameOver: {type: 'boolean', default: false},
     },
 
+    //INITIAL FUNCTION
     init : function() {
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
@@ -21,36 +24,67 @@ AFRAME.registerComponent('ingame', {
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
 
         context = this;
-        pauseGame = false;
-        victory = false;
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
             let camera = document.getElementById('game-camera');
+            let conveyors = document.querySelectorAll('.conveyor');
+            let trashArray = document.querySelectorAll('.trash');
 
             if(e.keyCode === 27){
-                if(pauseGame == false){
-                    pauseGame = true;
+                if(context.data.pauseGame == false){
+                    context.data.pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
-                    //startCamera.setAttribute('fps-look-controls', 'enabled: false');
-                    //startCamera.removeAttribute('fps-look-controls');
-                    document.exitPointerLock();
+                    if(context.data.multiplayer == false){
+                        for(let conveyor of conveyors){
+                            conveyor.components['animation'].pause();
+                        }
+                    }
+                    for(let trash of trashArray){
+                        if(context.data.multiplayer == false){
+                            if(trash.components['dynamic-body']){
+                                trash.components['dynamic-body'].pause();
+                            }
+                        }
+                    }
                     context.pauseMenu();
                 } else {
-                    pauseGame = false;
+                    context.data.pauseGame = false;
                 }
             }
         });
+
+        //Multiplayer standby
+        if(context.data.multiplayer == true && context.data.host == true && context.data.full == false){
+            this.generateStandby();
+        }
 
         //Hide multiplayer HUD elements on single player
         if(this.data.multiplayer == false){
             opponentScoreEl.setAttribute('visible', 'false');
             opponentEl.setAttribute('visible', 'false');
             youEl.setAttribute('visible', 'false');
+        } else {
+            opponentScoreEl.setAttribute('visible', 'true');
+            opponentEl.setAttribute('visible', 'true');
+            youEl.setAttribute('visible', 'true');
         }
         
         //Generate first Conveyor
-        this.data.conveyorArray.push(new Conveyor(-2, 4065)); 
+        if(context.data.multiplayer == false){
+            this.data.conveyorArray.push(new Conveyor(0, 3613, true));
+        } else {
+            if(context.data.host == true){
+                this.data.conveyorArray.push(new Conveyor(0, 3613, true));
+                console.log(document.getElementsByClassName('conveyor')[0]);
+                document.getElementsByClassName('conveyor')[0].components['animation'].pause();
+            } else {
+                this.data.conveyorArray.push(new Conveyor(0, 3613, false));
+            }
+        }
+
+        //Generate Bin Walls. Doing it this way as workaround for bug that encloses trash on generation
+        this.generateBinSides();
 
         //Adjust HUD to browser
         timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
@@ -63,56 +97,143 @@ AFRAME.registerComponent('ingame', {
         youEl.setAttribute("position", hudX + " " + hudY + " -1");
     },
 
+    //TICK FUNCTION
     tick : function(){
+        let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
-        if(pauseGame == false){
-            if(this.data.time <= 0 && victory == false) {
-                context.victoryMenu();
-                victory = true;
-            } else if (victory == false){
-                this.data.time--;
-                timerEl.setAttribute("value", Math.floor(this.data.time / 100));
-            }
-        }
 
         //Display the updated score
         scoreEl.setAttribute("value", this.data.score + " PTS");
+        
+        //Singleplayer
+        if(this.data.multiplayer == false){
+            if(this.data.pauseGame == false){ //Not paused
+                if(this.data.time <= 0 && this.data.gameOver == false) {
+                    //empty trash
+                    conveyor.components['animation'].pause();
+                    trash.components['dynamic-body'].pause();
+                    startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
 
-        //Generate conveyor. 225.81/s is speed
-        let conveyors = document.querySelectorAll('.conveyor');
-        if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
-            this.data.conveyorArray.push(new Conveyor(-16, 7000));
-        }
-        if(this.data.conveyorArray[0].object3D.position.x == 16){
-            document.getElementById(this.data.conveyorArray[0].id).remove();
-            this.data.conveyorArray.shift();
+                    context.victoryMenu();
+                    this.data.gameOver = true;
+                } else if (this.data.gameOver == false){ //No game over
+                    this.data.time--;
+                    timerEl.setAttribute("value", Math.floor(this.data.time / 100));
+
+                    //Generate Trashes
+                    if(this.data.time < 12000){// When time is less than 120s //-10.5
+                        if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                            this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
+                        }
+                    }
+                    if (this.data.time < 10000) {// When time is less than 100s
+                        if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                            this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                        }
+                    }
+                    if (this.data.time < 5000) {// When time is less than 50s
+                        if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                            this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                        }
+                    }
+                    if (this.data.time < 2000) {// When time is less than 20s
+                        if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                            this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                        }
+                    }
+
+                    //Degenerate Trash
+                    if(this.data.trashArray.length >= 30){
+                        document.getElementById(this.data.trashArray[0].id).remove();
+                        this.data.trashArray.shift();
+                    }
+
+                }
+            }
+
+            //Generate conveyor. 225.81/s is speed
+            let conveyors = document.querySelectorAll('.conveyor');
+            if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
+                this.data.conveyorArray.push(new Conveyor(-16, 7000, true));
+            }
+            if(this.data.conveyorArray[0].object3D.position.x == 16){
+                document.getElementById(this.data.conveyorArray[0].id).remove();
+                this.data.conveyorArray.shift();
+            }
         }
 
-        //Generate Trash
-        if(this.data.time < 12000){// When time is less than 120s
-            if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 10000) {// When time is less than 100s
-            if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 5000) {// When time is less than 50s
-            if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                this.generateTrash();
-            }
-        }
-        if (this.data.time < 2000) {// When time is less than 20s
-            if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                this.generateTrash();
+        //Multiplayer
+        if(this.data.multiplayer == false){
+            if(this.data.full == true) {
+                if(this.data.pauseGame == false){ //Not paused
+                    if(this.data.time <= 0 && this.data.gameOver == false) {
+                        //empty trash
+                        startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+                        context.victoryMenu();
+                        this.data.gameOver = true;
+                    } else if (this.data.gameOver == false){ //No game over
+                        this.data.time--;
+                        timerEl.setAttribute("value", Math.floor(this.data.time / 100));
+
+                        if(this.data.host == true){
+                            //Generate Trashes
+                            if(this.data.time < 12000){// When time is less than 120s //-10.5
+                                if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
+                                }
+                            }
+                            if (this.data.time < 10000) {// When time is less than 100s
+                                if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                }
+                            }
+                            if (this.data.time < 5000) {// When time is less than 50s
+                                if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                }
+                            }
+                            if (this.data.time < 2000) {// When time is less than 20s
+                                if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                }
+                            }
+
+                            //Degenerate Trash
+                            if(this.data.trashArray.length >= 30){
+                                document.getElementById(this.data.trashArray[0].id).remove();
+                                this.data.trashArray.shift();
+                            }
+                        }
+                    }
+                }
+
+                if(this.data.host == true){
+                    //Generate conveyor. 225.81/s is speed
+                    let conveyors = document.querySelectorAll('.conveyor');
+                    if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
+                        this.data.conveyorArray.push(new Conveyor(-16, 7000, true));
+                    }
+                    if(this.data.conveyorArray[0].object3D.position.x == 16){
+                        document.getElementById(this.data.conveyorArray[0].id).remove();
+                        this.data.conveyorArray.shift();
+                    }
+                } else {
+                    //Generate conveyor. 225.81/s is speed
+                    let conveyors = document.querySelectorAll('.conveyor');
+                    if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
+                        this.data.conveyorArray.push(new Conveyor(-16, 7000, false));
+                    }
+                    if(this.data.conveyorArray[0].object3D.position.x == 16){
+                        document.getElementById(this.data.conveyorArray[0].id).remove();
+                        this.data.conveyorArray.shift();
+                    }
+                }
             }
         }
     },
 
-    //Generate Pause Menu
+    //PAUSE MENU
     pauseMenu : function(){
         console.log("Pause menu created!");
 
@@ -167,9 +288,9 @@ AFRAME.registerComponent('ingame', {
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
     },
 
+    //MENU LISTENER
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
-
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
@@ -187,45 +308,67 @@ AFRAME.registerComponent('ingame', {
         });
     },
 
+    //CLICK MENU FUNCTION
     clickMenu : function(menuButton){
         let menuID = menuButton.getAttribute('id');
         var pauseMenu = document.getElementById('pauseMenu');
+        var startMenu = document.getElementById('startMenu');
         let cursor = document.getElementById('game-cursor');
         let camera = document.getElementById('game-camera');
         let hud = document.getElementById('HUD');
+        let conveyors = document.querySelectorAll('.conveyor')
+        let trashArray = document.querySelectorAll('.trash');
         
+        //CASE THAT USER IS PRESSING
         switch (menuID){
-
             case 'resumeButton':
-                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                cursor.setAttribute('visible', 'true');
-                camera.setAttribute('fps-look-controls', 'userHeight: 0');
 
-                pauseGame = false;
-                instructionGame = false;
-                break;
+                if(this.data.multiplayer == false){ //Singleplayer
+                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                    cursor.setAttribute('visible', 'true');
+                    camera.setAttribute('fps-look-controls', 'userHeight: 0');
+                    for(let conveyor of conveyors){
+                        conveyor.components['animation'].play();
+                    }
+                    for(let trash of trashArray){
+                        trash.components['dynamic-body'].play();
+                    }
+
+                    this.data.pauseGame = false;
+                    break;
+                } else { //Multiplayer
+                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                    cursor.setAttribute('visible', 'true');
+                    camera.setAttribute('fps-look-controls', 'userHeight: 0');
+                    if(this.data.host == true && this.data.full == false) {
+                        this.generateStandby();
+                    }
+
+                    this.data.pauseGame = false;
+                    break;
+                }
 
             case 'exitButton':
                 let scene = document.getElementById('scene');
                 let start = document.getElementById('start');
                 let conveyor = document.getElementById('conveyorContainer');
 
-                //Reset game values
-                this.el.removeAttribute('ingame');
-                cursor.setAttribute('visible', 'true');
-                camera.setAttribute('fps-look-controls', 'userHeight: 1');    
-
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 this.el.setAttribute('visible', 'false');
                 start.querySelector('#start-camera').setAttribute('camera', 'active: true');
                 start.setAttribute('visible', 'true');
-                document.querySelector('#game-camera').setAttribute('camera', 'active: false');
+                camera.setAttribute('camera', 'active: false');
 
                 //empty conveyor
                 startMenu.components['interact-start-menu'].emptyElement(conveyor);
 
                 //empty trash
                 startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+
+                //Reset game values
+                this.el.removeAttribute('ingame');
+                cursor.setAttribute('visible', 'true');
+                camera.setAttribute('fps-look-controls');
 
                 startMenu.components['interact-start-menu'].startMenu();
                 break;
@@ -247,6 +390,7 @@ AFRAME.registerComponent('ingame', {
 
     },
     
+    //CONTROL MENU
     controlsMenu: function(state){
         var pauseMenu = document.getElementById('pauseMenu');
         var instCont = document.createElement('a-entity');
@@ -291,6 +435,7 @@ AFRAME.registerComponent('ingame', {
         next.setAttribute('position', '0.6 0.45 0.1');
         next.setAttribute('class', 'menu');
 
+        //APPENDING PICTURES AND BUTTONS
         pauseMenu.append(instCont);
         instCont.append(img);
         instCont.append(back);
@@ -299,7 +444,7 @@ AFRAME.registerComponent('ingame', {
         this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
-    //Generate Victory Menu
+    //VICTORY MENU
     victoryMenu : function(){
         console.log("Victory created!");
 
@@ -330,41 +475,73 @@ AFRAME.registerComponent('ingame', {
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
     },
 
-    //Generate Trash
-    generateTrash : function(){
-        var scene = document.getElementById('scene');
-        let trashID = this.data.trashID;
-        let trashes = [];
+    //GENERATING BIN SIDE FUNCTION (FOR USERS)
+    generateBinSides(){
+        let bins = document.getElementById('playerBins');
 
-        //Get the random number
-        var randomNum = Math.floor(Math.random() * 5);
-        switch(randomNum) {
-            case 0:
-                plasticTrash = new Trash('plastic', "trash" + trashID);
-                trashes.push(plasticTrash.generateAttribute());
-                scene.append(plasticTrash.generateAttribute());
-                break;
-            case 1:
-                metalTrash = new Trash('metal', "trash" + trashID);
-                trashes.push(metalTrash.generateAttribute());
-                scene.append(metalTrash.generateAttribute());
-                break;
-            case 2:
-                compostTrash = new Trash('compost',"trash" + trashID);
-                trashes.push(compostTrash.generateAttribute());
-                scene.append(compostTrash.generateAttribute());
-                break;
-            case 3:
-                paperTrash = new Trash('paper', "trash" + trashID);
-                trashes.push(paperTrash.generateAttribute());
-                scene.append(paperTrash.generateAttribute());
-                break;
-            case 4:
-                trashTrash = new Trash('trash',"trash" + trashID);
-                trashes.push(trashTrash.generateAttribute());
-                scene.append(trashTrash.generateAttribute());
-                break;
+        for (let bin of document.querySelectorAll(".bin")){
+            let binSide = [];
+
+            for(var i = 0; i < 5; i++){
+                binSide[i] = document.createElement('a-plane');
+
+                binSide[i].setAttribute('height', "1;");
+                binSide[i].setAttribute('width', "1;");
+                
+                binSide[i].setAttribute('visible', "false");
+                binSide[i].setAttribute('static-body', "");
+
+                if(i == 0){
+                    binSide[i].setAttribute('scale', "10 10 10");
+                } else {
+                    binSide[i].setAttribute('scale', "25 40 20");
+                }
+
+                switch(i){
+                    
+                    case 0: //bottom
+                        binSide[i].setAttribute('position', "0 0 0");
+                        binSide[i].setAttribute('rotation', "-90 0 0");
+                        binSide[i].setAttribute('class', "binCollider");
+                        binSide[i].setAttribute('data-trash-type', bin.getAttribute("data-trash-type"));
+                        break;
+
+                    case 1: //right
+                        binSide[i].setAttribute('position', "0 3.166 -11.923");
+                        binSide[i].setAttribute('rotation', "0 0 0");
+                        break;
+
+                    case 2: //left
+                        binSide[i].setAttribute('position', "0 3.166 11.923");
+                        binSide[i].setAttribute('rotation', "0 180 0");
+                        break;
+
+                    case 3: //back
+                        binSide[i].setAttribute('position', "11.923 3.166 0");
+                        binSide[i].setAttribute('rotation', "0 -90 0");
+                        break;
+
+                    case 4: //front
+                        binSide[i].setAttribute('position', "-11.923 7.758 0");
+                        binSide[i].setAttribute('rotation', "0 90 0");
+                        break;
+                }
+
+                bin.append(binSide[i]);
+            }
         }
-        trashID += 1;
+    },
+
+    generateStandby : function(){
+        let pauseMenu = document.getElementById('pauseMenu');
+        let waiting = document.createElement('a-text');
+
+        waiting.setAttribute('value', 'Waiting for Player 2');
+        waiting.setAttribute('align', 'center');
+        waiting.setAttribute('height', '2');
+        waiting.setAttribute('width', '0.5');
+        waiting.setAttribute('font', 'https://cdn.aframe.io/fonts/Exo2Bold.fnt');
+        waiting.setAttribute('position', "0 2 0");
+        pauseMenu.append(waiting);
     }
 });

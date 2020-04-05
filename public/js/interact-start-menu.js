@@ -2,7 +2,7 @@ let socket;
 
 AFRAME.registerComponent('interact-start-menu', {
     schema : {
-        
+        startCount: {type: 'int', default: 0}
     },
 
     init : function() {
@@ -14,6 +14,7 @@ AFRAME.registerComponent('interact-start-menu', {
     //Add event listeners to button
     menuEventListener: function(menuButtons){
         let context = this
+
         menuButtons.forEach(function(menuButton) {
             let scene = document.getElementById('scene');
             var trashLogo = document.getElementById('startLogo');
@@ -52,7 +53,7 @@ AFRAME.registerComponent('interact-start-menu', {
         });
     },
 
-    //Generate Start Menu
+    //START MENU
     startMenu : function(){
         console.log("Start menu created!");
 
@@ -165,6 +166,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
+    //MULTIPLAYERS ROOM
     multiMenu: function(){
         let context = this;
         var startMenu = document.getElementById('startMenu');
@@ -231,6 +233,7 @@ AFRAME.registerComponent('interact-start-menu', {
         context.menuEventListener(context.el.querySelectorAll('.menu'));
     },
 
+    //CONTROL MENU
     controlsMenu: function(state){
         var startMenu = document.getElementById('startMenu');
         var instCont = document.createElement('a-entity');
@@ -254,7 +257,7 @@ AFRAME.registerComponent('interact-start-menu', {
         img.setAttribute('width', '1.29');
         img.setAttribute('height', '.847');
 
-        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 1;');
+        back.setAttribute('text', 'value: Back to start menu; color: #f4eed7; align: center; height: 2; width: 0.9; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
         back.setAttribute('id', 'back');
         back.setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.4');
         back.setAttribute('material', 'color: #697c37');
@@ -262,10 +265,10 @@ AFRAME.registerComponent('interact-start-menu', {
         back.setAttribute('class', 'menu');
 
         if(state == 'instructions'){
-            next.setAttribute('text', 'value: Controls; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('text', 'value: Controls; color: #f4eed7; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
             next.setAttribute('data-state', 'controls');
         } else if (state == 'controls') {
-            next.setAttribute('text', 'value: Instructions; color: #f4eed7; align: center; height: 2; width: 1;');
+            next.setAttribute('text', 'value: Instructions; color: #f4eed7; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
             next.setAttribute('data-state', 'instructions');
         }  
         next.setAttribute('id', 'next');
@@ -292,6 +295,7 @@ AFRAME.registerComponent('interact-start-menu', {
         this.multiMenu();
     },
 
+    //CLICK MENU FUNCTION
     clickMenu: function(menuButton){
         let context = this;
         let menuID = menuButton.getAttribute('id');
@@ -309,7 +313,7 @@ AFRAME.registerComponent('interact-start-menu', {
             case 'newRoom':
                 socket.emit('new-room');
                 socket.on('return-room-id', function(data){
-                    context.enterMulti(data);
+                    context.enterMulti(data, true, false);
                 });
                 break;
                 
@@ -318,7 +322,9 @@ AFRAME.registerComponent('interact-start-menu', {
                 break;
 
             case 'back':
-                socket.close();
+                if(socket){
+                    socket.close();
+                }
                 context.startMenu();
                 break;
             
@@ -331,19 +337,34 @@ AFRAME.registerComponent('interact-start-menu', {
         if(roomID){
             socket.emit('join-room', roomID);
             socket.on('return-room-id', function(data){
-                context.enterMulti(data);
+                context.enterMulti(data, false, true);
             });
         }
     },
 
-    //Enter singleplayer gamemode
+    //ENTER SINGLE PLAYER GAMEMODE
     enterSingle: function(){
         console.log('Entering SinglePlayer');
 
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
+        var gameCamera = document.getElementById('game-camera');
         let scene = document.getElementById('scene');
         var factoryAudio = document.createElement('a-entity');
+
+        var score = document.getElementById('score');
+        var timer = document.getElementById('timer');
+
+        
+
+        //Add menu cursor raycaster to new camera
+        if(document.getElementById('menu-raycast') == null){
+            var menuRaycast = document.createElement('a-entity');
+            menuRaycast.setAttribute("id", "menu-raycast");
+            menuRaycast.setAttribute("cursor", "rayOrigin:mouse;");
+            menuRaycast.setAttribute("raycaster", "objects: .menu;");
+            gameCamera.append(menuRaycast);
+        }
 
         // Remove/Hide start menu; move camera to ingame camera
         this.emptyElement(startMenu);
@@ -351,51 +372,94 @@ AFRAME.registerComponent('interact-start-menu', {
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
-        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        gameCamera.setAttribute('camera', 'active: true');
+        console.log(this.data.startCount);
+        if(this.data.startCount <= 0){
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
+        } else {
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
+        }
         
-        factoryAudio.setAttribute('id', 'factoryAudio');
-        factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true; volume: 0.25');
+        //factoryAudio.setAttribute('id', 'factoryAudio');
+        //factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
 
         ingame.append(factoryAudio);
 
         if(scene.is('vr-mode') == true){
-            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+            gameCamera.setAttribute('visible', 'false');
         }
+
+        //Fixing position of the score and time
+        score.setAttribute('position', '0.25 0.65 -1');
+        timer.setAttribute('position', '-0.25 0.65 -1');
+
+        this.data.startCount++
     },
 
     //Enter multiplayer gamemode
-    enterMulti: function(data){
-        console.log('Entering ' + data);
+    enterMulti: function(data, hostStatus, fullStatus){
+
+        console.log('Entering ' + data);        
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
+        var gameCamera = document.getElementById('game-camera');
+
+        //Fixing timer and score position
+        var timer = document.getElementById('timer');
+        var score = document.getElementById('score');
+        var youText = document.getElementById('youText');
+        var opponentScore = document.getElementById('opponentScore');
+        var opponentText = document.getElementById('opponentText');
+
+        //Add menu cursor raycaster to new camera
+        if(document.getElementById('menu-raycast') == null){
+            var menuRaycast = document.createElement('a-entity');
+            menuRaycast.setAttribute("id", "menu-raycast");
+            menuRaycast.setAttribute("cursor", "rayOrigin:mouse;");
+            menuRaycast.setAttribute("raycaster", "objects: .menu;");
+            gameCamera.append(menuRaycast);
+        }
 
         // Remove/Hide start menu; move camera to ingame camera
         this.emptyElement(startMenu);
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
-        ingame.setAttribute('ingame', 'multiplayer: true');
-        ingame.querySelector('#game-camera').setAttribute('camera', 'active: true');
-        ingame.querySelector('#game-camera').setAttribute('fps-look-controls', 'userHeight: 1');
+        ingame.setAttribute('ingame', 'multiplayer: true; host: ' + hostStatus + '; full:' + fullStatus);
+        gameCamera.setAttribute('camera', 'active: true');
+        if(this.data.startCount <= 0){
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
+        } else {
+            gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
+        }
 
         if(scene.is('vr-mode') == true){
-            ingame.querySelector('#game-cursor').setAttribute('visible', 'false');
+            gameCamera.setAttribute('visible', 'false');
         }
+
+        //Fixing position of the score and time
+        //timer.setAttribute('position', '-0.15 0.75 -1');
+        youText.setAttribute('position', '0.75 0.75 -1');
+        score.setAttribute('position', '0.75 0.65 -1');
+        opponentText.setAttribute('position', '0.75 0.55 -1');
+        opponentScore.setAttribute('position', '0.75 0.45 -1');
+        timer.setAttribute('position', '-0.75 0.65 -1');
+
+        this.data.startCount++
     },
 
+    //REMOVE ELEMENT FUNCTION
     emptyElement: function(element, name){
         if(!name){
             while (element.firstChild) {
                 element.removeChild(element.lastChild);
             }
         } else if (name) {
-            for (var i = 0; i < element.childNodes.length; i++) {
-                if (element.childNodes[i].className == name) {
-                    console.log('test');
-                    element.removeChild(element.childNodes[i]);
+            for (let el of element.children) {
+                if (el.className == name) {
+                    el.remove();
                 }        
             }
         }

@@ -3,9 +3,11 @@ AFRAME.registerComponent('pick-up-object', {
         cursor: {type: 'selector', default: "#game-cursor"},
         pickUpStatus: {type: 'boolean', default: false},
         mouseButton: {type: 'int'},
-        score : {type: 'int', default: 0},
+        destroyStatus: {type: 'boolean', default: false},
+        scoreValue: {type: 'int', default: 10},
     },
 
+    //INITIAL FUNCTION
     init : function() {
         
         //Init context
@@ -63,42 +65,53 @@ AFRAME.registerComponent('pick-up-object', {
 
         //Object collide on
         context.el.addEventListener('collide', function(e){
+            let ingame = document.querySelector("#ingame");
             let collider = e.detail.body.el.getAttribute('data-trash-type');
-            let ingameEl = document.querySelector("#ingame");
-            let collidedTarget = context.el.getAttribute('data-trash-type');
-            var trashBinClosingAudio = document.getElementById('trashBinClosing');
-
-            if(e.detail.body.el.getAttribute('class') == 'bin'){ //Object is same type as bin
-                if(collider == collidedTarget){
-                    trashBinClosingAudio.components.sound.playSound();
-                    //e.detail.target.el.setAttribute('visible', false);
-                    context.data.score += 10;
-                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
-
-                    setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
-                        if(e.detail.target.el){
-                            e.detail.target.el.remove();
-                        }
-                    }, 0);
-                }
-                else{ //Object is not the same type as bin
-                    context.data.score -= 10;
-                    ingameEl.setAttribute("ingame", "score: " + context.data.score);
-                    trashBinClosingAudio.components.sound.playSound();
-
-                    setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
-                        if(e.detail.target.el){
-                            e.detail.target.el.remove();
-                        }
-                    }, 0);
-                }
+            let colliderTarget = context.el.getAttribute('data-trash-type');
+            
+            if (e.detail.body.el.getAttribute('class') == 'clickable trash' || e.detail.body.el.getAttribute('class') == 'conveyor' || e.detail.body.el.getAttribute('class') == null || e.detail.body.el.getAttribute('class') == undefined){
+                return;
             }
-            if(e.detail.body.el.getAttribute('class') == 'delete'){ //Object is same type as bin
-                setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
-                    if(e.detail.target.el){
-                        e.detail.target.el.remove();
+
+            if(context.data.destroyStatus == false){
+                if(e.detail.body.el.getAttribute('class') == 'binCollider'){ 
+                    if(collider == colliderTarget){ //Object is same type as bin
+                        ingame.components['ingame'].data.score += context.data.scoreValue;
+
+                        setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
+                            if(e.detail.target.el){
+                                let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
+                                e.detail.target.el.remove();
+                                ingame.components['ingame'].data.trashArray.splice(index,1);
+                            }
+                        }, 0);
+
+                        //context.data.destroyStatus = true;
                     }
-                }, 0);
+                    else{ //Object is not the same type as bin
+                        ingame.components['ingame'].data.score -= 10;
+
+                        setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
+                            if(e.detail.target.el){
+                                let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
+                                e.detail.target.el.remove();
+                                ingame.components['ingame'].data.trashArray.splice(index,1);
+                            }
+                        }, 0);
+
+                        //context.data.destroyStatus = true;
+                    }
+                } else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
+                    setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
+                        if(e.detail.target.el){
+                            let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
+                            e.detail.target.el.remove();
+                            ingame.components['ingame'].data.trashArray.splice(index,1);
+                        }
+                    }, 0);
+
+                    //context.data.destroyStatus = true;
+                }
             }
         });
     },
@@ -126,6 +139,7 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.removeAttribute('animation');
     },
 
+    //DROP OBJECT FUNCTION
     dropObject: function(){
         var scene = document.getElementById("scene");
         
@@ -136,6 +150,7 @@ AFRAME.registerComponent('pick-up-object', {
         scene.object3D.add(this.el.object3D);
     },
 
+    //THROW OBJECT FUNCTION
     throwObject: function(){
         var scene = document.getElementById("scene");
         
@@ -145,5 +160,5 @@ AFRAME.registerComponent('pick-up-object', {
         this.el.setAttribute("dynamic-body", '');
         scene.object3D.add(this.el.object3D);
         this.el.body.applyLocalImpulse(new CANNON.Vec3(0, 1, -40), new CANNON.Vec3(0, 0, 0));
-    }
+    },    
 });

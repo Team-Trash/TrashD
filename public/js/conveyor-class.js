@@ -1,13 +1,13 @@
 //CLASS FOR CONVEYOR
 class Conveyor{
-    constructor(x, s){
+    constructor(x, s, collider){
         this.initX = x;
         this.speed = s;
-        this.id = this.makeid(5);
-        this.object3D = this.generateElement(this.id);
+        this.id = makeid(5);
+        this.object3D = this.generateElement(this.id, collider);
     }
-
-    generateElement(id){
+    //GENERATING FUNCTION
+    generateElement(id, collider){
         let ingame = document.getElementById('conveyorContainer');
         let element = document.createElement('a-entity');
         let ridge = [];
@@ -21,7 +21,9 @@ class Conveyor{
             var j = i - 7;
             ridge[i].setAttribute("position", j + " 0 0");
             ridge[i].setAttribute("material", "color: #555");
-            ridge[i].setAttribute("static-body", "");
+            if(collider == true){
+                ridge[i].setAttribute("static-body", "");
+            }
             
             element.append(ridge[i]);
         }
@@ -31,14 +33,4 @@ class Conveyor{
 
         return element.object3D;
     }
-
-    makeid(length){
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-           result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-     }
 }
