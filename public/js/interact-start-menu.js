@@ -407,9 +407,9 @@ AFRAME.registerComponent('interact-start-menu', {
                 element.removeChild(element.lastChild);
             }
         } else if (name) {
-            for (var i = 0; i < element.childNodes.length; i++) {
-                if (element.childNodes[i].className == name) {
-                    element.removeChild(element.childNodes[i]);
+            for (let el of element.children) {
+                if (el.className == name) {
+                    el.remove();
                 }        
             }
         }
