@@ -11,6 +11,7 @@ AFRAME.registerComponent('ingame', {
         gameOver: {type: 'boolean', default: false},
     },
 
+    //INITIAL FUNCTION
     init : function() {
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
@@ -23,7 +24,6 @@ AFRAME.registerComponent('ingame', {
 
         context = this;
         
-
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
             let camera = document.getElementById('game-camera');
@@ -73,6 +73,7 @@ AFRAME.registerComponent('ingame', {
         youEl.setAttribute("position", hudX + " " + hudY + " -1");
     },
 
+    //TICK FUNCTION
     tick : function(){
         let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
@@ -90,7 +91,7 @@ AFRAME.registerComponent('ingame', {
                 this.data.time--;
                 timerEl.setAttribute("value", Math.floor(this.data.time / 100));
 
-                //Generate Trash
+                //Generate Trashes
                 if(this.data.time < 12000){// When time is less than 120s //-10.5
                     if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
                         this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
@@ -141,7 +142,7 @@ AFRAME.registerComponent('ingame', {
         }
     },
 
-    //Generate Pause Menu
+    //PAUSE MENU
     pauseMenu : function(){
         console.log("Pause menu created!");
 
@@ -196,9 +197,9 @@ AFRAME.registerComponent('ingame', {
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
     },
 
+    //MENU LISTENER
     menuEventListener: function(menuButtons){
         menuButtons.forEach(function(menuButton) {
-
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
@@ -216,6 +217,7 @@ AFRAME.registerComponent('ingame', {
         });
     },
 
+    //CLICK MENU FUNCTION
     clickMenu : function(menuButton){
         let menuID = menuButton.getAttribute('id');
         var pauseMenu = document.getElementById('pauseMenu');
@@ -226,8 +228,8 @@ AFRAME.registerComponent('ingame', {
         let conveyors = document.querySelectorAll('.conveyor')
         let trashArray = document.querySelectorAll('.trash');
         
+        //CASE THAT USER IS PRESSING
         switch (menuID){
-
             case 'resumeButton':
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 cursor.setAttribute('visible', 'true');
@@ -285,6 +287,7 @@ AFRAME.registerComponent('ingame', {
 
     },
     
+    //CONTROL MENU
     controlsMenu: function(state){
         var pauseMenu = document.getElementById('pauseMenu');
         var instCont = document.createElement('a-entity');
@@ -329,6 +332,7 @@ AFRAME.registerComponent('ingame', {
         next.setAttribute('position', '0.6 0.45 0.1');
         next.setAttribute('class', 'menu');
 
+        //APPENDING PICTURES AND BUTTONS
         pauseMenu.append(instCont);
         instCont.append(img);
         instCont.append(back);
@@ -337,7 +341,7 @@ AFRAME.registerComponent('ingame', {
         this.menuEventListener(this.el.querySelectorAll('.menu'));
     },
 
-    //Generate Victory Menu
+    //VICTORY MENU
     victoryMenu : function(){
         console.log("Victory created!");
 
@@ -368,6 +372,7 @@ AFRAME.registerComponent('ingame', {
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
     },
 
+    //GENERATING BIN SIDE FUNCTION (FOR USERS)
     generateBinSides(){
         let bins = document.getElementById('playerBins');
 
