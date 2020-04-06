@@ -8,10 +8,17 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
         let scene = document.getElementById('scene');
+        let context = this;
+
+        console.log(scene.is('vr-mode'));
 
         if(scene.is('vr-mode')){
             this.menuEventListener();
         }
+
+        scene.addEventListener('enter-vr', function(e){
+            context.menuEventListener();
+        });
     },
 
     //MENU LISTENER FUNCTION
@@ -35,6 +42,7 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         this.el.addEventListener('xbuttondown', function(e){
             if(currentButton){
                 startMenu.components['interact-start-menu'].clickMenu(currentButton);
+                console.log(currentButton);
             }
             
         });
@@ -42,12 +50,14 @@ AFRAME.registerComponent('interact-start-menu-vr', {
         this.el.addEventListener('abuttondown', function(e){
             if(currentButton){
                 startMenu.components['interact-start-menu'].clickMenu(currentButton);
+                console.log(currentButton);
             }
         });
 
         this.el.addEventListener('triggerdown', function(e){
             if(currentButton){
                 startMenu.components['interact-start-menu'].clickMenu(currentButton);
+                console.log(currentButton);
             }
         });
     },

@@ -41,14 +41,14 @@ AFRAME.registerComponent('interact-start-menu', {
                 trashLogo.setAttribute('position', '0 2 -2');
                 singlePlayer.setAttribute('position', '-0.8 1 -2');
                 multiplePlayer.setAttribute('position', '0.8 1 -2');
-                controlButton.setAttribute('position', '-0.8 2 -2');
+                controlButton.setAttribute('position', '0 0.5 -2');
             });
 
             scene.addEventListener('exit-vr', function(e){
                 trashLogo.setAttribute('position', '0 1 -2');
                 singlePlayer.setAttribute('position', '-0.8 0 -2');
                 multiplePlayer.setAttribute('position', '0.8 0 -2');
-                controlButton.setAttribute('position', '0 2 -2');
+                controlButton.setAttribute('position', '0 -0.5 -2');
             });
         });
     },
@@ -121,36 +121,33 @@ AFRAME.registerComponent('interact-start-menu', {
 
         //ANIMATION TEST
         planeBlack.setAttribute('material', 'color: rgb(99, 100, 101)');
-        planeBlack.setAttribute('position', '0 -1.5 -2');
         planeBlack.setAttribute('scale', '1 0.05 1');
-        planeBlack.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeBlack.setAttribute('animation', 'property: position; from: -9 -1.5 -2; to: 0 -1.5 -2; dur: 3600; easing: linear');
+        planeBlack.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeBlack.setAttribute('animation', 'property: position; from: -9 -1.5 -3; to: 0 -1.5 -3; dur: 3600; easing: linear');
 
 
         planeGreen.setAttribute('material', 'color: rgb(164, 202, 172)');
-        planeGreen.setAttribute('position', '0 -0.75 -2');
         planeGreen.setAttribute('scale', '1 0.05 1');
-        planeGreen.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeGreen.setAttribute('animation', 'property: position; from: 9 -0.75 -2; to: 0 -0.75 -2; dur: 3500; easing: linear');
+        planeGreen.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeGreen.setAttribute('animation', 'property: position; from: 9 -0.75 -3; to: 0 -0.75 -3; dur: 3500; easing: linear');
 
 
         planeRed.setAttribute('material', 'color: rgb(228, 132, 119)');
-        planeRed.setAttribute('position', '0 0 -2');
         planeRed.setAttribute('scale', '1 0.05 1');
-        planeRed.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeRed.setAttribute('animation', 'property: position; from: -9 0 -2; to: 0 0 -2; dur: 3300; easing: linear');
+        planeRed.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeRed.setAttribute('animation', 'property: position; from: -9 0 -3; to: 0 0 -3; dur: 3300; easing: linear');
 
 
         planeBlue.setAttribute('material', 'color: rgb(151, 192, 217)');
         planeBlue.setAttribute('scale', '1 0.05 1');
-        planeBlue.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeBlue.setAttribute('animation', 'property: position; from: 9 0.75 -2; to: 0 0.75 -2; dur: 3300; easing: linear');
+        planeBlue.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeBlue.setAttribute('animation', 'property: position; from: 9 0.75 -3; to: 0 0.75 -3; dur: 3300; easing: linear');
 
 
         planeYellow.setAttribute('material', 'color: rgb(235, 220, 139)');
         planeYellow.setAttribute('scale', '1 0.05 1');
-        planeYellow.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeYellow.setAttribute('animation', 'property: position; from: -9 1.5 -2; to: 0 1.5 -2; dur: 3000; easing: linear');
+        planeYellow.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeYellow.setAttribute('animation', 'property: position; from: -9 1.5 -3; to: 0 1.5 -3; dur: 3000; easing: linear');
         
         startMenu.append(planeBlack);
         startMenu.append(planeGreen);

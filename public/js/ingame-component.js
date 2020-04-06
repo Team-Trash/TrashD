@@ -72,6 +72,9 @@ AFRAME.registerComponent('ingame', {
             }
         });
 
+        //VR Pause Listener
+        
+
         //Multiplayer standby
         if(context.data.multiplayer == true){
             if(context.data.host == true){
