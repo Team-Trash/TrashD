@@ -34,6 +34,7 @@ socketIO.on('connection', function(socket) {
 
     socket.on('new-room', function(){
         let roomID = 'room' + rooms;
+        console.log(socket.id + " has created " + roomID);
         socket.join(roomID);
         rooms++;
         socket.emit('return-room-id', roomID);
@@ -42,16 +43,14 @@ socketIO.on('connection', function(socket) {
     socket.on('join-room', function(roomID){
         console.log(socket.id + " has joined " + roomID);
         socket.join(roomID);
+        socket.to(roomID).emit('ready-room', socket.id);
         socket.emit('return-room-id', roomID);
-        if(socketIO.sockets.adapter.rooms){
-
-        }
     });
 
     socket.on('leave-room', function(roomID){
         console.log(socket.id + " left " + roomID);
+        socket.to(roomID).emit('forfeit');
         socket.leave(roomID);
-        socket.to('forfeit', roomID);
     });
 
     socket.on('get-trash', function(data){

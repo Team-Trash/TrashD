@@ -5,7 +5,7 @@ AFRAME.registerComponent('ingame', {
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: false},
         host : {type: 'boolean'},
-        full: {type: 'boolean'},
+        full: {type: 'boolean', default: false},
         conveyorArray: {type: 'array'},
         trashArray: {type: 'array'},
         pauseGame: {type: 'boolean', default: false},
@@ -15,6 +15,7 @@ AFRAME.registerComponent('ingame', {
 
     //INITIAL FUNCTION
     init : function() {
+        let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
         let opponentScoreEl = document.querySelector("#opponentScore");
@@ -25,6 +26,9 @@ AFRAME.registerComponent('ingame', {
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
 
         context = this;
+
+        //empty trash
+        startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
@@ -56,8 +60,112 @@ AFRAME.registerComponent('ingame', {
         });
 
         //Multiplayer standby
-        if(context.data.multiplayer == true && context.data.host == true && context.data.full == false){
-            this.generateStandby();
+        if(context.data.multiplayer == true){
+            if(context.data.host == true){
+                this.generateStandby('Waiting for Player 2');
+            } else if (context.data.host == false) {
+                let count = 0;
+                let startInt = setInterval(function(){
+                    switch(count){
+                        case 0:
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            context.generateStandby('Joined Game');
+                            break;
+
+                        case 1:
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            context.generateStandby('3');
+                            break;
+                        
+                        case 2:
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            context.generateStandby('2');
+                            break;
+
+                        case 3:
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            context.generateStandby('1');
+                            break;
+                        
+                        case 4:
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            context.generateStandby('GO');
+                            break;
+                        case 5:
+                            clearInterval(startInt);
+                            startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                            document.getElementById(context.data.conveyorArray[0].id).components['animation'].play();
+                            context.data.full = true;
+                            break;
+                    }
+                    count++;
+                }, 1000);
+            }
+        }
+
+        //Socket functions
+        if(context.data.multiplayer == true){
+
+            if (context.data.full == false){
+
+                socket.on('ready-room', function(oppID){//Start game when opponent joins
+                    console.log(oppID + ' is ready');
+                    let count = 0;
+                    let startInt = setInterval(function(){
+                        switch(count){
+                            case 0:
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                context.generateStandby('Player Found');
+                                break;
+
+                            case 1:
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                context.generateStandby('3');
+                                break;
+                            
+                            case 2:
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                context.generateStandby('2');
+                                break;
+
+                            case 3:
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                context.generateStandby('1');
+                                break;
+                            
+                            case 4:
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                context.generateStandby('GO');
+                                break;
+                            case 5:
+                                clearInterval(startInt);
+                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                document.getElementById(context.data.conveyorArray[0].id).components['animation'].play();
+                                context.data.full = true;
+                                break;
+                        }
+                        count++;
+                    }, 1000);
+                });
+            }
+
+            if(context.data.gameOver == false){
+                socket.on('forfeit', function(){
+                    let conveyorArray = document.querySelectorAll('.conveyor');
+                    let trashArray = document.querySelectorAll('.trash');
+
+                    context.data.gameOver = true;
+                    context.victoryMenu('Opponent has left');
+                    //empty trash
+                    for(let conveyor of conveyorArray){
+                        conveyor.components['animation'].pause();
+                    }
+                    for(let trash of trashArray){
+                        trash.components['dynamic-body'].pause();
+                    }
+                    startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+                });
+            }
         }
 
         //Hide multiplayer HUD elements on single player
@@ -70,19 +178,15 @@ AFRAME.registerComponent('ingame', {
             opponentEl.setAttribute('visible', 'true');
             youEl.setAttribute('visible', 'true');
         }
-        
+
         //Generate first Conveyor
         if(context.data.multiplayer == false){
             this.data.conveyorArray.push(new Conveyor(0, 3613, true));
         } else {
-            if(context.data.host == true){
-                this.data.conveyorArray.push(new Conveyor(0, 3613, true));
-                setTimeout(function(){
-                    document.getElementById(context.data.conveyorArray[0].id).components['animation'].pause();
-                }, 0);
-            } else {
-                this.data.conveyorArray.push(new Conveyor(0, 3613, false));
-            }
+            this.data.conveyorArray.push(new Conveyor(0, 3613, true));
+            setTimeout(function(){
+                document.getElementById(context.data.conveyorArray[0].id).components['animation'].pause();
+            }, 0);
         }
 
         //Generate Bin Walls. Doing it this way as workaround for bug that encloses trash on generation
@@ -172,7 +276,7 @@ AFRAME.registerComponent('ingame', {
         }
 
         //Multiplayer
-        if(this.data.multiplayer == false){
+        if(this.data.multiplayer == true){
             if(this.data.full == true) {
                 if(this.data.pauseGame == false){ //Not paused
                     if(this.data.time <= 0 && this.data.gameOver == false) {
@@ -181,38 +285,34 @@ AFRAME.registerComponent('ingame', {
                         context.victoryMenu();
                         this.data.gameOver = true;
                     } else if (this.data.gameOver == false){ //No game over
-                        socket.on('forfeit', function(){
-
-                        })
-
                         this.data.time--;
                         timerEl.setAttribute("value", Math.floor(this.data.time / 100));
 
                         if(this.data.host == true){
                             //Generate Trashes
                             if(this.data.time < 12000){// When time is less than 120s //-10.5
-                                if(this.data.trashArray.length <= 30){
+                                if(this.data.trashArray.length < 30){
                                     if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
                                         this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
                                     }
                                 }
                             }
                             if (this.data.time < 10000) {// When time is less than 100s
-                                if(this.data.trashArray.length <= 30){
+                                if(this.data.trashArray.length < 30){
                                     if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
                                         this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                     }
                                 }
                             }
                             if (this.data.time < 5000) {// When time is less than 50s
-                                if(this.data.trashArray.length <= 30){
+                                if(this.data.trashArray.length < 30){
                                     if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
                                         this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                     }
                                 }
                             }
                             if (this.data.time < 2000) {// When time is less than 20s
-                                if(this.data.trashArray.length <= 30){
+                                if(this.data.trashArray.length < 30){
                                     if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
                                         this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                     }
@@ -404,7 +504,7 @@ AFRAME.registerComponent('ingame', {
 
             case 'back':
                 this.pauseMenu();
-                hud.setAttribute('visible', 'false');
+                hud.setAttribute('visible', 'true');
                 break;
 
             case 'next':
@@ -569,11 +669,11 @@ AFRAME.registerComponent('ingame', {
         }
     },
 
-    generateStandby : function(){
+    generateStandby : function(string){
         let pauseMenu = document.getElementById('pauseMenu');
         let waiting = document.createElement('a-text');
 
-        waiting.setAttribute('value', 'Waiting for Player 2');
+        waiting.setAttribute('value', string);
         waiting.setAttribute('align', 'center');
         waiting.setAttribute('height', '2');
         waiting.setAttribute('width', '0.5');
