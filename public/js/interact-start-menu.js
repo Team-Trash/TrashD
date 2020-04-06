@@ -191,7 +191,6 @@ AFRAME.registerComponent('interact-start-menu', {
         socket.emit('get-rooms');
         socket.on('return-rooms', function(data){
             let roomCount = 1;
-            console.log(data);
             for (room in data){
                 if(room.includes("room") && data[room].length < 2){
                     position -= 0.15;
@@ -200,15 +199,14 @@ AFRAME.registerComponent('interact-start-menu', {
                     rooms[roomCount].setAttribute('geometry', 'primitive: plane; height: 0.1; width: 0.3');
                     rooms[roomCount].setAttribute('material', 'color: #3b3836');
                     rooms[roomCount].setAttribute('position',  '-0.65 ' + position + ' 0.1');
-                    rooms[roomCount].setAttribute('class', 'menu');
+                    rooms[roomCount].setAttribute('class', 'room');
                     rooms[roomCount].setAttribute('data-room', room);
 
                     multiList.append(rooms[roomCount]);
                     roomCount++;
-
-                    context.menuEventListener(context.el.querySelectorAll('.menu'));
                 }
             }
+            context.menuEventListener(context.el.querySelectorAll('.room'));
         });
 
         newRoom.setAttribute('text', 'value: New Room; color: #fff; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
@@ -312,8 +310,8 @@ AFRAME.registerComponent('interact-start-menu', {
 
             case 'newRoom':
                 socket.emit('new-room');
-                socket.on('return-room-id', function(data){
-                    context.enterMulti(data, true, false);
+                socket.on('return-room-id', function(roomID){
+                    context.enterMulti(roomID, true);
                 });
                 break;
                 
@@ -336,8 +334,8 @@ AFRAME.registerComponent('interact-start-menu', {
 
         if(roomID){
             socket.emit('join-room', roomID);
-            socket.on('return-room-id', function(data){
-                context.enterMulti(data, false, true);
+            socket.on('return-room-id', function(roomID){
+                context.enterMulti(roomID, false);
             });
         }
     },
@@ -362,7 +360,7 @@ AFRAME.registerComponent('interact-start-menu', {
             var menuRaycast = document.createElement('a-entity');
             menuRaycast.setAttribute("id", "menu-raycast");
             menuRaycast.setAttribute("cursor", "rayOrigin:mouse;");
-            menuRaycast.setAttribute("raycaster", "objects: .menu;");
+            menuRaycast.setAttribute("raycaster", "objects: .menu, .room;");
             gameCamera.append(menuRaycast);
         }
 
@@ -373,7 +371,6 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
         gameCamera.setAttribute('camera', 'active: true');
-        console.log(this.data.startCount);
         if(this.data.startCount <= 0){
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
@@ -397,9 +394,9 @@ AFRAME.registerComponent('interact-start-menu', {
     },
 
     //Enter multiplayer gamemode
-    enterMulti: function(data, hostStatus, fullStatus){
+    enterMulti: function(roomID, hostStatus){
 
-        console.log('Entering ' + data);        
+        console.log('Joining ' + roomID);        
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');
@@ -427,7 +424,7 @@ AFRAME.registerComponent('interact-start-menu', {
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
-        ingame.setAttribute('ingame', 'multiplayer: true; host: ' + hostStatus + '; full:' + fullStatus);
+        ingame.setAttribute('ingame', 'multiplayer: true; host: ' + hostStatus + '; roomID: ' + roomID);
         gameCamera.setAttribute('camera', 'active: true');
         if(this.data.startCount <= 0){
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
