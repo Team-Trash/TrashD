@@ -21,7 +21,7 @@ AFRAME.registerComponent('ingame', {
         let opponentScoreEl = document.querySelector("#opponentScore");
         let youEl = document.querySelector("#youText");
         let opponentEl = document.querySelector("#opponentText");
-
+        let hud = document.getElementById('HUD');
         let hudX = (document.body.clientWidth / 2) / 960;
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
 
@@ -29,6 +29,9 @@ AFRAME.registerComponent('ingame', {
 
         //empty trash
         startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+
+        //make HUD visible
+        hud.setAttribute('visible', 'true');
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
@@ -63,13 +66,61 @@ AFRAME.registerComponent('ingame', {
         if(context.data.multiplayer == true){
             if(context.data.host == true){
                 this.generateStandby('Waiting for Player 2');
-            } else if (context.data.host == false) {
-                let count = 0;
-                let startInt = setInterval(function(){
+            }
+        }
+
+        //Socket functions
+        if(context.data.multiplayer == true){
+            if (context.data.host == true){
+                if (context.data.full == false){
+
+                    socket.on('ready-room', function(oppID){//Start game when opponent joins
+                        console.log(oppID + ' is ready');
+                        let count = 0;
+                        let startInt = setInterval(function(){
+                            switch(count){
+                                case 0:
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    context.generateStandby('Player Found');
+                                    break;
+
+                                case 1:
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    context.generateStandby('3');
+                                    break;
+                                
+                                case 2:
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    context.generateStandby('2');
+                                    break;
+
+                                case 3:
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    context.generateStandby('1');
+                                    break;
+                                
+                                case 4:
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    context.generateStandby('GO');
+                                    break;
+                                case 5:
+                                    clearInterval(startInt);
+                                    startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
+                                    document.getElementById(context.data.conveyorArray[0].id).components['animation'].play();
+                                    context.data.full = true;
+                                    break;
+                            }
+                            socket.emit('get-countdown', count, context.data.roomID);
+                            count++;
+                        }, 1000);
+                    });
+                }
+            } else {
+                socket.on('send-countdown', function(count){
                     switch(count){
                         case 0:
                             startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                            context.generateStandby('Joined Game');
+                            context.generateStandby('Joining Game');
                             break;
 
                         case 1:
@@ -92,60 +143,19 @@ AFRAME.registerComponent('ingame', {
                             context.generateStandby('GO');
                             break;
                         case 5:
-                            clearInterval(startInt);
                             startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                             document.getElementById(context.data.conveyorArray[0].id).components['animation'].play();
                             context.data.full = true;
                             break;
                     }
-                    count++;
-                }, 1000);
-            }
-        }
+                });
 
-        //Socket functions
-        if(context.data.multiplayer == true){
+                socket.on('send-time', function(time){
+                    context.data.time = time;
+                });
 
-            if (context.data.full == false){
-
-                socket.on('ready-room', function(oppID){//Start game when opponent joins
-                    console.log(oppID + ' is ready');
-                    let count = 0;
-                    let startInt = setInterval(function(){
-                        switch(count){
-                            case 0:
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                context.generateStandby('Player Found');
-                                break;
-
-                            case 1:
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                context.generateStandby('3');
-                                break;
-                            
-                            case 2:
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                context.generateStandby('2');
-                                break;
-
-                            case 3:
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                context.generateStandby('1');
-                                break;
-                            
-                            case 4:
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                context.generateStandby('GO');
-                                break;
-                            case 5:
-                                clearInterval(startInt);
-                                startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                                document.getElementById(context.data.conveyorArray[0].id).components['animation'].play();
-                                context.data.full = true;
-                                break;
-                        }
-                        count++;
-                    }, 1000);
+                socket.on('send-score', function(score){
+                    context.data.opponentScore = score;
                 });
             }
 
@@ -164,6 +174,8 @@ AFRAME.registerComponent('ingame', {
                         trash.components['dynamic-body'].pause();
                     }
                     startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
+
+                    socket.emit('leave-room', context.data.roomID);
                 });
             }
         }
@@ -208,6 +220,7 @@ AFRAME.registerComponent('ingame', {
         let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
+        let opponentScoreEl = document.querySelector("#opponentScore");
         let conveyorArray = document.querySelectorAll('.conveyor');
         let trashArray = document.querySelectorAll('.trash');
 
@@ -230,6 +243,8 @@ AFRAME.registerComponent('ingame', {
                     context.victoryMenu("You're score is " + this.data.score);
                     this.data.gameOver = true;
                 } else if (this.data.gameOver == false){ //No game over
+
+                    //calculate time
                     this.data.time--;
                     timerEl.setAttribute("value", Math.floor(this.data.time / 100));
 
@@ -278,15 +293,32 @@ AFRAME.registerComponent('ingame', {
         //Multiplayer
         if(this.data.multiplayer == true){
             if(this.data.full == true) {
+
                 if(this.data.pauseGame == false){ //Not paused
                     if(this.data.time <= 0 && this.data.gameOver == false) {
                         //empty trash
                         startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
-                        context.victoryMenu();
+                        if(this.data.score > this.data.opponentScore){
+                            context.victoryMenu("You win!");
+                        } else if (this.data.score < this.data.opponentScore){
+                            context.victoryMenu("You lose!");
+                        } else {
+                            context.victoryMenu("It's a draw!");
+                        }
+
                         this.data.gameOver = true;
                     } else if (this.data.gameOver == false){ //No game over
-                        this.data.time--;
+
+                        //time functionality
+                        if(this.data.host == true){
+                            this.data.time--;
+                            socket.emit('get-time', this.data.time, this.data.roomID);
+                        }
                         timerEl.setAttribute("value", Math.floor(this.data.time / 100));
+
+                        //score functionality
+                        socket.emit('get-score', this.data.score, this.data.roomID);
+                        opponentScoreEl.setAttribute("value", this.data.opponentScore + " PTS");
 
                         if(this.data.host == true){
                             //Generate Trashes
