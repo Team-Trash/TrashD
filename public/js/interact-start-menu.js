@@ -348,7 +348,7 @@ AFRAME.registerComponent('interact-start-menu', {
         var ingame = document.getElementById('ingame');
         var gameCamera = document.getElementById('game-camera');
         let scene = document.getElementById('scene');
-        var factoryAudio = document.createElement('a-entity');
+        var factoryAudio = document.getElementById('factoryAudio');
 
         var score = document.getElementById('score');
         var timer = document.getElementById('timer');
@@ -376,11 +376,6 @@ AFRAME.registerComponent('interact-start-menu', {
         } else {
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
         }
-        
-        //factoryAudio.setAttribute('id', 'factoryAudio');
-        //factoryAudio.setAttribute('sound', 'src:#factoryAmbience-audio; autoplay: true; loop: true');
-
-        ingame.append(factoryAudio);
 
         if(scene.is('vr-mode') == true){
             gameCamera.setAttribute('visible', 'false');
@@ -389,6 +384,9 @@ AFRAME.registerComponent('interact-start-menu', {
         //Fixing position of the score and time
         score.setAttribute('position', '0.25 0.65 -1');
         timer.setAttribute('position', '-0.25 0.65 -1');
+
+        //Play the sound
+        factoryAudio.components.sound.playSound();
 
         this.data.startCount++
     },
@@ -402,6 +400,9 @@ AFRAME.registerComponent('interact-start-menu', {
         var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
         var gameCamera = document.getElementById('game-camera');
+        
+        //Sound of factory
+        var factoryAudio = document.getElementById('factoryAudio');
 
         //Fixing timer and score position
         var timer = document.getElementById('timer');
@@ -443,6 +444,9 @@ AFRAME.registerComponent('interact-start-menu', {
         opponentText.setAttribute('position', '0.75 0.55 -1');
         opponentScore.setAttribute('position', '0.75 0.45 -1');
         timer.setAttribute('position', '-0.75 0.65 -1');
+
+        //Play factory sound
+        factoryAudio.components.sound.playSound();
 
         this.data.startCount++
     },

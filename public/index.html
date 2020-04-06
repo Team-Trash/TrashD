@@ -152,18 +152,21 @@
 
                 <!--INGAME-->
                 <a-entity id="ingame" visible="false">
+                        <!--ADDING FACTORY AMBINANCE SOUNDS-->
+                        <a-entity       id = 'factoryAudio'
+                                        sound = 'src:#factoryAmbience-audio; loop: true; volume:0.15'></a-entity>
                         <!--ADDING SOUND OF THE GARBAGE BIN-->
                         <a-entity       id      = 'trashBinClosing'
-                                        sound   = 'src:#trashBinClosing-audio'></a-entity>
+                                        sound   = 'src:#trashBinClosing-audio; volume: 2'></a-entity>
                         <!--ADDING ROOM-->
-                        <a-entity       id          = "room"
+                        <a-entity       id              = "room"
                                         obj-model       = "obj:#room-obj;"
                                         material        = "src:#room-texture"
                                         position        = "0 1 0"
                                         visible         = "true"
                                         scale           = "0.04 0.04 0.04"></a-entity>
 
-                        <a-entity       id          = "walls"
+                        <a-entity       id              = "walls"
                                         obj-model       = "obj:#walls-obj;"
                                         material        = "src:#walls-texture"
                                         position        = "0 1 0"

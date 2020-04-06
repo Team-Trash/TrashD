@@ -68,6 +68,8 @@ AFRAME.registerComponent('pick-up-object', {
             let ingame = document.querySelector("#ingame");
             let collider = e.detail.body.el.getAttribute('data-trash-type');
             let colliderTarget = context.el.getAttribute('data-trash-type');
+            //SOUND WITH BIN
+            var trashBinClosing = document.getElementById('trashBinClosing');
             
             if (e.detail.body.el.getAttribute('class') == 'clickable trash' || e.detail.body.el.getAttribute('class') == 'conveyor' || e.detail.body.el.getAttribute('class') == null || e.detail.body.el.getAttribute('class') == undefined){
                 return;
@@ -75,6 +77,8 @@ AFRAME.registerComponent('pick-up-object', {
 
             if(context.data.destroyStatus == false){
                 if(e.detail.body.el.getAttribute('class') == 'binCollider'){ 
+                    //PLAY SOUND WITH BIN
+                    trashBinClosing.components.sound.playSound();
                     if(collider == colliderTarget){ //Object is same type as bin
                         ingame.components['ingame'].data.score += context.data.scoreValue;
 
