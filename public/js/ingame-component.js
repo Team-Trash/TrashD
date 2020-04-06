@@ -191,23 +191,31 @@ AFRAME.registerComponent('ingame', {
                         if(this.data.host == true){
                             //Generate Trashes
                             if(this.data.time < 12000){// When time is less than 120s //-10.5
-                                if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
+                                if(this.data.trashArray.length <= 30){
+                                    if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
+                                    }
                                 }
                             }
                             if (this.data.time < 10000) {// When time is less than 100s
-                                if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                if(this.data.trashArray.length <= 30){
+                                    if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                    }
                                 }
                             }
                             if (this.data.time < 5000) {// When time is less than 50s
-                                if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                if(this.data.trashArray.length <= 30){
+                                    if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                    }
                                 }
                             }
                             if (this.data.time < 2000) {// When time is less than 20s
-                                if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                if(this.data.trashArray.length <= 30){
+                                    if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
+                                    }
                                 }
                             }
 
