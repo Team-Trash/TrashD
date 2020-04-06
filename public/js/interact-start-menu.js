@@ -191,6 +191,7 @@ AFRAME.registerComponent('interact-start-menu', {
         socket.emit('get-rooms');
         socket.on('return-rooms', function(data){
             let roomCount = 1;
+            console.log(data);
             for (room in data){
                 if(room.includes("room") && data[room].length < 2){
                     position -= 0.15;
@@ -394,7 +395,7 @@ AFRAME.registerComponent('interact-start-menu', {
     //Enter multiplayer gamemode
     enterMulti: function(roomID, hostStatus){
 
-        console.log('Joining ' + roomID);        
+        console.log('Joining ' + roomID);
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');

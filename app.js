@@ -19,11 +19,18 @@ socketIO.on('connection', function(socket) {
     console.log(socket.id + ' has connected!');
 
     socket.on('disconnect', function(data) {
-        console.log(socket.id + ' has disconnected');
-        
+        console.log(socket.id + ' has disconnected!');
     });
 
     //custom events
+    socket.on('disconnecting', function(){
+        for (room in socket.rooms){
+            if(room.includes("room")){
+                socket.to(room).emit('forfeit');
+            }
+        }
+    });
+    
     socket.on('get-rooms', function(data) {//Add player to lobby across clients
         console.log('Getting rooms for ' + socket.id);
 
@@ -34,8 +41,8 @@ socketIO.on('connection', function(socket) {
 
     socket.on('new-room', function(){
         let roomID = 'room' + rooms;
-        console.log(socket.id + " has created " + roomID);
         socket.join(roomID);
+        console.log(socket.id + " has created " + roomID);
         rooms++;
         socket.emit('return-room-id', roomID);
     });
@@ -43,7 +50,7 @@ socketIO.on('connection', function(socket) {
     socket.on('join-room', function(roomID){
         console.log(socket.id + " has joined " + roomID);
         socket.join(roomID);
-        socket.to(roomID).emit('ready-room', socket.id);
+        socket.to(roomID).emit('ready-room', socket.id,);
         socket.emit('return-room-id', roomID);
     });
 
@@ -52,6 +59,18 @@ socketIO.on('connection', function(socket) {
         socket.to(roomID).emit('forfeit');
         socket.leave(roomID);
     });
+
+    socket.on('get-countdown', function(count, roomID){
+        socket.to(roomID).emit('send-countdown', count);
+    });
+
+    socket.on('get-time', function(time, roomID){
+        socket.to(roomID).emit('send-time', time);
+    })
+
+    socket.on('get-score', function(score, roomID){
+        socket.to(roomID).emit('send-score', score);
+    })
 
     socket.on('get-trash', function(data){
         socketIO.sockets.emit('send-trash', data);
