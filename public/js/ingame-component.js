@@ -353,6 +353,10 @@ AFRAME.registerComponent('ingame', {
                 let start = document.getElementById('start');
                 let conveyor = document.getElementById('conveyorContainer');
 
+                //Sound
+                var factoryAudio = document.getElementById('factoryAudio');
+
+
                 startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
                 this.el.setAttribute('visible', 'false');
                 start.querySelector('#start-camera').setAttribute('camera', 'active: true');
@@ -369,6 +373,10 @@ AFRAME.registerComponent('ingame', {
                 this.el.removeAttribute('ingame');
                 cursor.setAttribute('visible', 'true');
                 camera.setAttribute('fps-look-controls');
+
+                //Stop the ambianance sound
+                factoryAudio.components.sound.stopSound();
+
 
                 startMenu.components['interact-start-menu'].startMenu();
                 break;
