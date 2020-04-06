@@ -1,6 +1,6 @@
 AFRAME.registerComponent('ingame', {
     schema : {
-        time : {type: 'int', default: 1000}, //default 120000
+        time : {type: 'int', default: 12000}, //default 12000
         score : {type: 'int', default: 0},
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: false},
