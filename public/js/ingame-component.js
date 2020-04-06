@@ -1,6 +1,6 @@
 AFRAME.registerComponent('ingame', {
     schema : {
-        time : {type: 'int', default: 12000},
+        time : {type: 'int', default: 1000}, //default 120000
         score : {type: 'int', default: 0},
         opponentScore : {type: 'int', default: 0},
         multiplayer : {type: 'boolean', default: false},
@@ -10,6 +10,7 @@ AFRAME.registerComponent('ingame', {
         trashArray: {type: 'array'},
         pauseGame: {type: 'boolean', default: false},
         gameOver: {type: 'boolean', default: false},
+        roomID: {type: 'string'},
     },
 
     //INITIAL FUNCTION
@@ -31,7 +32,7 @@ AFRAME.registerComponent('ingame', {
             let conveyors = document.querySelectorAll('.conveyor');
             let trashArray = document.querySelectorAll('.trash');
 
-            if(e.keyCode === 27){
+            if(e.keyCode === 27 && context.data.gameOver == false){
                 if(context.data.pauseGame == false){
                     context.data.pauseGame = true;
                     camera.removeAttribute('fps-look-controls');
@@ -76,8 +77,9 @@ AFRAME.registerComponent('ingame', {
         } else {
             if(context.data.host == true){
                 this.data.conveyorArray.push(new Conveyor(0, 3613, true));
-                console.log(document.getElementsByClassName('conveyor')[0]);
-                document.getElementsByClassName('conveyor')[0].components['animation'].pause();
+                setTimeout(function(){
+                    document.getElementById(context.data.conveyorArray[0].id).components['animation'].pause();
+                }, 0);
             } else {
                 this.data.conveyorArray.push(new Conveyor(0, 3613, false));
             }
@@ -102,6 +104,8 @@ AFRAME.registerComponent('ingame', {
         let scene = document.getElementById('scene');
         let timerEl = document.querySelector("#timer");
         let scoreEl = document.querySelector("#score");
+        let conveyorArray = document.querySelectorAll('.conveyor');
+        let trashArray = document.querySelectorAll('.trash');
 
         //Display the updated score
         scoreEl.setAttribute("value", this.data.score + " PTS");
@@ -111,11 +115,15 @@ AFRAME.registerComponent('ingame', {
             if(this.data.pauseGame == false){ //Not paused
                 if(this.data.time <= 0 && this.data.gameOver == false) {
                     //empty trash
-                    conveyor.components['animation'].pause();
-                    trash.components['dynamic-body'].pause();
+                    for(let conveyor of conveyorArray){
+                        conveyor.components['animation'].pause();
+                    }
+                    for(let trash of trashArray){
+                        trash.components['dynamic-body'].pause();
+                    }
                     startMenu.components['interact-start-menu'].emptyElement(scene, 'clickable trash');
 
-                    context.victoryMenu();
+                    context.victoryMenu("You're score is " + this.data.score);
                     this.data.gameOver = true;
                 } else if (this.data.gameOver == false){ //No game over
                     this.data.time--;
@@ -173,6 +181,10 @@ AFRAME.registerComponent('ingame', {
                         context.victoryMenu();
                         this.data.gameOver = true;
                     } else if (this.data.gameOver == false){ //No game over
+                        socket.on('forfeit', function(){
+
+                        })
+
                         this.data.time--;
                         timerEl.setAttribute("value", Math.floor(this.data.time / 100));
 
@@ -249,16 +261,16 @@ AFRAME.registerComponent('ingame', {
 
         //Pause logo
         pauseLogo.setAttribute('src', '#pause-logo');
-        pauseLogo.setAttribute('position', '0 2.7 -2');
+        pauseLogo.setAttribute('position', '0 2.7 -1');
         pauseLogo.setAttribute('width', '3.7');
         pauseLogo.setAttribute('height', '1');
-        pauseLogo.setAttribute('scale', '0.5 0.5 0.5');
+        pauseLogo.setAttribute('scale', '0.3 0.3 0.3');
 
         //Resume Button
         resumeButton.setAttribute('class', 'menu');
         resumeButton.setAttribute('id', 'resumeButton');
         resumeButton.setAttribute('src', '#resume-button');
-        resumeButton.setAttribute('position', '0 2.2 -2');
+        resumeButton.setAttribute('position', '0 2.2 -1.2');
         resumeButton.setAttribute('width', '1.29');
         resumeButton.setAttribute('height', '.363');
 
@@ -266,7 +278,7 @@ AFRAME.registerComponent('ingame', {
         controlsButton.setAttribute('class', 'menu');
         controlsButton.setAttribute('id', 'controlsButton');
         controlsButton.setAttribute('src', '#controls-button');
-        controlsButton.setAttribute('position', '0 1.7 -2');
+        controlsButton.setAttribute('position', '0 1.7 -1.2');
         controlsButton.setAttribute('width', '1.29');
         controlsButton.setAttribute('height', '.363');
 
@@ -274,7 +286,7 @@ AFRAME.registerComponent('ingame', {
         exitButton.setAttribute('class', 'menu');
         exitButton.setAttribute('id', 'exitButton');
         exitButton.setAttribute('src', '#exit-button');
-        exitButton.setAttribute('position', '0 1.2 -2');
+        exitButton.setAttribute('position', '0 1.2 -1.2');
         exitButton.setAttribute('width', '1.29');
         exitButton.setAttribute('height', '.363');
 
@@ -316,7 +328,7 @@ AFRAME.registerComponent('ingame', {
         let cursor = document.getElementById('game-cursor');
         let camera = document.getElementById('game-camera');
         let hud = document.getElementById('HUD');
-        let conveyors = document.querySelectorAll('.conveyor')
+        let conveyors = document.querySelectorAll('.conveyor');
         let trashArray = document.querySelectorAll('.trash');
         
         //CASE THAT USER IS PRESSING
@@ -369,6 +381,10 @@ AFRAME.registerComponent('ingame', {
                 this.el.removeAttribute('ingame');
                 cursor.setAttribute('visible', 'true');
                 camera.setAttribute('fps-look-controls');
+
+                if(this.data.multiplayer == true){
+                    socket.emit('leave-room', this.data.roomID);
+                }
 
                 startMenu.components['interact-start-menu'].startMenu();
                 break;
@@ -445,31 +461,44 @@ AFRAME.registerComponent('ingame', {
     },
 
     //VICTORY MENU
-    victoryMenu : function(){
+    victoryMenu : function(text){
         console.log("Victory created!");
+        let hud = document.getElementById('HUD');
 
         var victoryMenu = document.getElementById('pauseMenu');
         let cursor = document.getElementById('game-cursor');
         let camera = document.getElementById('game-camera');
         var pauseLogo = document.createElement('a-image');
         var exitButton = document.createElement('a-image');
+        let waiting = document.createElement('a-text');
 
-        pauseLogo.setAttribute('src', '#pause-logo');
-        pauseLogo.setAttribute('position', '0 3 -2');
+        pauseLogo.setAttribute('src', '#gameover-logo');
+        pauseLogo.setAttribute('position', '0 2.5 -1.2');
         pauseLogo.setAttribute('width', '3.7');
         pauseLogo.setAttribute('height', '1');
-        pauseLogo.setAttribute('scale', '0.8 0.8 0.8');
+        pauseLogo.setAttribute('scale', '0.4 0.4 0.4');
+
+        waiting.setAttribute('value', text);
+        waiting.setAttribute('align', 'center');
+        waiting.setAttribute('height', '2');
+        waiting.setAttribute('width', '5');
+        waiting.setAttribute('font', 'https://cdn.aframe.io/fonts/Exo2Bold.fnt');
+        waiting.setAttribute('position', "0 2.1 -1.2");
 
         exitButton.setAttribute('class', 'menu');
         exitButton.setAttribute('id', 'exitButton');
         exitButton.setAttribute('src', '#exit-button');
-        exitButton.setAttribute('position', '0 2 -2');
+        exitButton.setAttribute('position', '0 1.5 -1.2');
         exitButton.setAttribute('width', '1.29');
         exitButton.setAttribute('height', '.363');
 
         cursor.setAttribute('visible', 'false');
         camera.removeAttribute('fps-look-controls');
 
+        hud.setAttribute('visible', 'false');
+
+        victoryMenu.append(pauseLogo);
+        victoryMenu.append(waiting);
         victoryMenu.append(exitButton);
 
         context.menuEventListener(pauseMenu.querySelectorAll('.menu'));

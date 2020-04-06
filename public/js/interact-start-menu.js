@@ -312,8 +312,8 @@ AFRAME.registerComponent('interact-start-menu', {
 
             case 'newRoom':
                 socket.emit('new-room');
-                socket.on('return-room-id', function(data){
-                    context.enterMulti(data, true, false);
+                socket.on('return-room-id', function(roomID){
+                    context.enterMulti(roomID, true, false);
                 });
                 break;
                 
@@ -336,8 +336,8 @@ AFRAME.registerComponent('interact-start-menu', {
 
         if(roomID){
             socket.emit('join-room', roomID);
-            socket.on('return-room-id', function(data){
-                context.enterMulti(data, false, true);
+            socket.on('return-room-id', function(roomID){
+                context.enterMulti(roomID, false, true);
             });
         }
     },
@@ -368,7 +368,6 @@ AFRAME.registerComponent('interact-start-menu', {
         ingame.setAttribute('visible', 'true');
         ingame.setAttribute('ingame', '');
         gameCamera.setAttribute('camera', 'active: true');
-        console.log(this.data.startCount);
         if(this.data.startCount <= 0){
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
         } else {
@@ -388,9 +387,9 @@ AFRAME.registerComponent('interact-start-menu', {
     },
 
     //Enter multiplayer gamemode
-    enterMulti: function(data, hostStatus, fullStatus){
+    enterMulti: function(roomID, hostStatus, fullStatus){
 
-        console.log('Entering ' + data);        
+        console.log('Joining room ' + roomID);        
 
         var start = document.getElementById('start');
         var startMenu = document.getElementById('startMenu');
@@ -411,7 +410,7 @@ AFRAME.registerComponent('interact-start-menu', {
         start.setAttribute('visible', 'false');
         start.querySelector('#start-camera').setAttribute('camera', 'active: false');
         ingame.setAttribute('visible', 'true');
-        ingame.setAttribute('ingame', 'multiplayer: true; host: ' + hostStatus + '; full:' + fullStatus);
+        ingame.setAttribute('ingame', 'multiplayer: true; host: ' + hostStatus + '; full:' + fullStatus + '; roomID: ' + roomID);
         gameCamera.setAttribute('camera', 'active: true');
         if(this.data.startCount <= 0){
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 1');
