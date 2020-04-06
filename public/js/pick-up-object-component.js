@@ -103,6 +103,33 @@ AFRAME.registerComponent('pick-up-object', {
                             }
                         }, 0);
                     }
+                } else if(e.detail.body.el.getAttribute('class') == 'enemyCollider'){ 
+                    //PLAY SOUND WITH BIN
+                    trashBinClosing.components.sound.playSound();
+                    if(collider == colliderTarget){ //Object is same type as bin
+                        ingame.components['ingame'].data.score += context.data.scoreValue * 2;
+
+                        setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
+                            if(e.detail.target.el){
+                                context.data.destroyStatus = true;
+                                let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
+                                e.detail.target.el.remove();
+                                ingame.components['ingame'].data.trashArray.splice(index,1);
+                            }
+                        }, 0);
+                    }
+                    else{ //Object is not the same type as bin
+                        ingame.components['ingame'].data.score -= 10;
+
+                        setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
+                            if(e.detail.target.el){
+                                context.data.destroyStatus = true;
+                                let index = ingame.components['ingame'].data.trashArray.findIndex(checkId, e.detail.target.el.getAttribute("id"));
+                                e.detail.target.el.remove();
+                                ingame.components['ingame'].data.trashArray.splice(index,1);
+                            }
+                        }, 0);
+                    }
                 } else if (e.detail.body.el.getAttribute('class') == 'delete'){ //Object reaches end of conveyor
                     setTimeout(function() {//Set timeout because would crash for not finishing calculate physics
                         if(e.detail.target.el){

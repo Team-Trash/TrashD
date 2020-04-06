@@ -61,19 +61,19 @@ socketIO.on('connection', function(socket) {
     });
 
     socket.on('get-countdown', function(count, roomID){
-        socket.to(roomID).emit('send-countdown', count);
+        socket.to(roomID).broadcast.emit('send-countdown', count);
     });
 
     socket.on('get-time', function(time, roomID){
-        socket.to(roomID).emit('send-time', time);
+        socket.to(roomID).broadcast.emit('send-time', time);
     })
 
     socket.on('get-score', function(score, roomID){
-        socket.to(roomID).emit('send-score', score);
+        socket.to(roomID).broadcast.emit('send-score', score);
     })
 
-    socket.on('get-trash', function(data){
-        socketIO.sockets.emit('send-trash', data);
+    socket.on('get-opponent-rotation', function(rotation, roomID){
+        socket.to(roomID).broadcast.emit('send-opponent-rotation', rotation);
     });
 
 });
