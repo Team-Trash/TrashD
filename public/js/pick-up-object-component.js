@@ -5,6 +5,7 @@ AFRAME.registerComponent('pick-up-object', {
         mouseButton: {type: 'int'},
         destroyStatus: {type: 'boolean', default: false},
         scoreValue: {type: 'int', default: 10},
+        vrTargeted: {type: 'boolean', default: false},
     },
 
     //INITIAL FUNCTION
@@ -19,11 +20,27 @@ AFRAME.registerComponent('pick-up-object', {
         //Mouse hover over object
         context.el.addEventListener('raycaster-intersected', function(e){
             context.data.cursor.setAttribute("material", {color: 'green'});
+            if(e.detail.el.id == "vr-raycast-left"){
+                e.detail.el.setAttribute("line", "color: green; opacity: 0.7");
+                context.data.vrTargeted = true;
+            }
+            if(e.detail.el.id == "vr-raycast-right"){
+                e.detail.el.setAttribute("line", "color: green; opacity: 0.7");
+                context.data.vrTargeted = true;
+            }
         });
 
         //Mouse hover out of object
         context.el.addEventListener('raycaster-intersected-cleared', function(e){
             context.data.cursor.setAttribute("material", {color: 'red'});
+            if(e.detail.el.id == "vr-raycast-left"){
+                e.detail.el.setAttribute("line", "color: red; opacity: 0.7");
+                context.data.vrTargeted = false;
+            }
+            if(e.detail.el.id == "vr-raycast-right"){
+                e.detail.el.setAttribute("line", "color: red; opacity: 0.7");
+                context.data.vrTargeted = false;
+            }
         });
 
         //Pickup and drop on dektop
@@ -50,16 +67,16 @@ AFRAME.registerComponent('pick-up-object', {
         //Pickup and drop on VR
         if(vr == true){
             left.addEventListener('gripdown', function(e){
-                context.pickUpObject(left);
+                context.vrPickUpObject(left);
             });
             right.addEventListener('gripdown', function(e){
-                context.pickUpObject(right);
+                context.vrPickUpObject(right);
             });
             left.addEventListener('gripup', function(e){
-                context.dropObject();
+                context.vrDropObject();
             });
             right.addEventListener('gripup', function(e){
-                context.dropObject();
+                context.vrDropObject();
             });
         }
 
@@ -145,26 +162,30 @@ AFRAME.registerComponent('pick-up-object', {
     },
 
     //This is how the object that is selected will be follow the mouse
-    pickUpObject: function(hand){
+    pickUpObject: function(){
         var camera = document.querySelector("#game-camera");
         this.el.removeAttribute("dynamic-body");
-        let vr = document.getElementById('scene').is('vr-mode');
         
         this.el.object3D.rotation.x = 0;
         this.el.object3D.rotation.y = 0;
         this.el.object3D.rotation.z = 0;
         
-        if(vr == false){
-            this.el.object3D.position.set(0, 0, -2)
-            camera.object3D.add(this.el.object3D);
-        }
-        if (vr == true){
-            this.el.object3D.position.set(0, 0, 0);
-            hand.object3D.add(this.el.object3D);
-        }
+        this.el.object3D.position.set(0, 0, -2)
+        camera.object3D.add(this.el.object3D);
+    },
 
-        //STOP THE ANIMATION FROM THE TRASH
-        this.el.removeAttribute('animation');
+    vrPickUpObject: function(hand){
+        if (this.data.vrTargeted == true){
+            this.el.removeAttribute("dynamic-body");
+        
+            this.el.object3D.rotation.x = 0;
+            this.el.object3D.rotation.y = 0;
+            this.el.object3D.rotation.z = 0;
+
+            this.el.object3D.position.set(0, -0.2, 0);
+            hand.object3D.add(this.el.object3D);
+            this.data.pickUpStatus = true;
+        }
     },
 
     //DROP OBJECT FUNCTION
@@ -178,12 +199,36 @@ AFRAME.registerComponent('pick-up-object', {
         scene.object3D.add(this.el.object3D);
     },
 
+    vrDropObject: function(){
+        if(this.data.pickUpStatus == true){
+            var scene = document.getElementById("scene");
+            let lastPosition = new CANNON.Vec3(0, 0, 0);
+            let currentPosition = new CANNON.Vec3(0, 0, 0);
+            let delta = 25;
+            
+            this.el.object3D.getWorldPosition(this.el.object3D.position);
+            lastPosition.copy(this.el.object3D.position);
+            this.el.object3D.getWorldQuaternion(this.el.object3D.rotation);
+            this.el.setAttribute("dynamic-body", '');
+            scene.object3D.add(this.el.object3D);
+
+            setTimeout(() => {
+                this.el.object3D.getWorldPosition(this.el.object3D.position);
+                currentPosition.copy(this.el.object3D.position);
+                let velocity = currentPosition.vsub(lastPosition).scale(15 / (delta / 10000));
+                console.log(velocity);
+                this.el.body.applyLocalImpulse(velocity.scale(1), new CANNON.Vec3(0, 0, 0));
+                this.pickUpStatus = false;
+            }, delta);
+        }
+    },
+
     //THROW OBJECT FUNCTION
     throwObject: function(){
         var scene = document.getElementById("scene");
         
         this.el.object3D.getWorldPosition(this.el.object3D.position);
-        
+
         this.el.object3D.getWorldQuaternion(this.el.object3D.rotation);
         this.el.setAttribute("dynamic-body", '');
         scene.object3D.add(this.el.object3D);

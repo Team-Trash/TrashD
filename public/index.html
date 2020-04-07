@@ -128,22 +128,24 @@
                         </a-entity>
 
                         <!--VR Hands-->
-                        <a-entity       hand-controls="left"
+                        <a-entity       id="startHandLeft"
+                                        hand-controls="left"
                                         interact-start-menu-vr="cursor: #vr-raycast-left"
                                         position="0 0 0">
                         <a-entity 	id = "vr-raycast-left"
                                         cursor ="rayOrigin:entity;"
-                                        raycaster="objects: .menu; showLine: true"
+                                        raycaster="objects: .menu, .room; showLine: true"
                                         line="color: blue; opacity: 0.7"></a-entity>
                         </a-entity >
 
-                        <a-entity       hand-controls="right"
+                        <a-entity       id="startHandRight"
+                                        hand-controls="right"
                                         interact-start-menu-vr="cursor: #vr-raycast-right"
                                         position="0 0 0">
 
                         <a-entity       id = "vr-raycast-right"
                                         cursor ="rayOrigin:entity;"
-                                        raycaster="objects: .menu; showLine: true"
+                                        raycaster="objects: .menu, .room; showLine: true"
                                         line="color: blue; opacity: 0.7"></a-entity>
                         </a-entity>
 
@@ -295,88 +297,92 @@
                                         static-body></a-entity>
 
                         <!--CAMERA-->
-                        <a-entity       id="game-camera"
-                                        camera="active: false"
-                                        position="0 1.15 3">
-                                <a-entity 	id = "game-cursor"
-                                                geometry="primitive: circle; radius: 0.01"
-                                                material="color: red"
-                                                position="0 0 -1.5"
-                                                cursor ="rayOrigin:entity;"
-                                                raycaster="objects: .clickable;">
-                                </a-entity>
-                                
-                                <a-entity id="HUD">
-                                        <a-text id="youText"
-                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                                                color = "white"
-                                                value = "You"
-                                                scale = "0.7 0.7 0.7"
-                                                align="right"
-                                                position = "-0.25 0.75 -1"
-                                                width = "2"></a-text>
+                        <a-entity id="game-camera-rig">
+                                <a-entity       id="game-camera"
+                                                camera="active: false"
+                                                position="0 1.15 3">
+                                        <a-entity 	id = "game-cursor"
+                                                        geometry="primitive: circle; radius: 0.01"
+                                                        material="color: red"
+                                                        position="0 0 -1.5"
+                                                        cursor ="rayOrigin:entity;"
+                                                        raycaster="objects: .clickable;">
+                                        </a-entity>
                                         
-                                        <a-text id="opponentText"
-                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                                                color = "white"
-                                                position = "0.2 0.75 -1"
-                                                scale = "0.7 0.7 0.7"
-                                                value = "Opponent"
-                                                align="right"
-                                                width = "2"></a-text>   
+                                        <a-entity id="HUD">
+                                                <a-text id="youText"
+                                                        font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                        color = "white"
+                                                        value = "You"
+                                                        scale = "0.7 0.7 0.7"
+                                                        align="right"
+                                                        position = "-0.25 0.75 -1"
+                                                        width = "2"></a-text>
+                                                
+                                                <a-text id="opponentText"
+                                                        font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                        color = "white"
+                                                        position = "0.2 0.75 -1"
+                                                        scale = "0.7 0.7 0.7"
+                                                        value = "Opponent"
+                                                        align="right"
+                                                        width = "2"></a-text>   
 
-                                        <a-text id="timer"
-                                                value=""
-                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                                                color="white"
-                                                align="left"
-                                                position="-1.2 0.5 -1"
-                                                width="2">
-                                        </a-text>
+                                                <a-text id="timer"
+                                                        value=""
+                                                        font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                        color="white"
+                                                        align="left"
+                                                        position="-1.2 0.5 -1"
+                                                        width="2">
+                                                </a-text>
 
-                                        <a-text id="score"   
-                                                value="0 PTS"
-                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                                                color="white"
-                                                align="right"
-                                                position="1.2 0.5 -1"
-                                                width="2">
-                                        </a-text>
+                                                <a-text id="score"   
+                                                        value="0 PTS"
+                                                        font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                        color="white"
+                                                        align="right"
+                                                        position="1.2 0.5 -1"
+                                                        width="2">
+                                                </a-text>
 
-                                        <a-text id="opponentScore"   
-                                                value="0 PTS"
-                                                font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
-                                                color="white"
-                                                align="right"
-                                                position="1.2 0.5 -1"
-                                                width="2">
-                                        </a-text>
+                                                <a-text id="opponentScore"   
+                                                        value="0 PTS"
+                                                        font="https://cdn.aframe.io/fonts/Exo2Bold.fnt"
+                                                        color="white"
+                                                        align="right"
+                                                        position="1.2 0.5 -1"
+                                                        width="2">
+                                                </a-text>
+                                        </a-entity>
+
+                                        <!-- PAUSE MENU CONTAINER -->
+                                        <a-entity   id="pauseMenu"
+                                                        position="0 -2 -0.1">
+                                        </a-entity>
+
                                 </a-entity>
 
-                                <!-- PAUSE MENU CONTAINER -->
-                                <a-entity   id="pauseMenu"
-                                                position="0 -2 -0.1">
-                                </a-entity>
-
+                                <!--VR Hands-->
+                                <a-entity       id="hand-left"
+                                                hand-controls="left"
+                                                position="0 0 3">
+                                        <a-entity 	id = "vr-raycast-left"
+                                                        cursor ="rayOrigin:entity;"
+                                                        raycaster="objects: .menu, .clickable; showLine: true"
+                                                        line="color: red; opacity: 0.7"></a-entity>
+                                </a-entity >
+                                <a-entity       id="hand-right"
+                                                hand-controls="right"
+                                                position="0 0 3">
+                                        <a-entity       id = "vr-raycast-right"
+                                                        cursor ="rayOrigin:entity;"
+                                                        raycaster="objects: .menu, .clickable; showLine: true"
+                                                        line="color: red; opacity: 0.7"></a-entity>
+                                </a-entity >
                         </a-entity>
                         
-                        <!--VR Hands-->
-                        <a-entity       id="hand-left"
-                                        hand-controls="left"
-                                        position="0 0 3">
-                                <a-entity 	id = "vr-raycast-left"
-                                                cursor ="rayOrigin:entity;"
-                                                raycaster="objects: .menu; showLine: true"
-                                                line="color: blue; opacity: 0.7"></a-entity>
-                        </a-entity >
-                        <a-entity       id="hand-right"
-                                        hand-controls="right"
-                                        position="0 0 3">
-                                <a-entity       id = "vr-raycast-right"
-                                                cursor ="rayOrigin:entity;"
-                                                raycaster="objects: .menu; showLine: true"
-                                                line="color: blue; opacity: 0.7"></a-entity>
-                        </a-entity >
+                        
                         
                         <!-- CONVEYOR CONTAINER -->
                         <a-entity       id="conveyorContainer"></a-entity>

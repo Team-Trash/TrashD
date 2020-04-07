@@ -16,6 +16,8 @@ AFRAME.registerComponent('ingame', {
     //INITIAL FUNCTION
     init : function() {
         let scene = document.getElementById('scene');
+        let left = document.getElementById('hand-left');
+        let cursor = document.getElementById('game-cursor');
         let timerEl = document.getElementById("timer");
         let scoreEl = document.getElementById("score");
         let opponentScoreEl = document.getElementById("opponentScore");
@@ -32,6 +34,11 @@ AFRAME.registerComponent('ingame', {
 
         //make HUD visible
         hud.setAttribute('visible', 'true');
+
+        //hide cursor on vr
+        if(scene.is('vr-mode')){
+            cursor.setAttribute('visible', 'false');
+        }
 
         //Adjust HUD to browser
         timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
@@ -73,7 +80,33 @@ AFRAME.registerComponent('ingame', {
         });
 
         //VR Pause Listener
-        
+        if(scene.is('vr-mode')){
+            left.addEventListener('xbuttondown', function(){
+                let conveyors = document.querySelectorAll('.conveyor');
+                let trashArray = document.querySelectorAll('.trash');
+
+                if(context.data.gameOver == false){
+                    if(context.data.pauseGame == false){
+                        context.data.pauseGame = true;
+                        if(context.data.multiplayer == false){
+                            for(let conveyor of conveyors){
+                                conveyor.components['animation'].pause();
+                            }
+                        }
+                        for(let trash of trashArray){
+                            if(context.data.multiplayer == false){
+                                if(trash.components['dynamic-body']){
+                                    trash.components['dynamic-body'].pause();
+                                }
+                            }
+                        }
+                        context.pauseMenu();
+                    } else {
+                        context.data.pauseGame = false;
+                    }
+                }
+            });
+        }
 
         //Multiplayer standby
         if(context.data.multiplayer == true){
@@ -393,6 +426,7 @@ AFRAME.registerComponent('ingame', {
     pauseMenu : function(){
         console.log("Pause menu created!");
 
+        let scene = document.getElementById('scene');
         var pauseMenu = document.getElementById('pauseMenu');
         let cursor = document.getElementById('game-cursor');
         var pauseLogo = document.createElement('a-image');
@@ -441,7 +475,11 @@ AFRAME.registerComponent('ingame', {
         pauseMenu.append(controlsButton);
         pauseMenu.append(exitButton);
 
-        context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //MENU LISTENER
@@ -460,12 +498,57 @@ AFRAME.registerComponent('ingame', {
             menuButton.addEventListener('click', function(e){
                 context.clickMenu(menuButton);
             });
+        });
+    },
 
+    //VR Listeners
+    vrMenuEventListener: function(menuButtons){
+        let currentButton;
+        let left = document.getElementById('hand-left');
+        let right = document.getElementById('hand-right');
+        let context = this;
+
+        //Raycaster Listeners
+        menuButtons.forEach(function(menuButton) {
+            menuButton.addEventListener('mouseenter', function(e){
+                menuButton.object3D.scale.set(1.05, 1.05, 1.05);
+                currentButton = e.target;
+            });
+
+            menuButton.addEventListener('mouseleave', function(e){
+                menuButton.object3D.scale.set(1.0, 1.0, 1.0);
+                currentButton = null;
+            });
+        });
+
+        left.addEventListener('xbuttondown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        right.addEventListener('abuttondown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        left.addEventListener('triggerdown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        right.addEventListener('triggerdown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
         });
     },
 
     //CLICK MENU FUNCTION
     clickMenu : function(menuButton){
+        let sceneEl = document.getElementById('scene');
         let menuID = menuButton.getAttribute('id');
         var pauseMenu = document.getElementById('pauseMenu');
         var startMenu = document.getElementById('startMenu');
@@ -481,7 +564,9 @@ AFRAME.registerComponent('ingame', {
 
                 if(this.data.multiplayer == false){ //Singleplayer
                     startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                    cursor.setAttribute('visible', 'true');
+                    if(sceneEl.is('vr-mode') == false){
+                        cursor.setAttribute('visible', 'true');
+                    }
                     camera.setAttribute('fps-look-controls', 'userHeight: 0');
                     for(let conveyor of conveyors){
                         conveyor.components['animation'].play();
@@ -569,7 +654,12 @@ AFRAME.registerComponent('ingame', {
         startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
 
         instCont.setAttribute('id', 'instCont');
-        instCont.setAttribute('position', '0 2 -2');
+        if(scene.is('vr-mode')){
+            instCont.setAttribute('position', '0 2 -3');
+        } else {
+            instCont.setAttribute('position', '0 2 -2');
+        }
+        
         instCont.setAttribute('scale', '2.5 2.5 2.5');
 
         img.setAttribute('id', 'instructImg')
@@ -608,7 +698,11 @@ AFRAME.registerComponent('ingame', {
         instCont.append(back);
         instCont.append(next);
 
-        this.menuEventListener(this.el.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //VICTORY MENU
@@ -652,7 +746,11 @@ AFRAME.registerComponent('ingame', {
         victoryMenu.append(waiting);
         victoryMenu.append(exitButton);
 
-        context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //GENERATING BIN SIDE FUNCTION (FOR USERS)
