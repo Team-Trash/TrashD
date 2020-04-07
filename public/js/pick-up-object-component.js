@@ -215,7 +215,7 @@ AFRAME.registerComponent('pick-up-object', {
             setTimeout(() => {
                 this.el.object3D.getWorldPosition(this.el.object3D.position);
                 currentPosition.copy(this.el.object3D.position);
-                let velocity = currentPosition.vsub(lastPosition).scale(15 / (delta / 10000));
+                let velocity = currentPosition.vsub(lastPosition).scale(1 / (delta / 75000));
                 console.log(velocity);
                 this.el.body.applyLocalImpulse(velocity.scale(1), new CANNON.Vec3(0, 0, 0));
                 this.pickUpStatus = false;
