@@ -9,4 +9,6 @@ Hoang Nguyen (Thao)<br>
 
 **Development Blog**<br>
 https://trashd.yfkuang.com/<br>
+
+**Demo**<br>
 Available at: https://trash-d.herokuapp.com/
