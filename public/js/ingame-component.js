@@ -16,11 +16,13 @@ AFRAME.registerComponent('ingame', {
     //INITIAL FUNCTION
     init : function() {
         let scene = document.getElementById('scene');
-        let timerEl = document.querySelector("#timer");
-        let scoreEl = document.querySelector("#score");
-        let opponentScoreEl = document.querySelector("#opponentScore");
-        let youEl = document.querySelector("#youText");
-        let opponentEl = document.querySelector("#opponentText");
+        let left = document.getElementById('hand-left');
+        let cursor = document.getElementById('game-cursor');
+        let timerEl = document.getElementById("timer");
+        let scoreEl = document.getElementById("score");
+        let opponentScoreEl = document.getElementById("opponentScore");
+        let youEl = document.getElementById("youText");
+        let opponentEl = document.getElementById("opponentText");
         let hud = document.getElementById('HUD');
         let hudX = (document.body.clientWidth / 2) / 960;
         let hudY = ((document.body.clientHeight / 2) / 540) / 2;
@@ -32,6 +34,21 @@ AFRAME.registerComponent('ingame', {
 
         //make HUD visible
         hud.setAttribute('visible', 'true');
+
+        //hide cursor on vr
+        if(scene.is('vr-mode')){
+            cursor.setAttribute('visible', 'false');
+        }
+
+        //Adjust HUD to browser
+        timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
+        scoreEl.setAttribute("position", hudX + " " + hudY + " -1");
+        hudY -= 0.2;
+        opponentScoreEl.setAttribute("position", hudX + " " + hudY + " -1");
+        hudY += 0.1;
+        opponentEl.setAttribute("position", hudX + " " + hudY + " -1");
+        hudY += 0.2;
+        youEl.setAttribute("position", hudX + " " + hudY + " -1");
 
         //Pause Menu Event Listener
         document.addEventListener('keydown', function(e) {
@@ -62,6 +79,35 @@ AFRAME.registerComponent('ingame', {
             }
         });
 
+        //VR Pause Listener
+        if(scene.is('vr-mode')){
+            left.addEventListener('xbuttondown', function(){
+                let conveyors = document.querySelectorAll('.conveyor');
+                let trashArray = document.querySelectorAll('.trash');
+
+                if(context.data.gameOver == false){
+                    if(context.data.pauseGame == false){
+                        context.data.pauseGame = true;
+                        if(context.data.multiplayer == false){
+                            for(let conveyor of conveyors){
+                                conveyor.components['animation'].pause();
+                            }
+                        }
+                        for(let trash of trashArray){
+                            if(context.data.multiplayer == false){
+                                if(trash.components['dynamic-body']){
+                                    trash.components['dynamic-body'].pause();
+                                }
+                            }
+                        }
+                        context.pauseMenu();
+                    } else {
+                        context.data.pauseGame = false;
+                    }
+                }
+            });
+        }
+
         //Multiplayer standby
         if(context.data.multiplayer == true){
             if(context.data.host == true){
@@ -71,6 +117,13 @@ AFRAME.registerComponent('ingame', {
 
         //Socket functions
         if(context.data.multiplayer == true){
+
+            //Get head rotation
+            socket.on('send-opponent-rotation', function(rotation){
+                console.log(rotation);
+                document.getElementById('opponent').setAttribute('rotation', "0 " + rotation + " 0");
+            })
+
             if (context.data.host == true){
                 if (context.data.full == false){
 
@@ -148,14 +201,16 @@ AFRAME.registerComponent('ingame', {
                             context.data.full = true;
                             break;
                     }
+
+                    if(context.data.pauseGame == false && context.data.gameOver == false){
+                        socket.on('send-trash', function(trashArray){
+                            console.log(trashArray);
+                        });
+                    }
                 });
 
                 socket.on('send-time', function(time){
                     context.data.time = time;
-                });
-
-                socket.on('send-score', function(score){
-                    context.data.opponentScore = score;
                 });
             }
 
@@ -177,6 +232,10 @@ AFRAME.registerComponent('ingame', {
 
                     socket.emit('leave-room', context.data.roomID);
                 });
+
+                socket.on('send-score', function(score){
+                    context.data.opponentScore = score;
+                });
             }
         }
 
@@ -192,10 +251,8 @@ AFRAME.registerComponent('ingame', {
         }
 
         //Generate first Conveyor
-        if(context.data.multiplayer == false){
-            this.data.conveyorArray.push(new Conveyor(0, 3613, true));
-        } else {
-            this.data.conveyorArray.push(new Conveyor(0, 3613, true));
+        this.data.conveyorArray.push(new Conveyor(0, 3613, true));
+        if(context.data.multiplayer == true){
             setTimeout(function(){
                 document.getElementById(context.data.conveyorArray[0].id).components['animation'].pause();
             }, 0);
@@ -203,16 +260,6 @@ AFRAME.registerComponent('ingame', {
 
         //Generate Bin Walls. Doing it this way as workaround for bug that encloses trash on generation
         this.generateBinSides();
-
-        //Adjust HUD to browser
-        timerEl.setAttribute("position", "-" + hudX + " " + hudY + " -1");
-        scoreEl.setAttribute("position", hudX + " " + hudY + " -1");
-        hudY -= 0.2;
-        opponentScoreEl.setAttribute("position", hudX + " " + hudY + " -1");
-        hudY += 0.1;
-        opponentEl.setAttribute("position", hudX + " " + hudY + " -1");
-        hudY += 0.2;
-        youEl.setAttribute("position", hudX + " " + hudY + " -1");
     },
 
     //TICK FUNCTION
@@ -292,6 +339,7 @@ AFRAME.registerComponent('ingame', {
 
         //Multiplayer
         if(this.data.multiplayer == true){
+
             if(this.data.full == true) {
 
                 if(this.data.pauseGame == false){ //Not paused
@@ -320,68 +368,57 @@ AFRAME.registerComponent('ingame', {
                         socket.emit('get-score', this.data.score, this.data.roomID);
                         opponentScoreEl.setAttribute("value", this.data.opponentScore + " PTS");
 
-                        if(this.data.host == true){
-                            //Generate Trashes
-                            if(this.data.time < 12000){// When time is less than 120s //-10.5
-                                if(this.data.trashArray.length < 30){
-                                    if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
-                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
-                                    }
+                        //Generate Trashes
+                        if(this.data.time < 12000){// When time is less than 120s //
+                            if(this.data.trashArray.length < 30){
+                                if ((this.data.time % (200 + Math.floor(Math.random() * 5)) * 10) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0));
                                 }
                             }
-                            if (this.data.time < 10000) {// When time is less than 100s
-                                if(this.data.trashArray.length < 30){
-                                    if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
-                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
-                                    }
+                        }
+                        if (this.data.time < 10000) {// When time is less than 100s
+                            if(this.data.trashArray.length < 30){
+                                if ((this.data.time % (100 + Math.floor(Math.random() * 3)) * 10) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                 }
                             }
-                            if (this.data.time < 5000) {// When time is less than 50s
-                                if(this.data.trashArray.length < 30){
-                                    if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
-                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
-                                    }
+                        }
+                        if (this.data.time < 5000) {// When time is less than 50s
+                            if(this.data.trashArray.length < 30){
+                                if ((this.data.time % (40 + Math.floor(Math.random() * 2)) * 5) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                 }
                             }
-                            if (this.data.time < 2000) {// When time is less than 20s
-                                if(this.data.trashArray.length < 30){
-                                    if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
-                                        this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
-                                    }
+                        }
+                        if (this.data.time < 2000) {// When time is less than 20s
+                            if(this.data.trashArray.length < 30){
+                                if ((this.data.time % (20 + Math.floor(Math.random() * 2)) * 2) == 0){
+                                    this.data.trashArray.push(new Trash(-10.5, 1.4, 0)); 
                                 }
                             }
+                        }
 
-                            //Degenerate Trash
-                            if(this.data.trashArray.length >= 30){
-                                document.getElementById(this.data.trashArray[0].id).remove();
-                                this.data.trashArray.shift();
-                            }
+                        //Degenerate Trash
+                        if(this.data.trashArray.length >= 30){
+                            document.getElementById(this.data.trashArray[0].id).remove();
+                            this.data.trashArray.shift();
                         }
                     }
                 }
 
-                if(this.data.host == true){
-                    //Generate conveyor. 225.81/s is speed
-                    let conveyors = document.querySelectorAll('.conveyor');
-                    if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
-                        this.data.conveyorArray.push(new Conveyor(-16, 7000, true));
-                    }
-                    if(this.data.conveyorArray[0].object3D.position.x == 16){
-                        document.getElementById(this.data.conveyorArray[0].id).remove();
-                        this.data.conveyorArray.shift();
-                    }
-                } else {
-                    //Generate conveyor. 225.81/s is speed
-                    let conveyors = document.querySelectorAll('.conveyor');
-                    if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
-                        this.data.conveyorArray.push(new Conveyor(-16, 7000, false));
-                    }
-                    if(this.data.conveyorArray[0].object3D.position.x == 16){
-                        document.getElementById(this.data.conveyorArray[0].id).remove();
-                        this.data.conveyorArray.shift();
-                    }
+                //Generate conveyor. 225.81/s is speed
+                let conveyors = document.querySelectorAll('.conveyor');
+                if(this.data.conveyorArray[0].object3D.position.x > 0 && conveyors.length < 2){
+                    this.data.conveyorArray.push(new Conveyor(-16, 7000, true));
+                }
+                if(this.data.conveyorArray[0].object3D.position.x == 16){
+                    document.getElementById(this.data.conveyorArray[0].id).remove();
+                    this.data.conveyorArray.shift();
                 }
             }
+
+            //Send head rotation
+            socket.emit('get-opponent-rotation', (document.getElementById('game-camera').object3D.rotation.y * -1) * (180/Math.PI), this.data.roomID);
         }
     },
 
@@ -389,6 +426,7 @@ AFRAME.registerComponent('ingame', {
     pauseMenu : function(){
         console.log("Pause menu created!");
 
+        let scene = document.getElementById('scene');
         var pauseMenu = document.getElementById('pauseMenu');
         let cursor = document.getElementById('game-cursor');
         var pauseLogo = document.createElement('a-image');
@@ -437,7 +475,11 @@ AFRAME.registerComponent('ingame', {
         pauseMenu.append(controlsButton);
         pauseMenu.append(exitButton);
 
-        context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //MENU LISTENER
@@ -456,12 +498,57 @@ AFRAME.registerComponent('ingame', {
             menuButton.addEventListener('click', function(e){
                 context.clickMenu(menuButton);
             });
+        });
+    },
 
+    //VR Listeners
+    vrMenuEventListener: function(menuButtons){
+        let currentButton;
+        let left = document.getElementById('hand-left');
+        let right = document.getElementById('hand-right');
+        let context = this;
+
+        //Raycaster Listeners
+        menuButtons.forEach(function(menuButton) {
+            menuButton.addEventListener('mouseenter', function(e){
+                menuButton.object3D.scale.set(1.05, 1.05, 1.05);
+                currentButton = e.target;
+            });
+
+            menuButton.addEventListener('mouseleave', function(e){
+                menuButton.object3D.scale.set(1.0, 1.0, 1.0);
+                currentButton = null;
+            });
+        });
+
+        left.addEventListener('xbuttondown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        right.addEventListener('abuttondown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        left.addEventListener('triggerdown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
+        });
+
+        right.addEventListener('triggerdown', function(e){
+            if(currentButton){
+                context.clickMenu(currentButton);
+            }
         });
     },
 
     //CLICK MENU FUNCTION
     clickMenu : function(menuButton){
+        let sceneEl = document.getElementById('scene');
         let menuID = menuButton.getAttribute('id');
         var pauseMenu = document.getElementById('pauseMenu');
         var startMenu = document.getElementById('startMenu');
@@ -477,7 +564,9 @@ AFRAME.registerComponent('ingame', {
 
                 if(this.data.multiplayer == false){ //Singleplayer
                     startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
-                    cursor.setAttribute('visible', 'true');
+                    if(sceneEl.is('vr-mode') == false){
+                        cursor.setAttribute('visible', 'true');
+                    }
                     camera.setAttribute('fps-look-controls', 'userHeight: 0');
                     for(let conveyor of conveyors){
                         conveyor.components['animation'].play();
@@ -493,7 +582,7 @@ AFRAME.registerComponent('ingame', {
                     cursor.setAttribute('visible', 'true');
                     camera.setAttribute('fps-look-controls', 'userHeight: 0');
                     if(this.data.host == true && this.data.full == false) {
-                        this.generateStandby();
+                        this.generateStandby("Waiting for player 2");
                     }
 
                     this.data.pauseGame = false;
@@ -565,7 +654,12 @@ AFRAME.registerComponent('ingame', {
         startMenu.components['interact-start-menu'].emptyElement(pauseMenu);
 
         instCont.setAttribute('id', 'instCont');
-        instCont.setAttribute('position', '0 2 -2');
+        if(scene.is('vr-mode')){
+            instCont.setAttribute('position', '0 2 -3');
+        } else {
+            instCont.setAttribute('position', '0 2 -2');
+        }
+        
         instCont.setAttribute('scale', '2.5 2.5 2.5');
 
         img.setAttribute('id', 'instructImg')
@@ -604,7 +698,11 @@ AFRAME.registerComponent('ingame', {
         instCont.append(back);
         instCont.append(next);
 
-        this.menuEventListener(this.el.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //VICTORY MENU
@@ -648,7 +746,11 @@ AFRAME.registerComponent('ingame', {
         victoryMenu.append(waiting);
         victoryMenu.append(exitButton);
 
-        context.menuEventListener(pauseMenu.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //GENERATING BIN SIDE FUNCTION (FOR USERS)
@@ -678,7 +780,11 @@ AFRAME.registerComponent('ingame', {
                     case 0: //bottom
                         binSide[i].setAttribute('position', "0 0 0");
                         binSide[i].setAttribute('rotation', "-90 0 0");
-                        binSide[i].setAttribute('class', "binCollider");
+                        if(bin.parentElement.getAttribute('id') == 'playerBins'){
+                            binSide[i].setAttribute('class', "binCollider");
+                        } else if (bin.parentElement.getAttribute('id') == 'opponentBins'){
+                            binSide[i].setAttribute('class', "enemyCollider");
+                        }
                         binSide[i].setAttribute('data-trash-type', bin.getAttribute("data-trash-type"));
                         break;
 

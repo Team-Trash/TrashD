@@ -7,26 +7,22 @@ AFRAME.registerComponent('interact-start-menu-vr', {
     init : function() {       
         //Init context
         console.log('Initalize VR Start Menu ' + this.el.getAttribute('hand-controls'));
-        let scene = document.getElementById('scene');
-
-        if(scene.is('vr-mode')){
-            this.menuEventListener();
-        }
     },
 
     //MENU LISTENER FUNCTION
-    menuEventListener : function(){
+    menuEventListener : function(menuButtons){
         let startMenu = document.querySelector('#startMenu');
-        let menuButtons = startMenu.querySelectorAll('.menu')
         let currentButton;
 
         //Raycaster Listeners
         menuButtons.forEach(function(menuButton) {
             menuButton.addEventListener('mouseenter', function(e){
+                menuButton.object3D.scale.set(1.05, 1.05, 1.05);
                 currentButton = e.target;
             });
 
             menuButton.addEventListener('mouseleave', function(e){
+                menuButton.object3D.scale.set(1.0, 1.0, 1.0);
                 currentButton = null;
             });
         });

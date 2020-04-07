@@ -7,21 +7,29 @@ AFRAME.registerComponent('interact-start-menu', {
 
     init : function() {
         console.log('Initalize Start Menu');
-        
-        this.startMenu();
+        let context = this;
+        let scene = document.getElementById('scene');
+        let startMenu = document.getElementById('startMenu');
+
+        //Enter/Exit VR
+        scene.addEventListener('enter-vr', function(e){
+            this.setAttribute("vr-mode");
+            context.emptyElement(startMenu);
+            context.startMenu();
+        });
+
+        scene.addEventListener('exit-vr', function(e){
+            this.removeAttribute("vr-mode");
+        });
+
+        context.startMenu();
     },
 
     //Add event listeners to button
     menuEventListener: function(menuButtons){
-        let context = this
+        let context = this;
 
         menuButtons.forEach(function(menuButton) {
-            let scene = document.getElementById('scene');
-            var trashLogo = document.getElementById('startLogo');
-            var singlePlayer = document.getElementById('singleButton');
-            var multiplePlayer = document.getElementById('multiButton');
-            var controlButton = document.getElementById('controlsButton');
-
             //Raycaster Listeners
             menuButton.addEventListener('mouseenter', function(e){
                 menuButton.object3D.scale.set(1.05, 1.05, 1.05);
@@ -35,22 +43,15 @@ AFRAME.registerComponent('interact-start-menu', {
             menuButton.addEventListener('click', function(e){
                 context.clickMenu(menuButton);
             });
-
-            //Enter/Exit VR
-            scene.addEventListener('enter-vr', function(e){
-                trashLogo.setAttribute('position', '0 2 -2');
-                singlePlayer.setAttribute('position', '-0.8 1 -2');
-                multiplePlayer.setAttribute('position', '0.8 1 -2');
-                controlButton.setAttribute('position', '-0.8 2 -2');
-            });
-
-            scene.addEventListener('exit-vr', function(e){
-                trashLogo.setAttribute('position', '0 1 -2');
-                singlePlayer.setAttribute('position', '-0.8 0 -2');
-                multiplePlayer.setAttribute('position', '0.8 0 -2');
-                controlButton.setAttribute('position', '0 2 -2');
-            });
         });
+    },
+
+    vrMenuEventListener : function(menuButtons){
+        let left = document.getElementById('startHandLeft');
+        let right = document.getElementById('startHandRight');
+
+        left.components['interact-start-menu-vr'].menuEventListener(menuButtons);
+        right.components['interact-start-menu-vr'].menuEventListener(menuButtons);
     },
 
     //START MENU
@@ -63,7 +64,7 @@ AFRAME.registerComponent('interact-start-menu', {
         var singlePlayer = document.createElement('a-image');
         var multiplePlayer = document.createElement('a-image');
         var controlsButton = document.createElement('a-image');
-        
+
         //Animation
         var planeRed = document.createElement('a-entity');
         var planeBlue = document.createElement('a-entity');
@@ -75,13 +76,14 @@ AFRAME.registerComponent('interact-start-menu', {
         //Empty start menu of child nodes
         this.emptyElement(startMenu);
 
+        //Correct position for VR
+        if(scene.is('vr-mode')){
+            startMenu.setAttribute('position', '0 1 0')
+        }
+
         trashLogo.setAttribute('id', 'startLogo');
         trashLogo.setAttribute('src', '#logo');
-        if(scene.is('vr-mode')){
-            trashLogo.setAttribute('position', '0 2 -2');
-        } else {
-            trashLogo.setAttribute('position', '0 1 -2');
-        }
+        trashLogo.setAttribute('position', '0 1 -2');
         trashLogo.setAttribute('width', '3.7');
         trashLogo.setAttribute('height', '1');
         trashLogo.setAttribute('scale', '0.8 0.8 0.8');
@@ -89,68 +91,53 @@ AFRAME.registerComponent('interact-start-menu', {
         singlePlayer.setAttribute('class', 'menu');
         singlePlayer.setAttribute('id', 'singleButton');
         singlePlayer.setAttribute('src', '#single-button');
-        if(scene.is('vr-mode')){
-            singlePlayer.setAttribute('position', '-0.8 1 -2');
-        } else {
-            singlePlayer.setAttribute('position', '-0.8 0 -2');
-        }
+        singlePlayer.setAttribute('position', '-0.8 0 -2');
         singlePlayer.setAttribute('width', '1.29');
         singlePlayer.setAttribute('height', '.363');
 
         multiplePlayer.setAttribute('class', 'menu');
         multiplePlayer.setAttribute('id', 'multiButton');
         multiplePlayer.setAttribute('src', '#multi-button');
-        if(scene.is('vr-mode')){
-            multiplePlayer.setAttribute('position', '0.8 1 -2');
-        } else {
-            multiplePlayer.setAttribute('position', '0.8 0 -2');
-        }
+        multiplePlayer.setAttribute('position', '0.8 0 -2');
         multiplePlayer.setAttribute('width', '1.29');
         multiplePlayer.setAttribute('height', '.363');
 
         controlsButton.setAttribute('class', 'menu');
         controlsButton.setAttribute('id', 'controlsButton');
         controlsButton.setAttribute('src', '#controls-button');
-        if(scene.is('vr-mode')){
-            controlsButton.setAttribute('position', '0 0.5 -2');
-        } else {
-            controlsButton.setAttribute('position', '0 -0.5 -2');
-        }
+        controlsButton.setAttribute('position', '0 -0.5 -2');
         controlsButton.setAttribute('width', '1.29');
         controlsButton.setAttribute('height', '.363');
 
         //ANIMATION TEST
         planeBlack.setAttribute('material', 'color: rgb(99, 100, 101)');
-        planeBlack.setAttribute('position', '0 -1.5 -2');
         planeBlack.setAttribute('scale', '1 0.05 1');
-        planeBlack.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeBlack.setAttribute('animation', 'property: position; from: -9 -1.5 -2; to: 0 -1.5 -2; dur: 3600; easing: linear');
+        planeBlack.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeBlack.setAttribute('animation', 'property: position; from: -9 -1.5 -3; to: 0 -1.5 -3; dur: 3600; easing: linear');
 
 
         planeGreen.setAttribute('material', 'color: rgb(164, 202, 172)');
-        planeGreen.setAttribute('position', '0 -0.75 -2');
         planeGreen.setAttribute('scale', '1 0.05 1');
-        planeGreen.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeGreen.setAttribute('animation', 'property: position; from: 9 -0.75 -2; to: 0 -0.75 -2; dur: 3500; easing: linear');
+        planeGreen.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeGreen.setAttribute('animation', 'property: position; from: 9 -0.75 -3; to: 0 -0.75 -3; dur: 3500; easing: linear');
 
 
         planeRed.setAttribute('material', 'color: rgb(228, 132, 119)');
-        planeRed.setAttribute('position', '0 0 -2');
         planeRed.setAttribute('scale', '1 0.05 1');
-        planeRed.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeRed.setAttribute('animation', 'property: position; from: -9 0 -2; to: 0 0 -2; dur: 3300; easing: linear');
+        planeRed.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeRed.setAttribute('animation', 'property: position; from: -9 0 -3; to: 0 0 -3; dur: 3300; easing: linear');
 
 
         planeBlue.setAttribute('material', 'color: rgb(151, 192, 217)');
         planeBlue.setAttribute('scale', '1 0.05 1');
-        planeBlue.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeBlue.setAttribute('animation', 'property: position; from: 9 0.75 -2; to: 0 0.75 -2; dur: 3300; easing: linear');
+        planeBlue.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeBlue.setAttribute('animation', 'property: position; from: 9 0.75 -3; to: 0 0.75 -3; dur: 3300; easing: linear');
 
 
         planeYellow.setAttribute('material', 'color: rgb(235, 220, 139)');
         planeYellow.setAttribute('scale', '1 0.05 1');
-        planeYellow.setAttribute('geometry', 'primitive: plane; height: 10; width: 10');
-        planeYellow.setAttribute('animation', 'property: position; from: -9 1.5 -2; to: 0 1.5 -2; dur: 3000; easing: linear');
+        planeYellow.setAttribute('geometry', 'primitive: plane; height: 10; width: 14');
+        planeYellow.setAttribute('animation', 'property: position; from: -9 1.5 -3; to: 0 1.5 -3; dur: 3000; easing: linear');
         
         startMenu.append(planeBlack);
         startMenu.append(planeGreen);
@@ -163,7 +150,11 @@ AFRAME.registerComponent('interact-start-menu', {
         startMenu.append(multiplePlayer);
         startMenu.append(controlsButton);
 
-        this.menuEventListener(this.el.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //MULTIPLAYERS ROOM
@@ -179,6 +170,11 @@ AFRAME.registerComponent('interact-start-menu', {
 
         //Empty start menu of child nodes
         this.emptyElement(startMenu);
+
+        //Correct position for VR
+        if(scene.is('vr-mode')){
+            startMenu.setAttribute('position', '0 1.5 -1')
+        }
 
         multiList.setAttribute('id', 'multiList');
         multiList.setAttribute('position', '0 0 -1');
@@ -207,7 +203,12 @@ AFRAME.registerComponent('interact-start-menu', {
                     roomCount++;
                 }
             }
-            context.menuEventListener(context.el.querySelectorAll('.room'));
+            
+            if(scene.is('vr-mode')){
+                context.vrMenuEventListener(context.el.querySelectorAll('.room'));
+            } else {
+                context.menuEventListener(context.el.querySelectorAll('.room'));
+            }
         });
 
         newRoom.setAttribute('text', 'value: New Room; color: #fff; align: center; height: 2; width: 1; font: https://cdn.aframe.io/fonts/Exo2Bold.fnt;');
@@ -229,7 +230,11 @@ AFRAME.registerComponent('interact-start-menu', {
         multiList.append(newRoom);
         multiList.append(back);
 
-        context.menuEventListener(context.el.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
     },
 
     //CONTROL MENU
@@ -242,6 +247,11 @@ AFRAME.registerComponent('interact-start-menu', {
 
         //Empty start menu of child nodes
         this.emptyElement(startMenu);
+
+        //Correct position for VR
+        if(scene.is('vr-mode')){
+            startMenu.setAttribute('position', '0 1.5 -1')
+        }
 
         instCont.setAttribute('id', 'instCont');
         instCont.setAttribute('position', '0 0 -1');
@@ -281,7 +291,12 @@ AFRAME.registerComponent('interact-start-menu', {
         instCont.append(back);
         instCont.append(next);
 
-        this.menuEventListener(this.el.querySelectorAll('.menu'));
+        if(scene.is('vr-mode')){
+            this.vrMenuEventListener(this.el.querySelectorAll('.menu'));
+        } else {
+            this.menuEventListener(this.el.querySelectorAll('.menu'));
+        }
+        
     },
 
     multiList: function(){
@@ -348,13 +363,9 @@ AFRAME.registerComponent('interact-start-menu', {
         var start = document.getElementById('start');
         var ingame = document.getElementById('ingame');
         var gameCamera = document.getElementById('game-camera');
+        var gameCameraRig = document.getElementById('game-camera-rig');
         let scene = document.getElementById('scene');
         var factoryAudio = document.getElementById('factoryAudio');
-
-        var score = document.getElementById('score');
-        var timer = document.getElementById('timer');
-
-        
 
         //Add menu cursor raycaster to new camera
         if(document.getElementById('menu-raycast') == null){
@@ -378,13 +389,11 @@ AFRAME.registerComponent('interact-start-menu', {
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
         }
 
-        if(scene.is('vr-mode') == true){
-            gameCamera.setAttribute('visible', 'false');
-        }
 
-        //Fixing position of the score and time
-        score.setAttribute('position', '0.25 0.65 -1');
-        timer.setAttribute('position', '-0.25 0.65 -1');
+        //Correct Camera
+        if(scene.is('vr-mode') == true){
+            gameCameraRig.setAttribute('position', '0 0 4');
+        }
 
         //Play the sound
         factoryAudio.components.sound.playSound();
@@ -401,16 +410,10 @@ AFRAME.registerComponent('interact-start-menu', {
         var startMenu = document.getElementById('startMenu');
         var ingame = document.getElementById('ingame');
         var gameCamera = document.getElementById('game-camera');
+        var gameCameraRig = document.getElementById('game-camera-rig');
         
         //Sound of factory
         var factoryAudio = document.getElementById('factoryAudio');
-
-        //Fixing timer and score position
-        var timer = document.getElementById('timer');
-        var score = document.getElementById('score');
-        var youText = document.getElementById('youText');
-        var opponentScore = document.getElementById('opponentScore');
-        var opponentText = document.getElementById('opponentText');
 
         //Add menu cursor raycaster to new camera
         if(document.getElementById('menu-raycast') == null){
@@ -434,17 +437,10 @@ AFRAME.registerComponent('interact-start-menu', {
             gameCamera.setAttribute('fps-look-controls', 'userHeight: 0');
         }
 
+        //Correct Camera
         if(scene.is('vr-mode') == true){
-            gameCamera.setAttribute('visible', 'false');
+            gameCameraRig.setAttribute('position', '0 0 4');
         }
-
-        //Fixing position of the score and time
-        //timer.setAttribute('position', '-0.15 0.75 -1');
-        youText.setAttribute('position', '0.75 0.75 -1');
-        score.setAttribute('position', '0.75 0.65 -1');
-        opponentText.setAttribute('position', '0.75 0.55 -1');
-        opponentScore.setAttribute('position', '0.75 0.45 -1');
-        timer.setAttribute('position', '-0.75 0.65 -1');
 
         //Play factory sound
         factoryAudio.components.sound.playSound();
