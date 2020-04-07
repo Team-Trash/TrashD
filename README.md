@@ -7,6 +7,6 @@ Niki Roy,<br>
 Deka Said,<br>
 Hoang Nguyen (Thao)<br>
 
-**Development Blog**
+**Development Blog**<br>
 https://trashd.yfkuang.com/<br>
 Available at: trash-d.herokuapp.com/
